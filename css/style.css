@@ -96,10 +96,19 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
   font-weight: 600;
   padding: 0.5rem 0;
   transition: color 0.2s;
+  position: relative;
 }
 .mob-nav a i { font-size: 1.25rem; }
 .mob-nav a.active, .mob-nav a:hover { color: var(--primary); }
 .mob-nav a.active i { color: var(--primary); }
+.mob-nav a.active::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 22%; right: 22%;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 0 0 4px 4px;
+}
 
 /* ── HERO ── */
 .hero {
@@ -530,8 +539,85 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
 .check-item-naam { font-weight: 600; font-size: 0.95rem; color: var(--text); }
 .check-persons { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 
+/* ── FILTER KNOPPEN ACTIEF ── */
+.filter-btn.active {
+  background: var(--primary) !important;
+  color: white !important;
+  border-color: var(--primary) !important;
+}
+
+/* ── FILTER SCROLLRIJ (activiteiten mobiel) ── */
+.filter-scroll {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.3rem;
+  scrollbar-width: none;
+  flex-wrap: nowrap;
+}
+.filter-scroll::-webkit-scrollbar { display: none; }
+.filter-scroll .filter-btn { flex-shrink: 0; white-space: nowrap; }
+
+/* ── PAGE HEADER (verbeterd) ── */
+.page-header {
+  border-bottom: 4px solid var(--secondary);
+}
+
 /* ── LOCATIE ZOEK SUGGESTIES ── */
 #locatie-suggesties > div:last-child { border-bottom: none; }
+
+/* ── VAKANTIEAGENDA ── */
+.agenda-strip {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.agenda-strip::-webkit-scrollbar { display: none; }
+.agenda-dag {
+  flex-shrink: 0;
+  min-width: 136px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 0.9rem;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.agenda-dag:hover { box-shadow: var(--shadow); border-color: var(--primary); }
+.agenda-dag.eerste {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, #FFFBEE, #FFF8D6);
+}
+.agenda-dag.laatste {
+  border-color: var(--secondary);
+  background: linear-gradient(135deg, #FFF5F4, #FFECEA);
+}
+.agenda-dag-label {
+  font-size: 0.68rem; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--text-light);
+  font-weight: 700; margin-bottom: 0.1rem;
+}
+.agenda-dag-naam {
+  font-size: 0.8rem; font-weight: 700;
+  color: var(--text-light); text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.agenda-dag-datum {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem; font-weight: 800;
+  color: var(--text); line-height: 1.1; margin: 0.15rem 0;
+}
+.agenda-dag-activiteiten { margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.25rem; }
+.agenda-activiteit-pill {
+  font-size: 0.72rem; color: var(--primary); font-weight: 600;
+  background: rgba(26,107,138,0.09); border-radius: 6px;
+  padding: 0.15rem 0.45rem; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.agenda-dag-leeg { font-size: 0.75rem; color: var(--border); font-style: italic; margin-top: 0.4rem; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
@@ -589,6 +675,18 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
   /* Activiteiten layout op mobiel */
   .activities-layout { grid-template-columns: 1fr !important; }
   .map-sticky { position: static !important; }
+
+  /* Page header mobiel */
+  .page-header { padding: 1.25rem 1rem; }
+  .page-header h1 { font-size: 1.4rem; }
+
+  /* Jubileum kaart mobiel */
+  .jubileum-inner { flex-direction: column !important; gap: 1.25rem !important; }
+  .jubileum-badge { display: none !important; }
+
+  /* Activiteiten filter op mobiel — horizontaal scrollen */
+  .activities-toolbar { flex-direction: column !important; align-items: stretch !important; }
+  .activities-toolbar .btn { align-self: flex-start; }
 }
 
 @media (max-width: 480px) {

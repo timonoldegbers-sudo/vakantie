@@ -34,31 +34,31 @@
 
     <!-- JUBILEUM -->
     <div class="card jubileum-card" style="grid-column:span 12;">
-      <div style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
+      <div class="jubileum-inner" style="display:flex;align-items:center;gap:2rem;">
         <div style="position:relative;flex-shrink:0;cursor:pointer;" id="trouwfoto-wrap" title="Klik om trouwfoto toe te voegen">
-          <div id="trouwfoto-placeholder" style="width:120px;height:150px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#0e4d6b);display:flex;flex-direction:column;align-items:center;justify-content:center;color:rgba(255,255,255,0.7);font-size:0.78rem;gap:0.4rem;border:2px dashed rgba(255,255,255,0.4);">
+          <div id="trouwfoto-placeholder" style="width:110px;height:140px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#0e4d6b);display:flex;flex-direction:column;align-items:center;justify-content:center;color:rgba(255,255,255,0.7);font-size:0.78rem;gap:0.4rem;border:2px dashed rgba(255,255,255,0.4);">
             <i class="fa fa-camera" style="font-size:1.6rem;"></i>
             <span>Trouwfoto</span>
           </div>
-          <img id="trouwfoto-img" src="" alt="Trouwfoto" style="display:none;width:120px;height:150px;border-radius:12px;object-fit:cover;box-shadow:0 4px 16px rgba(0,0,0,0.2);">
+          <img id="trouwfoto-img" src="" alt="Trouwfoto" style="display:none;width:110px;height:140px;border-radius:12px;object-fit:cover;box-shadow:0 4px 16px rgba(0,0,0,0.2);">
           <input type="file" id="trouwfoto-upload" accept="image/*" style="display:none">
         </div>
-        <div style="flex:1;min-width:200px;">
-          <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--secondary);font-weight:700;margin-bottom:0.4rem;">💍 Ter ere van</div>
-          <h2 style="font-size:1.8rem;font-weight:800;color:var(--primary);margin-bottom:0.3rem;">Leo & Anneke</h2>
-          <div style="font-size:1.1rem;color:var(--text-light);margin-bottom:0.75rem;">40 jaar getrouwd &nbsp;·&nbsp; 28 april 1987 – 28 april 2027</div>
-          <p style="color:var(--text);font-size:0.95rem;line-height:1.6;max-width:600px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--secondary);font-weight:700;margin-bottom:0.35rem;">💍 Ter ere van</div>
+          <h2 style="font-size:1.7rem;font-weight:800;color:var(--primary);margin-bottom:0.25rem;">Leo & Anneke</h2>
+          <div style="font-size:1rem;color:var(--text-light);margin-bottom:0.7rem;">40 jaar getrouwd · 28 april 1987 – 28 april 2027</div>
+          <p style="color:var(--text);font-size:0.92rem;line-height:1.65;max-width:580px;">
             Deze vakantie is een feest voor het hele gezin — ter ere van veertig prachtige jaren samen.
             Van twee naar een heel gezin vol kinderen, schoonkinderen en kleinkinderen. Op nog vele jaren!
           </p>
-          <div style="margin-top:1rem;padding:0.75rem 1.1rem;background:linear-gradient(135deg,#FFF8E7,#FFF3D0);border-radius:10px;border-left:4px solid var(--accent);display:inline-block;font-style:italic;font-size:0.88rem;color:var(--text);">
+          <div style="margin-top:0.9rem;padding:0.7rem 1rem;background:linear-gradient(135deg,#FFF8E7,#FFF3D0);border-radius:10px;border-left:4px solid var(--accent);display:inline-block;font-style:italic;font-size:0.86rem;color:var(--text);">
             "Wat God heeft samengevoegd, scheide de mens niet." &nbsp;<strong style="color:var(--secondary)">— Mattheüs 19:6</strong>
           </div>
         </div>
-        <div style="text-align:center;flex-shrink:0;">
-          <div style="font-size:4rem;font-weight:900;color:var(--accent);line-height:1;">40</div>
-          <div style="font-size:0.85rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:0.08em;">jaar</div>
-          <div style="margin-top:0.75rem;font-size:1.5rem;">💛</div>
+        <div class="jubileum-badge" style="text-align:center;flex-shrink:0;padding:0.5rem 1.5rem;background:linear-gradient(135deg,#FFF8E7,#FFF3D0);border-radius:16px;border:2px solid var(--accent);">
+          <div style="font-size:3.5rem;font-weight:900;color:var(--accent);line-height:1;">40</div>
+          <div style="font-size:0.8rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:0.1em;">jaar</div>
+          <div style="margin-top:0.5rem;font-size:1.4rem;">💛</div>
         </div>
       </div>
     </div>
@@ -123,6 +123,19 @@
         <li><span class="land">🇳🇴 Noorwegen</span><span class="prijs">€ 9,50</span></li>
       </ul>
       <div style="font-size:0.72rem;color:var(--text-light);margin-top:0.75rem;">Gemiddelde prijs voor een biertje in een café (0,33L)</div>
+    </div>
+
+    <!-- VAKANTIEAGENDA -->
+    <div class="card" style="grid-column:span 12;">
+      <div class="card-title"><i class="fa fa-calendar-days"></i> Vakantieagenda</div>
+      <div class="agenda-strip" id="agenda-strip">
+        <div style="color:var(--text-light);font-size:0.88rem;padding:1rem 0;">Agenda wordt geladen...</div>
+      </div>
+      <div style="font-size:0.75rem;color:var(--text-light);margin-top:0.6rem;text-align:right;">
+        <a href="activities.html" style="color:var(--primary);text-decoration:none;font-weight:600;">
+          <i class="fa fa-map-pin"></i> Activiteiten beheren →
+        </a>
+      </div>
     </div>
 
     <!-- KAART -->
@@ -345,6 +358,64 @@ L.marker([LOCATIE.lat, LOCATIE.lng], { icon: huisIcon })
   .addTo(map)
   .bindPopup('<strong>Ons huisje</strong><br>Ferragudo, Algarve, Portugal')
   .openPopup();
+
+// ---- VAKANTIEAGENDA ----
+async function laadAgenda() {
+  const VERTREK = new Date('2027-04-28');
+  const TERUG   = new Date('2027-05-05');
+  const { data: activiteiten } = await db.from('activiteiten').select('naam, datum, categorie');
+
+  // Bouw een map: datum-string → activiteiten
+  const actMap = {};
+  (activiteiten || []).forEach(a => {
+    if (!a.datum) return;
+    const d = a.datum.slice(0, 10);
+    if (!actMap[d]) actMap[d] = [];
+    actMap[d].push(a);
+  });
+
+  const strip = document.getElementById('agenda-strip');
+  strip.innerHTML = '';
+
+  const dagNamen = ['zo','ma','di','wo','do','vr','za'];
+  const maandNamen = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+
+  let dag = new Date(VERTREK);
+  let i = 0;
+  while (dag <= TERUG) {
+    const dateStr = dag.toISOString().slice(0, 10);
+    const actsOpDag = actMap[dateStr] || [];
+    const isEerste = i === 0;
+    const isLaatste = dag.getTime() === TERUG.getTime();
+
+    const el = document.createElement('div');
+    el.className = 'agenda-dag' + (isEerste ? ' eerste' : isLaatste ? ' laatste' : '');
+
+    let labelHtml = '';
+    if (isEerste) labelHtml = `<div class="agenda-dag-label" style="color:var(--accent)">✈️ Vertrek</div>`;
+    else if (isLaatste) labelHtml = `<div class="agenda-dag-label" style="color:var(--secondary)">🏠 Terug</div>`;
+    else labelHtml = `<div class="agenda-dag-naam">${dagNamen[dag.getDay()]}</div>`;
+
+    const actsHtml = actsOpDag.length
+      ? actsOpDag.slice(0, 3).map(a =>
+          `<div class="agenda-activiteit-pill">${a.categorie || '📍'} ${a.naam}</div>`
+        ).join('')
+      : `<div class="agenda-dag-leeg">Vrij</div>`;
+
+    el.innerHTML = `
+      ${labelHtml}
+      <div class="agenda-dag-datum">${dag.getDate()} ${maandNamen[dag.getMonth()]}</div>
+      <div class="agenda-dag-activiteiten">${actsHtml}</div>
+    `;
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', () => { window.location.href = 'activities.html'; });
+    strip.appendChild(el);
+
+    dag.setDate(dag.getDate() + 1);
+    i++;
+  }
+}
+laadAgenda();
 
 async function laadActiviteitPins() {
   const { data } = await db.from('activiteiten').select('naam, lat, lng, categorie, datum');

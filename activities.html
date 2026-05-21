@@ -33,8 +33,8 @@
 
     <!-- LINKER KOLOM -->
     <div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:1rem;">
-        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+      <div class="activities-toolbar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;gap:1rem;">
+        <div class="filter-scroll">
           <button class="btn btn-outline btn-sm filter-btn active" data-filter="alles">Alles</button>
           <button class="btn btn-outline btn-sm filter-btn" data-filter="🏖️">🏖️ Strand</button>
           <button class="btn btn-outline btn-sm filter-btn" data-filter="🍽️">🍽️ Eten</button>
@@ -43,7 +43,7 @@
           <button class="btn btn-outline btn-sm filter-btn" data-filter="🎭">🎭 Cultuur</button>
           <button class="btn btn-outline btn-sm filter-btn" data-filter="🌅">🌅 Uitzicht</button>
         </div>
-        <button class="btn btn-primary" id="open-modal-btn">
+        <button class="btn btn-primary" id="open-modal-btn" style="flex-shrink:0;">
           <i class="fa fa-plus"></i> Activiteit aandragen
         </button>
       </div>
