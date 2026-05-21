@@ -75,6 +75,16 @@ function weerIcon(code) {
   return '🌤️';
 }
 
+// Unieke sessie-ID per apparaat (voor emoji-reacties)
+function getSessieId() {
+  let id = localStorage.getItem('vakantie_sessie_id');
+  if (!id) {
+    id = 'sess_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem('vakantie_sessie_id', id);
+  }
+  return id;
+}
+
 function formatDatum(dateStr) {
   const d = new Date(dateStr);
   const dagen = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];

@@ -4,6 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Activiteiten — Vakantie Oldegbers</title>
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1A6B8A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Vakantie">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Activiteiten — Vakantie Oldegbers 2027">
+  <meta property="og:description" content="Wat gaan we doen in Ferragudo? Draag activiteiten aan en geef aan wie er bij gaat!">
+  <meta property="og:image" content="https://villacocheira.com/wp-content/uploads/2018/09/Villa-Cocheira-Beach-House-Ferragudo-Pool-6-1.jpg">
+  <meta property="og:url" content="https://vakantie.oldegbers.nl/activities.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="preconnect" href="https://unpkg.com">
   <link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin>
@@ -153,14 +167,26 @@ let activiteiten = [];
 let actieveFilter = 'alles';
 let gekozenLat = null, gekozenLng = null;
 let zoekTimeout = null;
+let reactieMap = {};
+const sessieId = getSessieId();
+const REACTIE_EMOJIS = ['👍', '🔥', '❤️', '😄'];
 
 async function init() {
-  const [{ data: d }, { data: a }] = await Promise.all([
+  const [{ data: d }, { data: a }, { data: r }] = await Promise.all([
     db.from('deelnemers').select('naam').order('id'),
-    db.from('activiteiten').select('*, activiteit_checks(*)').order('datum', { ascending: true, nullsFirst: false }).order('created_at')
+    db.from('activiteiten').select('*, activiteit_checks(*)').order('datum', { ascending: true, nullsFirst: false }).order('created_at'),
+    db.from('activiteit_reacties').select('*'),
   ]);
   deelnemers = d || [];
   activiteiten = a || [];
+
+  // Bouw reactie-map op
+  reactieMap = {};
+  (r || []).forEach(reactie => {
+    if (!reactieMap[reactie.activiteit_id]) reactieMap[reactie.activiteit_id] = [];
+    reactieMap[reactie.activiteit_id].push(reactie);
+  });
+
   const aandragerSel = document.getElementById('f-aandrager');
   deelnemers.forEach(d => {
     const opt = document.createElement('option');
@@ -168,6 +194,37 @@ async function init() {
     aandragerSel.appendChild(opt);
   });
   renderActiviteiten();
+}
+
+function renderReactiesVoor(actId, container) {
+  container.innerHTML = '';
+  const reacties = reactieMap[actId] || [];
+  REACTIE_EMOJIS.forEach(emoji => {
+    const reactiesVoorEmoji = reacties.filter(r => r.emoji === emoji);
+    const count = reactiesVoorEmoji.length;
+    const hebbIkGereageerd = reactiesVoorEmoji.some(r => r.sessie_id === sessieId);
+    const btn = document.createElement('button');
+    btn.className = 'reactie-btn' + (hebbIkGereageerd ? ' actief' : '');
+    btn.innerHTML = count > 0
+      ? `${emoji} <span class="reactie-count">${count}</span>`
+      : emoji;
+    btn.addEventListener('click', async e => {
+      e.stopPropagation();
+      const bestaand = (reactieMap[actId] || []).find(r => r.emoji === emoji && r.sessie_id === sessieId);
+      if (bestaand) {
+        await db.from('activiteit_reacties').delete().eq('id', bestaand.id);
+        reactieMap[actId] = reactieMap[actId].filter(r => !(r.emoji === emoji && r.sessie_id === sessieId));
+      } else {
+        const { data } = await db.from('activiteit_reacties')
+          .insert({ activiteit_id: actId, emoji, sessie_id: sessieId })
+          .select().single();
+        if (!reactieMap[actId]) reactieMap[actId] = [];
+        if (data) reactieMap[actId].push(data);
+      }
+      renderReactiesVoor(actId, container);
+    });
+    container.appendChild(btn);
+  });
 }
 
 // ---- MINI KAART ----
@@ -235,6 +292,7 @@ function renderActiviteiten() {
         <span style="font-weight:400;">(${aantalMee}/${deelnemers.length})</span>
       </div>
       <div class="deelnemers-check" id="checks-${a.id}"></div>
+      <div class="reacties-rij" id="reacties-${a.id}"></div>
     `;
 
     const checksDiv = card.querySelector(`#checks-${a.id}`);
@@ -256,6 +314,9 @@ function renderActiviteiten() {
       });
       checksDiv.appendChild(span);
     });
+
+    // Render reactie-knoppen
+    renderReactiesVoor(a.id, card.querySelector(`#reacties-${a.id}`));
 
     lijst.appendChild(card);
   });

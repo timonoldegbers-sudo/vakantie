@@ -4,6 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vakantie Oldegbers — Ferragudo 2027</title>
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1A6B8A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Vakantie">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Vakantie Oldegbers — Ferragudo 2027">
+  <meta property="og:description" content="De familiepagina voor onze vakantie naar Ferragudo, Algarve! 🌊 Leo & Anneke 40 jaar getrouwd.">
+  <meta property="og:image" content="https://villacocheira.com/wp-content/uploads/2018/09/Villa-Cocheira-Beach-House-Ferragudo-Pool-6-1.jpg">
+  <meta property="og:url" content="https://vakantie.oldegbers.nl">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="nl_NL">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="preconnect" href="https://unpkg.com">
   <link rel="preconnect" href="https://api.open-meteo.com">
@@ -148,33 +163,39 @@
     <div class="card reisinfo-card">
       <div class="card-title"><i class="fa fa-plane"></i> Reisinfo</div>
       <div class="reisinfo-grid">
-        <div class="reisinfo-item">
+        <div class="reisinfo-item" data-sleutel="reisinfo_vertrek">
           <div class="ri-label"><i class="fa fa-plane-departure"></i> Vertrek</div>
           <div class="ri-value placeholder" id="ri-vertrek">Nog niet bekend</div>
+          <div class="ri-edit-hint"><i class="fa fa-pen"></i> klik om te bewerken</div>
         </div>
-        <div class="reisinfo-item">
+        <div class="reisinfo-item" data-sleutel="reisinfo_aankomst">
           <div class="ri-label"><i class="fa fa-plane-arrival"></i> Aankomst</div>
           <div class="ri-value placeholder" id="ri-aankomst">Nog niet bekend</div>
+          <div class="ri-edit-hint"><i class="fa fa-pen"></i> klik om te bewerken</div>
         </div>
-        <div class="reisinfo-item">
+        <div class="reisinfo-item" data-sleutel="reisinfo_vlucht">
           <div class="ri-label"><i class="fa fa-hashtag"></i> Vluchtnummer</div>
           <div class="ri-value placeholder" id="ri-vlucht">Nog niet bekend</div>
+          <div class="ri-edit-hint"><i class="fa fa-pen"></i> klik om te bewerken</div>
         </div>
-        <div class="reisinfo-item">
+        <div class="reisinfo-item" data-sleutel="reisinfo_tijd">
           <div class="ri-label"><i class="fa fa-clock"></i> Vertrektijd</div>
           <div class="ri-value placeholder" id="ri-tijd">Nog niet bekend</div>
+          <div class="ri-edit-hint"><i class="fa fa-pen"></i> klik om te bewerken</div>
         </div>
-        <div class="reisinfo-item">
+        <div class="reisinfo-item" data-sleutel="reisinfo_checkin">
           <div class="ri-label"><i class="fa fa-house"></i> Check-in</div>
           <div class="ri-value placeholder" id="ri-checkin">Nog niet bekend</div>
+          <div class="ri-edit-hint"><i class="fa fa-pen"></i> klik om te bewerken</div>
         </div>
-        <div class="reisinfo-item">
+        <div class="reisinfo-item" data-sleutel="reisinfo_checkout">
           <div class="ri-label"><i class="fa fa-door-open"></i> Check-out</div>
           <div class="ri-value placeholder" id="ri-checkout">Nog niet bekend</div>
+          <div class="ri-edit-hint"><i class="fa fa-pen"></i> klik om te bewerken</div>
         </div>
         <div class="reisinfo-item" style="grid-column:span 2;">
           <div class="ri-label"><i class="fa fa-location-dot"></i> Adres</div>
-          <div class="ri-value">Ferragudo, Lagoa, Faro, Portugal</div>
+          <div class="ri-value">Rua Dr. Coelho de Carvalho 8, Ferragudo 8400-257, Portugal</div>
         </div>
       </div>
     </div>
@@ -359,13 +380,73 @@ L.marker([LOCATIE.lat, LOCATIE.lng], { icon: huisIcon })
   .bindPopup('<strong>Ons huisje</strong><br>Ferragudo, Algarve, Portugal')
   .openPopup();
 
+// ---- REISINFO ----
+const REISINFO_VELDEN = [
+  { id: 'ri-vertrek',  sleutel: 'reisinfo_vertrek' },
+  { id: 'ri-aankomst', sleutel: 'reisinfo_aankomst' },
+  { id: 'ri-vlucht',   sleutel: 'reisinfo_vlucht' },
+  { id: 'ri-tijd',     sleutel: 'reisinfo_tijd' },
+  { id: 'ri-checkin',  sleutel: 'reisinfo_checkin' },
+  { id: 'ri-checkout', sleutel: 'reisinfo_checkout' },
+];
+
+async function laadReisinfo() {
+  const sleutels = REISINFO_VELDEN.map(v => v.sleutel);
+  const { data } = await db.from('instellingen').select('sleutel, waarde').in('sleutel', sleutels);
+  (data || []).forEach(r => {
+    const veld = REISINFO_VELDEN.find(v => v.sleutel === r.sleutel);
+    if (!veld || !r.waarde) return;
+    const el = document.getElementById(veld.id);
+    if (el) { el.textContent = r.waarde; el.classList.remove('placeholder'); }
+  });
+}
+
+function initReisinfoBewerkbaar() {
+  document.querySelectorAll('.reisinfo-item[data-sleutel]').forEach(item => {
+    item.addEventListener('click', () => {
+      const sleutel = item.dataset.sleutel;
+      const veld = REISINFO_VELDEN.find(v => v.sleutel === sleutel);
+      if (!veld) return;
+      const waardeEl = document.getElementById(veld.id);
+      if (!waardeEl || item.querySelector('.ri-inline-input')) return; // al in edit
+
+      const huidigeWaarde = waardeEl.classList.contains('placeholder') ? '' : waardeEl.textContent;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'ri-inline-input';
+      input.value = huidigeWaarde;
+      input.placeholder = 'Typ hier...';
+      waardeEl.replaceWith(input);
+      input.focus();
+      input.select();
+
+      async function slaOp() {
+        const waarde = input.value.trim();
+        await db.from('instellingen').upsert({ sleutel, waarde }, { onConflict: 'sleutel' });
+        const nieuweEl = document.createElement('div');
+        nieuweEl.className = 'ri-value' + (waarde ? '' : ' placeholder');
+        nieuweEl.id = veld.id;
+        nieuweEl.textContent = waarde || 'Nog niet bekend';
+        input.replaceWith(nieuweEl);
+      }
+      input.addEventListener('blur', slaOp);
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); input.blur(); } });
+    });
+  });
+}
+laadReisinfo();
+initReisinfoBewerkbaar();
+
 // ---- VAKANTIEAGENDA ----
 async function laadAgenda() {
   const VERTREK = new Date('2027-04-28');
   const TERUG   = new Date('2027-05-05');
-  const { data: activiteiten } = await db.from('activiteiten').select('naam, datum, categorie');
 
-  // Bouw een map: datum-string → activiteiten
+  const [{ data: activiteiten }, { data: notities }] = await Promise.all([
+    db.from('activiteiten').select('naam, datum, categorie'),
+    db.from('agenda_notities').select('datum, notitie'),
+  ]);
+
   const actMap = {};
   (activiteiten || []).forEach(a => {
     if (!a.datum) return;
@@ -373,6 +454,9 @@ async function laadAgenda() {
     if (!actMap[d]) actMap[d] = [];
     actMap[d].push(a);
   });
+
+  const notitieMap = {};
+  (notities || []).forEach(n => { notitieMap[n.datum] = n.notitie || ''; });
 
   const strip = document.getElementById('agenda-strip');
   strip.innerHTML = '';
@@ -392,8 +476,8 @@ async function laadAgenda() {
     el.className = 'agenda-dag' + (isEerste ? ' eerste' : isLaatste ? ' laatste' : '');
 
     let labelHtml = '';
-    if (isEerste) labelHtml = `<div class="agenda-dag-label" style="color:var(--accent)">✈️ Vertrek</div>`;
-    else if (isLaatste) labelHtml = `<div class="agenda-dag-label" style="color:var(--secondary)">🏠 Terug</div>`;
+    if (isEerste) labelHtml = `<div class="agenda-dag-label" style="color:var(--accent);">✈️ Vertrek</div>`;
+    else if (isLaatste) labelHtml = `<div class="agenda-dag-label" style="color:var(--secondary);">🏠 Terug</div>`;
     else labelHtml = `<div class="agenda-dag-naam">${dagNamen[dag.getDay()]}</div>`;
 
     const actsHtml = actsOpDag.length
@@ -406,11 +490,28 @@ async function laadAgenda() {
       ${labelHtml}
       <div class="agenda-dag-datum">${dag.getDate()} ${maandNamen[dag.getMonth()]}</div>
       <div class="agenda-dag-activiteiten">${actsHtml}</div>
+      <textarea class="agenda-notitie-input" placeholder="📝 notitie..." rows="1">${notitieMap[dateStr] || ''}</textarea>
     `;
-    el.style.cursor = 'pointer';
-    el.addEventListener('click', () => { window.location.href = 'activities.html'; });
-    strip.appendChild(el);
 
+    // Notitie opslaan op blur
+    const textarea = el.querySelector('.agenda-notitie-input');
+    const ds = dateStr; // Closure
+    textarea.addEventListener('click', e => e.stopPropagation());
+    textarea.addEventListener('blur', async () => {
+      const tekst = textarea.value.trim();
+      if (tekst !== (notitieMap[ds] || '')) {
+        await db.from('agenda_notities').upsert(
+          { datum: ds, notitie: tekst },
+          { onConflict: 'datum' }
+        );
+        notitieMap[ds] = tekst;
+      }
+    });
+    textarea.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); textarea.blur(); }
+    });
+
+    strip.appendChild(el);
     dag.setDate(dag.getDate() + 1);
     i++;
   }

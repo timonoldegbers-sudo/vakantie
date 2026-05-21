@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#1A6B8A"/>
+  <!-- Zon -->
+  <circle cx="256" cy="196" r="78" fill="#F0B429"/>
+  <!-- Zonnestralen -->
+  <g stroke="#F0B429" stroke-width="15" stroke-linecap="round" opacity="0.75">
+    <line x1="256" y1="74" x2="256" y2="44"/>
+    <line x1="341" y1="101" x2="362" y2="80"/>
+    <line x1="376" y1="186" x2="406" y2="186"/>
+    <line x1="341" y1="271" x2="362" y2="292"/>
+    <line x1="171" y1="101" x2="150" y2="80"/>
+    <line x1="136" y1="186" x2="106" y2="186"/>
+    <line x1="171" y1="271" x2="150" y2="292"/>
+  </g>
+  <!-- Golf 1 (achterste) -->
+  <path d="M0 330 C 70 290 130 325 190 315 S 310 285 390 315 S 470 335 512 305 L512 512 L0 512 Z"
+        fill="#0d3d54" opacity="0.55"/>
+  <!-- Golf 2 (voorste) -->
+  <path d="M0 375 C 80 335 140 368 200 358 S 330 325 410 360 S 475 385 512 355 L512 512 L0 512 Z"
+        fill="white" opacity="0.92"/>
+</svg>

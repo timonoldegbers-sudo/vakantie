@@ -564,6 +564,91 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
   border-bottom: 4px solid var(--secondary);
 }
 
+/* ── EMOJI REACTIES ── */
+.reacties-rij {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--border);
+}
+.reactie-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.28rem 0.65rem;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  background: var(--bg);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  line-height: 1;
+}
+.reactie-btn:hover { border-color: var(--primary); background: rgba(26,107,138,0.06); }
+.reactie-btn.actief { background: rgba(26,107,138,0.1); border-color: var(--primary); color: var(--primary); }
+.reactie-count { font-size: 0.78rem; font-weight: 700; color: inherit; }
+
+/* ── REISINFO BEWERKBAAR ── */
+.reisinfo-item { cursor: pointer; }
+.reisinfo-item:hover { background: rgba(26,107,138,0.04); }
+.reisinfo-item:hover .ri-edit-hint { opacity: 1; }
+.ri-edit-hint {
+  font-size: 0.63rem;
+  color: var(--primary);
+  opacity: 0;
+  transition: opacity 0.2s;
+  margin-top: 0.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.ri-inline-input {
+  width: 100%;
+  padding: 0.25rem 0.4rem;
+  border: 1.5px solid var(--primary);
+  border-radius: 6px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  background: white;
+  color: var(--text);
+  margin-top: 0.15rem;
+}
+.ri-inline-input:focus { outline: none; }
+
+/* ── AGENDA NOTITIE ── */
+.agenda-notitie-input {
+  width: 100%;
+  font-size: 0.71rem;
+  border: none;
+  border-bottom: 1.5px dashed var(--border);
+  border-radius: 0;
+  padding: 0.2rem 0;
+  font-family: 'Inter', sans-serif;
+  resize: none;
+  background: transparent;
+  color: var(--text-light);
+  line-height: 1.45;
+  margin-top: 0.45rem;
+  transition: all 0.2s;
+  overflow: hidden;
+  min-height: 1.4em;
+}
+.agenda-notitie-input:focus {
+  outline: none;
+  border-bottom-color: var(--primary);
+  color: var(--text);
+  background: rgba(26,107,138,0.04);
+  border-radius: 4px;
+  padding: 0.2rem 0.3rem;
+}
+.agenda-notitie-input::placeholder { color: var(--border); font-style: italic; }
+
 /* ── LOCATIE ZOEK SUGGESTIES ── */
 #locatie-suggesties > div:last-child { border-bottom: none; }
 

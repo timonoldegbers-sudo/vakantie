@@ -1,0 +1,34 @@
+{
+  "name": "Vakantie Oldegbers",
+  "short_name": "Vakantie",
+  "description": "Familievakantie naar Ferragudo, Algarve 2027 — Leo & Anneke 40 jaar getrouwd",
+  "start_url": "index.html",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FDF6EF",
+  "theme_color": "#1A6B8A",
+  "lang": "nl",
+  "categories": ["travel", "lifestyle"],
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://villacocheira.com/wp-content/uploads/2018/09/Villa-Cocheira-Beach-House-Ferragudo-Pool-6-1.jpg",
+      "sizes": "1200x800",
+      "type": "image/jpeg"
+    }
+  ]
+}
