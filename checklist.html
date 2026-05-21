@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inpaklijst — Vakantie Oldegbers</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">🌊 <span>Vakantie</span> Oldegbers</a>
+  <a href="index.html"><i class="fa fa-house"></i> Dashboard</a>
+  <a href="gallery.html"><i class="fa fa-images"></i> Galerij</a>
+  <a href="activities.html"><i class="fa fa-map-pin"></i> Activiteiten</a>
+  <a href="checklist.html" class="active"><i class="fa fa-list-check"></i> Inpaklijst</a>
+</nav>
+
+<div class="page-header">
+  <h1><i class="fa fa-list-check"></i> Inpaklijst & Checklist</h1>
+  <p>Zorg dat je niets vergeet!</p>
+</div>
+
+<div class="container">
+
+  <!-- PROGRESSBAR -->
+  <div class="card" style="margin-bottom:1.5rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+      <div class="card-title" style="margin-bottom:0;"><i class="fa fa-chart-line"></i> Voortgang</div>
+      <div style="font-weight:700;color:var(--primary);" id="progress-tekst">0 / 0 ingepakt</div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+    </div>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+      <button class="btn btn-outline btn-sm" id="reset-btn"><i class="fa fa-rotate-left"></i> Alles uitvinken</button>
+      <button class="btn btn-outline btn-sm" id="alles-btn"><i class="fa fa-check-double"></i> Alles aanvinken</button>
+      <button class="btn btn-primary btn-sm" id="open-toevoeg-modal"><i class="fa fa-plus"></i> Item toevoegen</button>
+    </div>
+  </div>
+
+  <div id="checklist-container"></div>
+</div>
+
+<!-- MODAL: toevoegen -->
+<div class="modal-overlay" id="toevoeg-modal">
+  <div class="modal">
+    <h2><i class="fa fa-plus-circle" style="color:var(--secondary)"></i> Item toevoegen</h2>
+    <div class="form-group">
+      <label>Naam</label>
+      <input type="text" id="ni-naam" placeholder="bijv. Zonnebrand SPF 50">
+    </div>
+    <div class="form-group">
+      <label>Categorie</label>
+      <select id="ni-categorie">
+        <option value="👕 Kleding">👕 Kleding</option>
+        <option value="🧴 Toilettas">🧴 Toilettas</option>
+        <option value="📄 Documenten">📄 Documenten</option>
+        <option value="🔌 Elektronica">🔌 Elektronica</option>
+        <option value="🏖️ Strand">🏖️ Strand</option>
+        <option value="💊 Medicijnen">💊 Medicijnen</option>
+        <option value="📦 Diversen">📦 Diversen</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="sluit-toevoeg">Annuleren</button>
+      <button class="btn btn-primary" id="sla-item-op">Toevoegen</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+const STANDAARD_ITEMS = [
+  { cat: '📄 Documenten', naam: 'Paspoort', gedaan: false },
+  { cat: '📄 Documenten', naam: 'Reisverzekering', gedaan: false },
+  { cat: '📄 Documenten', naam: 'Vliegtickets (print of app)', gedaan: false },
+  { cat: '📄 Documenten', naam: 'EHIC-kaart (Europese zorgverzekering)', gedaan: false },
+  { cat: '📄 Documenten', naam: 'Bankpas / creditcard', gedaan: false },
+  { cat: '📄 Documenten', naam: 'Noodcontacten opgeschreven', gedaan: false },
+
+  { cat: '👕 Kleding', naam: 'T-shirts (genoeg voor elke dag)', gedaan: false },
+  { cat: '👕 Kleding', naam: 'Shorts / zomerbroeken', gedaan: false },
+  { cat: '👕 Kleding', naam: 'Ondergoed & sokken', gedaan: false },
+  { cat: '👕 Kleding', naam: 'Badkleding / zwembroek', gedaan: false },
+  { cat: '👕 Kleding', naam: 'Lichte avondkleding', gedaan: false },
+  { cat: '👕 Kleding', naam: 'Sloffen / sandalen', gedaan: false },
+  { cat: '👕 Kleding', naam: 'Sneakers / wandelschoenen', gedaan: false },
+  { cat: '👕 Kleding', naam: 'Regenjas of licht jasje', gedaan: false },
+
+  { cat: '🧴 Toilettas', naam: 'Tandenborstel & tandpasta', gedaan: false },
+  { cat: '🧴 Toilettas', naam: 'Shampoo & conditioner', gedaan: false },
+  { cat: '🧴 Toilettas', naam: 'Douchegel / zeep', gedaan: false },
+  { cat: '🧴 Toilettas', naam: 'Deodorant', gedaan: false },
+  { cat: '🧴 Toilettas', naam: 'Scheermes / scheermesjes', gedaan: false },
+  { cat: '🧴 Toilettas', naam: 'Haarborstel / kam', gedaan: false },
+
+  { cat: '🏖️ Strand', naam: 'Zonnebrand SPF 50', gedaan: false },
+  { cat: '🏖️ Strand', naam: 'After sun / aloe vera', gedaan: false },
+  { cat: '🏖️ Strand', naam: 'Zonnebril', gedaan: false },
+  { cat: '🏖️ Strand', naam: 'Zonnehoed / pet', gedaan: false },
+  { cat: '🏖️ Strand', naam: 'Strandlaken', gedaan: false },
+  { cat: '🏖️ Strand', naam: 'Snorkelset', gedaan: false },
+  { cat: '🏖️ Strand', naam: 'Waterfles', gedaan: false },
+
+  { cat: '🔌 Elektronica', naam: 'Telefoon & oplader', gedaan: false },
+  { cat: '🔌 Elektronica', naam: 'Powerbank', gedaan: false },
+  { cat: '🔌 Elektronica', naam: 'Koptelefoon / oordopjes', gedaan: false },
+  { cat: '🔌 Elektronica', naam: 'Camera', gedaan: false },
+  { cat: '🔌 Elektronica', naam: 'Reisstekker (Portugal = Type F, past op NL)', gedaan: false },
+  { cat: '🔌 Elektronica', naam: 'E-reader / tablet', gedaan: false },
+
+  { cat: '💊 Medicijnen', naam: 'Paracetamol / ibuprofen', gedaan: false },
+  { cat: '💊 Medicijnen', naam: 'Diarreemiddelen', gedaan: false },
+  { cat: '💊 Medicijnen', naam: 'Pleisters & verbandgaas', gedaan: false },
+  { cat: '💊 Medicijnen', naam: 'Muggenspray', gedaan: false },
+  { cat: '💊 Medicijnen', naam: 'Eigen medicatie', gedaan: false },
+  { cat: '💊 Medicijnen', naam: 'Antihistaminica (hooikoorts/allergie)', gedaan: false },
+
+  { cat: '📦 Diversen', naam: 'Boek / vakantieliteratuur', gedaan: false },
+  { cat: '📦 Diversen', naam: 'Kaartspel / gezelschapsspel', gedaan: false },
+  { cat: '📦 Diversen', naam: 'Koffer slot', gedaan: false },
+  { cat: '📦 Diversen', naam: 'Wekker gezet / huis op slot gecontroleerd', gedaan: false },
+  { cat: '📦 Diversen', naam: 'Planten water gegeven', gedaan: false },
+  { cat: '📦 Diversen', naam: 'Brievenbus geregeld', gedaan: false },
+];
+
+let items = loadData('checklist', STANDAARD_ITEMS);
+
+function updateProgress() {
+  const totaal = items.length;
+  const gedaan = items.filter(i => i.gedaan).length;
+  const pct = totaal ? Math.round(gedaan / totaal * 100) : 0;
+  document.getElementById('progress-tekst').textContent = `${gedaan} / ${totaal} ingepakt`;
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+function renderChecklist() {
+  const container = document.getElementById('checklist-container');
+  container.innerHTML = '';
+
+  const categorieen = [...new Set(items.map(i => i.cat))];
+  categorieen.forEach(cat => {
+    const catItems = items.filter(i => i.cat === cat);
+    const gedaan = catItems.filter(i => i.gedaan).length;
+
+    const section = document.createElement('div');
+    section.className = 'checklist-section';
+    section.innerHTML = `
+      <div class="checklist-section-title">
+        ${cat}
+        <span style="font-size:0.8rem;font-weight:400;color:var(--text-light);margin-left:0.5rem;">${gedaan}/${catItems.length}</span>
+      </div>
+      <div class="checklist-items" id="cat-${btoa(cat).replace(/=/g,'')}"></div>
+    `;
+
+    const itemsDiv = section.querySelector(`#cat-${btoa(cat).replace(/=/g,'')}`);
+    catItems.forEach(item => {
+      const globalIdx = items.indexOf(item);
+      const el = document.createElement('div');
+      el.className = 'check-item' + (item.gedaan ? ' done' : '');
+      el.innerHTML = `
+        <div class="check-box">${item.gedaan ? '✓' : ''}</div>
+        <span class="check-label">${item.naam}</span>
+        <button onclick="event.stopPropagation();verwijderItem(${globalIdx})" title="Verwijderen" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--text-light);font-size:0.8rem;padding:0.2rem 0.4rem;border-radius:4px;opacity:0;transition:opacity 0.2s;" class="del-btn">
+          <i class="fa fa-trash"></i>
+        </button>
+      `;
+      el.addEventListener('mouseenter', () => el.querySelector('.del-btn').style.opacity = '1');
+      el.addEventListener('mouseleave', () => el.querySelector('.del-btn').style.opacity = '0');
+      el.addEventListener('click', () => {
+        items[globalIdx].gedaan = !items[globalIdx].gedaan;
+        saveData('checklist', items);
+        renderChecklist();
+        updateProgress();
+      });
+      itemsDiv.appendChild(el);
+    });
+
+    container.appendChild(section);
+  });
+
+  updateProgress();
+}
+
+function verwijderItem(index) {
+  items.splice(index, 1);
+  saveData('checklist', items);
+  renderChecklist();
+}
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+  items.forEach(i => i.gedaan = false);
+  saveData('checklist', items);
+  renderChecklist();
+});
+
+document.getElementById('alles-btn').addEventListener('click', () => {
+  items.forEach(i => i.gedaan = true);
+  saveData('checklist', items);
+  renderChecklist();
+});
+
+// Modal
+document.getElementById('open-toevoeg-modal').addEventListener('click', () =>
+  document.getElementById('toevoeg-modal').classList.add('open'));
+document.getElementById('sluit-toevoeg').addEventListener('click', () =>
+  document.getElementById('toevoeg-modal').classList.remove('open'));
+
+document.getElementById('sla-item-op').addEventListener('click', () => {
+  const naam = document.getElementById('ni-naam').value.trim();
+  if (!naam) { alert('Vul een naam in.'); return; }
+  items.push({ cat: document.getElementById('ni-categorie').value, naam, gedaan: false });
+  saveData('checklist', items);
+  renderChecklist();
+  document.getElementById('ni-naam').value = '';
+  document.getElementById('toevoeg-modal').classList.remove('open');
+});
+
+renderChecklist();
+</script>
+</body>
+</html>

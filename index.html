@@ -3,24 +3,290 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vakantie</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background: #f0f8ff;
-    }
-    h1 {
-      color: #2c7be5;
-    }
-  </style>
+  <title>Vakantie Oldegbers — Ferragudo 2026</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-  <h1>Welkom op de vakantiesite!</h1>
-  <p>En trouwens: Job is het leukste broertje dat ik heb. 🏆</p>
+
+<nav>
+  <a href="index.html" class="logo">🌊 <span>Vakantie</span> Oldegbers</a>
+  <a href="index.html" class="active"><i class="fa fa-house"></i> Dashboard</a>
+  <a href="gallery.html"><i class="fa fa-images"></i> Galerij</a>
+  <a href="activities.html"><i class="fa fa-map-pin"></i> Activiteiten</a>
+  <a href="checklist.html"><i class="fa fa-list-check"></i> Inpaklijst</a>
+</nav>
+
+<div class="hero">
+  <h1>🏖️ Ferragudo, Algarve</h1>
+  <p>Portugal &nbsp;·&nbsp; Zomer 2026 &nbsp;·&nbsp; Het huisje van de dromen</p>
+</div>
+
+<div class="container">
+  <div class="dashboard-grid">
+
+    <!-- AFTELTIMER -->
+    <div class="card countdown-card">
+      <div class="card-title"><i class="fa fa-hourglass-half"></i> Nog even geduld...</div>
+      <div class="countdown-inner">
+        <div class="countdown-unit"><div class="num" id="cd-dagen">--</div><div class="label">dagen</div></div>
+        <div class="countdown-unit"><div class="num" id="cd-uren">--</div><div class="label">uren</div></div>
+        <div class="countdown-unit"><div class="num" id="cd-min">--</div><div class="label">minuten</div></div>
+        <div class="countdown-unit"><div class="num" id="cd-sec">--</div><div class="label">seconden</div></div>
+      </div>
+      <div class="quote-bar" id="dagelijks-quote"></div>
+    </div>
+
+    <!-- DEELNEMERS -->
+    <div class="card deelnemers-card">
+      <div class="card-title"><i class="fa fa-users"></i> Wie gaan er mee?</div>
+      <div class="deelnemers-grid" id="deelnemers-grid">
+        <!-- Gegenereerd door JS -->
+      </div>
+    </div>
+
+    <!-- WEER -->
+    <div class="card weer-card">
+      <div class="card-title"><i class="fa fa-cloud-sun"></i> Weer in Ferragudo — 10 dagen</div>
+      <div class="weer-grid" id="weer-grid">
+        <div style="grid-column:span 5;text-align:center;color:var(--text-light);padding:2rem;">Weer wordt geladen...</div>
+      </div>
+      <div class="weer-refresh" id="weer-refresh-info"></div>
+    </div>
+
+    <!-- BIER INDEX -->
+    <div class="card bier-card">
+      <div class="card-title"><i class="fa fa-beer-mug-empty"></i> Nationale Bierprijs Index</div>
+      <ul class="bier-list">
+        <li class="highlight"><span class="land">🇵🇹 Portugal</span><span class="prijs">€ 1,50</span></li>
+        <li><span class="land">🇳🇱 Nederland</span><span class="prijs">€ 4,20</span></li>
+        <li><span class="land">🇩🇪 Duitsland</span><span class="prijs">€ 3,80</span></li>
+        <li><span class="land">🇧🇪 België</span><span class="prijs">€ 3,50</span></li>
+        <li><span class="land">🇫🇷 Frankrijk</span><span class="prijs">€ 4,50</span></li>
+        <li><span class="land">🇬🇧 Engeland</span><span class="prijs">€ 6,80</span></li>
+        <li><span class="land">🇳🇴 Noorwegen</span><span class="prijs">€ 9,50</span></li>
+      </ul>
+      <div style="font-size:0.72rem;color:var(--text-light);margin-top:0.75rem;">Gemiddelde prijs voor een biertje in een café (0,33L)</div>
+    </div>
+
+    <!-- KAART -->
+    <div class="card kaart-card">
+      <div class="card-title"><i class="fa fa-map-location-dot"></i> Onze locatie</div>
+      <div id="map"></div>
+    </div>
+
+    <!-- REISINFO -->
+    <div class="card reisinfo-card">
+      <div class="card-title"><i class="fa fa-plane"></i> Reisinfo</div>
+      <div class="reisinfo-grid">
+        <div class="reisinfo-item">
+          <div class="ri-label"><i class="fa fa-plane-departure"></i> Vertrek</div>
+          <div class="ri-value placeholder" id="ri-vertrek">Nog niet bekend</div>
+        </div>
+        <div class="reisinfo-item">
+          <div class="ri-label"><i class="fa fa-plane-arrival"></i> Aankomst</div>
+          <div class="ri-value placeholder" id="ri-aankomst">Nog niet bekend</div>
+        </div>
+        <div class="reisinfo-item">
+          <div class="ri-label"><i class="fa fa-hashtag"></i> Vluchtnummer</div>
+          <div class="ri-value placeholder" id="ri-vlucht">Nog niet bekend</div>
+        </div>
+        <div class="reisinfo-item">
+          <div class="ri-label"><i class="fa fa-clock"></i> Vertrektijd</div>
+          <div class="ri-value placeholder" id="ri-tijd">Nog niet bekend</div>
+        </div>
+        <div class="reisinfo-item">
+          <div class="ri-label"><i class="fa fa-house"></i> Check-in</div>
+          <div class="ri-value placeholder" id="ri-checkin">Nog niet bekend</div>
+        </div>
+        <div class="reisinfo-item">
+          <div class="ri-label"><i class="fa fa-door-open"></i> Check-out</div>
+          <div class="ri-value placeholder" id="ri-checkout">Nog niet bekend</div>
+        </div>
+        <div class="reisinfo-item" style="grid-column:span 2;">
+          <div class="ri-label"><i class="fa fa-location-dot"></i> Adres</div>
+          <div class="ri-value">Ferragudo, Lagoa, Faro, Portugal</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ---- COUNTDOWN ----
+function updateCountdown() {
+  const nu = new Date();
+  const diff = VERTREKDATUM - nu;
+  if (diff <= 0) {
+    document.getElementById('cd-dagen').textContent = '🎉';
+    document.getElementById('cd-uren').textContent = '🌊';
+    document.getElementById('cd-min').textContent = '☀️';
+    document.getElementById('cd-sec').textContent = '🍺';
+    return;
+  }
+  const dagen = Math.floor(diff / 86400000);
+  const uren  = Math.floor((diff % 86400000) / 3600000);
+  const min   = Math.floor((diff % 3600000) / 60000);
+  const sec   = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-dagen').textContent = String(dagen).padStart(2,'0');
+  document.getElementById('cd-uren').textContent  = String(uren).padStart(2,'0');
+  document.getElementById('cd-min').textContent   = String(min).padStart(2,'0');
+  document.getElementById('cd-sec').textContent   = String(sec).padStart(2,'0');
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+// ---- QUOTE ----
+const q = getDagelijkseQuote();
+document.getElementById('dagelijks-quote').innerHTML =
+  `"${q.tekst}" <strong>— ${q.ref}</strong>`;
+
+// ---- DEELNEMERS ----
+const DEFAULT_DEELNEMERS = [
+  'Papa', 'Mama', 'Timon', 'Job'
+];
+let deelnemers = loadData('deelnemers', DEFAULT_DEELNEMERS.map(n => ({ naam: n, foto: null })));
+
+function renderDeelnemers() {
+  const grid = document.getElementById('deelnemers-grid');
+  grid.innerHTML = '';
+  deelnemers.forEach((d, i) => {
+    const el = document.createElement('div');
+    el.className = 'deelnemer';
+    el.innerHTML = d.foto
+      ? `<img class="deelnemer-avatar" src="${d.foto}" alt="${d.naam}">`
+      : `<div class="avatar-placeholder">${d.naam[0]}</div>`;
+    el.innerHTML += `
+      <div class="deelnemer-name">${d.naam}</div>
+      <div class="upload-hint">📷 klik voor foto</div>
+      <input type="file" class="deelnemer-upload" accept="image/*" data-index="${i}">
+    `;
+    el.querySelector('.deelnemer-upload').addEventListener('change', e => uploadFoto(e, i));
+    el.addEventListener('click', () => el.querySelector('.deelnemer-upload').click());
+    grid.appendChild(el);
+  });
+}
+
+function uploadFoto(e, index) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    deelnemers[index].foto = ev.target.result;
+    saveData('deelnemers', deelnemers);
+    renderDeelnemers();
+  };
+  reader.readAsDataURL(file);
+}
+renderDeelnemers();
+
+// ---- WEER ----
+async function laadWeer() {
+  const cacheKey = 'vakantie_weer_cache';
+  const cacheTime = 'vakantie_weer_tijd';
+  const nu = Date.now();
+  const laatste = parseInt(localStorage.getItem(cacheTime) || '0');
+  const heeftCache = localStorage.getItem(cacheKey);
+
+  // Refresh alleen als ouder dan 1 uur (of elke ochtend)
+  if (heeftCache && (nu - laatste) < 3600000) {
+    renderWeer(JSON.parse(heeftCache));
+    return;
+  }
+
+  try {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${LOCATIE.lat}&longitude=${LOCATIE.lng}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Europe%2FLisbon&forecast_days=10`;
+    const res = await fetch(url);
+    const data = await res.json();
+    localStorage.setItem(cacheKey, JSON.stringify(data));
+    localStorage.setItem(cacheTime, String(nu));
+    renderWeer(data);
+    document.getElementById('weer-refresh-info').textContent =
+      `Bijgewerkt: ${new Date().toLocaleString('nl-NL')} · ververs elke ochtend om 07:00`;
+  } catch {
+    document.getElementById('weer-grid').innerHTML =
+      '<div style="grid-column:span 5;text-align:center;color:var(--text-light)">Weer kon niet worden geladen</div>';
+  }
+}
+
+function renderWeer(data) {
+  const grid = document.getElementById('weer-grid');
+  grid.innerHTML = '';
+  const d = data.daily;
+  for (let i = 0; i < 10; i++) {
+    const { dag, datum } = formatDatum(d.time[i]);
+    const div = document.createElement('div');
+    div.className = 'weer-dag';
+    div.innerHTML = `
+      <div class="dag-naam">${dag}</div>
+      <div class="datum">${datum}</div>
+      <div class="icon">${weerIcon(d.weather_code[i])}</div>
+      <div class="temp-max">${Math.round(d.temperature_2m_max[i])}°</div>
+      <div class="temp-min">${Math.round(d.temperature_2m_min[i])}°</div>
+      <div class="regen">💧 ${d.precipitation_probability_max[i]}%</div>
+    `;
+    grid.appendChild(div);
+  }
+  document.getElementById('weer-refresh-info').textContent =
+    `Bijgewerkt: ${new Date(parseInt(localStorage.getItem('vakantie_weer_tijd'))).toLocaleString('nl-NL')}`;
+}
+
+laadWeer();
+
+// Elke dag om 07:00 refreshen
+function planeerWeerRefresh() {
+  const nu = new Date();
+  const morgen07 = new Date(nu);
+  morgen07.setHours(7, 0, 0, 0);
+  if (nu >= morgen07) morgen07.setDate(morgen07.getDate() + 1);
+  const msNaar07 = morgen07 - nu;
+  setTimeout(() => {
+    localStorage.removeItem('vakantie_weer_tijd'); // force refresh
+    laadWeer();
+    setInterval(() => { localStorage.removeItem('vakantie_weer_tijd'); laadWeer(); }, 86400000);
+  }, msNaar07);
+}
+planeerWeerRefresh();
+
+// ---- KAART ----
+const map = L.map('map').setView([LOCATIE.lat, LOCATIE.lng], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap'
+}).addTo(map);
+
+const huisIcon = L.divIcon({
+  html: '<div style="font-size:2rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4))">🏠</div>',
+  className: '',
+  iconSize: [36, 36],
+  iconAnchor: [18, 36],
+});
+L.marker([LOCATIE.lat, LOCATIE.lng], { icon: huisIcon })
+  .addTo(map)
+  .bindPopup('<strong>Ons huisje</strong><br>Ferragudo, Algarve, Portugal')
+  .openPopup();
+
+// Activiteiten pins laden
+function laadActiviteitPins() {
+  const activiteiten = loadData('activiteiten', []);
+  activiteiten.forEach(a => {
+    if (a.lat && a.lng) {
+      const pinIcon = L.divIcon({
+        html: `<div style="font-size:1.6rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))">${a.icon || '📍'}</div>`,
+        className: '',
+        iconSize: [28, 28],
+        iconAnchor: [14, 28],
+      });
+      L.marker([a.lat, a.lng], { icon: pinIcon })
+        .addTo(map)
+        .bindPopup(`<strong>${a.naam}</strong><br>${a.datum || ''}`);
+    }
+  });
+}
+laadActiviteitPins();
+</script>
 </body>
 </html>

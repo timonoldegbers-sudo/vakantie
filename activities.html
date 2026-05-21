@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activiteiten — Vakantie Oldegbers</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">🌊 <span>Vakantie</span> Oldegbers</a>
+  <a href="index.html"><i class="fa fa-house"></i> Dashboard</a>
+  <a href="gallery.html"><i class="fa fa-images"></i> Galerij</a>
+  <a href="activities.html" class="active"><i class="fa fa-map-pin"></i> Activiteiten</a>
+  <a href="checklist.html"><i class="fa fa-list-check"></i> Inpaklijst</a>
+</nav>
+
+<div class="page-header">
+  <h1><i class="fa fa-map-pin"></i> Activiteiten</h1>
+  <p>Plan, draag aan en vink af — per persoon bijhouden</p>
+</div>
+
+<div class="container">
+  <div style="display:grid;grid-template-columns:1fr 380px;gap:1.5rem;align-items:start;">
+
+    <!-- LINKER KOLOM -->
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:1rem;">
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <button class="btn btn-outline btn-sm filter-btn active" data-filter="alles">Alles</button>
+          <button class="btn btn-outline btn-sm filter-btn" data-filter="actief">Niet gedaan</button>
+          <button class="btn btn-outline btn-sm filter-btn" data-filter="gedaan">Gedaan</button>
+        </div>
+        <button class="btn btn-primary" id="open-modal-btn">
+          <i class="fa fa-plus"></i> Activiteit aandragen
+        </button>
+      </div>
+
+      <div id="activiteiten-lijst"></div>
+      <div id="geen-activiteiten" style="text-align:center;padding:3rem;color:var(--text-light);display:none;">
+        <i class="fa fa-map-pin" style="font-size:2rem;margin-bottom:0.75rem;display:block;"></i>
+        Nog geen activiteiten. Draag er een aan!
+      </div>
+    </div>
+
+    <!-- RECHTER KOLOM: MINI KAART -->
+    <div class="card" style="position:sticky;top:80px;">
+      <div class="card-title"><i class="fa fa-map"></i> Op de kaart</div>
+      <div id="mini-map" style="height:300px;border-radius:10px;overflow:hidden;"></div>
+      <div style="font-size:0.78rem;color:var(--text-light);margin-top:0.75rem;">
+        Voeg een activiteit toe met een locatie om deze op de kaart te zien.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h2><i class="fa fa-plus-circle" style="color:var(--secondary)"></i> Activiteit aandragen</h2>
+    <div class="form-group">
+      <label>Naam activiteit *</label>
+      <input type="text" id="f-naam" placeholder="bijv. Praia da Marinha bezoeken">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Datum</label>
+        <input type="date" id="f-datum">
+      </div>
+      <div class="form-group">
+        <label>Kosten per persoon (€)</label>
+        <input type="number" id="f-kosten" placeholder="0" min="0" step="0.50">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Beschrijving</label>
+      <textarea id="f-beschrijving" rows="3" placeholder="Wat gaan we doen? Tips, opmerkingen..."></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Categorie</label>
+        <select id="f-categorie">
+          <option value="🏖️">🏖️ Strand</option>
+          <option value="🍽️">🍽️ Eten & drinken</option>
+          <option value="🏊">🏊 Water</option>
+          <option value="🚶">🚶 Wandelen</option>
+          <option value="🎭">🎭 Cultuur</option>
+          <option value="🛒">🛒 Winkelen</option>
+          <option value="🌅">🌅 Uitkijkpunt</option>
+          <option value="📍">📍 Anders</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Aangedragen door</label>
+        <select id="f-aandrager">
+          <option value="">— kies —</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Breedtegraad (lat)</label>
+        <input type="number" id="f-lat" placeholder="bijv. 37.0945" step="0.0001">
+      </div>
+      <div class="form-group">
+        <label>Lengtegraad (lng)</label>
+        <input type="number" id="f-lng" placeholder="bijv. -8.4945" step="0.0001">
+      </div>
+    </div>
+    <div style="font-size:0.78rem;color:var(--text-light);margin-top:-0.5rem;margin-bottom:1rem;">
+      Tip: zoek de locatie op in <a href="https://www.google.nl/maps" target="_blank" style="color:var(--primary)">Google Maps</a>, klik rechts → coördinaten kopiëren
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="sluit-modal-btn">Annuleren</button>
+      <button class="btn btn-primary" id="opslaan-btn">Opslaan</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const DEFAULT_DEELNEMERS = ['Papa', 'Mama', 'Timon', 'Job'];
+const deelnemers = loadData('deelnemers', DEFAULT_DEELNEMERS.map(n => ({ naam: n, foto: null })));
+let activiteiten = loadData('activiteiten', []);
+let actieveFilter = 'alles';
+
+// Vul aandrager dropdown
+const aandragerSel = document.getElementById('f-aandrager');
+deelnemers.forEach(d => {
+  const opt = document.createElement('option');
+  opt.value = d.naam;
+  opt.textContent = d.naam;
+  aandragerSel.appendChild(opt);
+});
+
+// ---- MINI KAART ----
+const miniMap = L.map('mini-map').setView([LOCATIE.lat, LOCATIE.lng], 11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap'
+}).addTo(miniMap);
+L.marker([LOCATIE.lat, LOCATIE.lng], {
+  icon: L.divIcon({ html: '🏠', className: '', iconSize: [28,28], iconAnchor: [14,28] })
+}).addTo(miniMap).bindPopup('Ons huisje');
+let mapMarkers = [];
+
+function updateKaartPins() {
+  mapMarkers.forEach(m => miniMap.removeLayer(m));
+  mapMarkers = [];
+  activiteiten.forEach(a => {
+    if (a.lat && a.lng) {
+      const m = L.marker([a.lat, a.lng], {
+        icon: L.divIcon({ html: `<span style="font-size:1.4rem">${a.categorie || '📍'}</span>`, className: '', iconSize: [24,24], iconAnchor: [12,24] })
+      }).addTo(miniMap).bindPopup(`<strong>${a.naam}</strong><br>€${a.kosten || 0} p.p.`);
+      mapMarkers.push(m);
+    }
+  });
+}
+
+// ---- RENDER ----
+function renderActiviteiten() {
+  const lijst = document.getElementById('activiteiten-lijst');
+  lijst.innerHTML = '';
+
+  let gefilterd = activiteiten;
+  if (actieveFilter === 'gedaan') {
+    gefilterd = activiteiten.filter(a => {
+      const checks = a.checks || {};
+      return deelnemers.every(d => checks[d.naam]);
+    });
+  } else if (actieveFilter === 'actief') {
+    gefilterd = activiteiten.filter(a => {
+      const checks = a.checks || {};
+      return !deelnemers.every(d => checks[d.naam]);
+    });
+  }
+
+  document.getElementById('geen-activiteiten').style.display =
+    gefilterd.length === 0 ? 'block' : 'none';
+
+  gefilterd.forEach((a, idx) => {
+    const realIdx = activiteiten.indexOf(a);
+    const checks = a.checks || {};
+    const aantalGedaan = deelnemers.filter(d => checks[d.naam]).length;
+    const allesGedaan = aantalGedaan === deelnemers.length;
+
+    const card = document.createElement('div');
+    card.className = 'activity-card';
+    if (allesGedaan) card.style.opacity = '0.65';
+
+    card.innerHTML = `
+      <div class="activity-header">
+        <div>
+          <div class="activity-title">${a.categorie || '📍'} ${a.naam}</div>
+          <div class="activity-meta">
+            ${a.datum ? `📅 ${new Date(a.datum).toLocaleDateString('nl-NL', {weekday:'short',day:'numeric',month:'long'})}` : ''}
+            ${a.aandrager ? `&nbsp;·&nbsp; Aangedragen door ${a.aandrager}` : ''}
+            ${a.beschrijving ? `<br>${a.beschrijving}` : ''}
+          </div>
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:center;flex-shrink:0;">
+          ${a.kosten ? `<span class="activity-cost">€${parseFloat(a.kosten).toFixed(2)} p.p.</span>` : ''}
+          <button class="btn btn-outline btn-sm" onclick="verwijderActiviteit(${realIdx})" title="Verwijderen">
+            <i class="fa fa-trash"></i>
+          </button>
+        </div>
+      </div>
+      <div class="deelnemers-check" id="checks-${realIdx}"></div>
+      <div style="font-size:0.75rem;color:var(--text-light);margin-top:0.5rem;">${aantalGedaan}/${deelnemers.length} gaan mee</div>
+    `;
+
+    const checksDiv = card.querySelector(`#checks-${realIdx}`);
+    deelnemers.forEach(d => {
+      const span = document.createElement('label');
+      span.className = 'check-person' + (checks[d.naam] ? ' checked' : '');
+      span.innerHTML = `
+        <div class="dot"></div>
+        ${d.naam}
+        <input type="checkbox" ${checks[d.naam] ? 'checked' : ''}>
+      `;
+      span.querySelector('input').addEventListener('change', e => {
+        if (!activiteiten[realIdx].checks) activiteiten[realIdx].checks = {};
+        activiteiten[realIdx].checks[d.naam] = e.target.checked;
+        saveData('activiteiten', activiteiten);
+        renderActiviteiten();
+      });
+      checksDiv.appendChild(span);
+    });
+
+    lijst.appendChild(card);
+  });
+
+  updateKaartPins();
+}
+
+// ---- FILTER ----
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    actieveFilter = btn.dataset.filter;
+    renderActiviteiten();
+  });
+});
+
+// ---- MODAL ----
+document.getElementById('open-modal-btn').addEventListener('click', () => {
+  document.getElementById('modal').classList.add('open');
+});
+document.getElementById('sluit-modal-btn').addEventListener('click', () => {
+  document.getElementById('modal').classList.remove('open');
+});
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal'))
+    document.getElementById('modal').classList.remove('open');
+});
+
+document.getElementById('opslaan-btn').addEventListener('click', () => {
+  const naam = document.getElementById('f-naam').value.trim();
+  if (!naam) { alert('Vul een naam in.'); return; }
+  activiteiten.push({
+    naam,
+    datum: document.getElementById('f-datum').value,
+    kosten: document.getElementById('f-kosten').value,
+    beschrijving: document.getElementById('f-beschrijving').value,
+    categorie: document.getElementById('f-categorie').value,
+    aandrager: document.getElementById('f-aandrager').value,
+    lat: parseFloat(document.getElementById('f-lat').value) || null,
+    lng: parseFloat(document.getElementById('f-lng').value) || null,
+    checks: {},
+  });
+  saveData('activiteiten', activiteiten);
+  renderActiviteiten();
+  document.getElementById('modal').classList.remove('open');
+  // reset form
+  ['f-naam','f-datum','f-kosten','f-beschrijving','f-lat','f-lng'].forEach(id =>
+    document.getElementById(id).value = '');
+});
+
+function verwijderActiviteit(index) {
+  if (confirm('Activiteit verwijderen?')) {
+    activiteiten.splice(index, 1);
+    saveData('activiteiten', activiteiten);
+    renderActiviteiten();
+  }
+}
+
+renderActiviteiten();
+</script>
+</body>
+</html>
