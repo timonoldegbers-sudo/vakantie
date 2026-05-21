@@ -501,19 +501,17 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
   cursor: pointer; background: none; border: none;
 }
 
-/* ── HUISJE FOTO GRID ── */
-.huisje-grid {
+/* ── HUISJE FOTO STRIP ── */
+.foto-strip {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
-  height: 300px;
-  border-radius: 14px;
+  height: 175px;
+  border-radius: 12px;
   overflow: hidden;
   margin-bottom: 1rem;
 }
-.huisje-grid img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.huisje-grid img:first-child { grid-row: span 2; }
+.foto-strip img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* ── CHECKLIST EXPANDED ITEM ── */
 .check-item-expanded {
@@ -575,17 +573,16 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
 
   .checklist-items { grid-template-columns: 1fr; }
 
-  .huisje-grid {
+  .foto-strip {
     display: flex;
     overflow-x: auto;
-    height: 200px;
+    height: 150px;
     gap: 0.4rem;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    border-radius: 12px;
+    border-radius: 10px;
   }
-  .huisje-grid img { width: 80vw; flex-shrink: 0; scroll-snap-align: start; height: 100%; border-radius: 0; }
-  .huisje-grid img:first-child { width: 88vw; grid-row: auto; }
+  .foto-strip img { width: 76vw; flex-shrink: 0; scroll-snap-align: start; height: 100%; border-radius: 0; }
 
   .gallery-grid { grid-template-columns: repeat(2, 1fr); }
 

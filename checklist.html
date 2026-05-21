@@ -22,16 +22,26 @@
 
 <div class="page-header">
   <h1><i class="fa fa-list-check"></i> Inpaklijst & Checklist</h1>
-  <p>Persoonlijk: iedereen vinkt zelf aan. Gezamenlijk: wie neemt het mee?</p>
+  <p>Kies jouw naam en vink je eigen spullen aan</p>
 </div>
 
 <div class="container">
 
+  <!-- NAAM-KIEZER -->
+  <div class="card" style="margin-bottom:1.25rem;">
+    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+      <div style="font-weight:700;color:var(--text);font-size:0.9rem;white-space:nowrap;flex-shrink:0;">
+        <i class="fa fa-user" style="color:var(--secondary);margin-right:0.4rem;"></i>Wie ben jij?
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.4rem;" id="naam-kiezer"></div>
+    </div>
+  </div>
+
   <!-- PROGRESSBAR -->
   <div class="card" style="margin-bottom:1.5rem;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
-      <div class="card-title" style="margin-bottom:0;"><i class="fa fa-chart-line"></i> Voortgang groep</div>
-      <div style="font-weight:700;color:var(--primary);" id="progress-tekst">0%</div>
+      <div class="card-title" style="margin-bottom:0;"><i class="fa fa-chart-line"></i> Voortgang</div>
+      <div style="font-weight:700;color:var(--primary);" id="progress-tekst">—</div>
     </div>
     <div class="progress-bar-wrap">
       <div class="progress-bar" id="progress-bar" style="width:0%"></div>
@@ -98,6 +108,7 @@ let items = [];
 let deelnemers = [];
 let checks = {};
 let actieveTab = 'persoonlijk';
+let gekozenPersoon = localStorage.getItem('checklist_persoon') || null;
 
 function actieveItems() {
   return items.filter(i => (i.type || 'persoonlijk') === actieveTab);
@@ -111,23 +122,64 @@ async function laadChecklist() {
   ]);
   deelnemers = d || [];
   items = c || [];
+
+  // Valideer opgeslagen naam
+  if (gekozenPersoon && !deelnemers.find(d => d.naam === gekozenPersoon)) {
+    gekozenPersoon = null;
+    localStorage.removeItem('checklist_persoon');
+  }
+
   checks = {};
   (ch || []).forEach(r => {
     if (!checks[r.checklist_id]) checks[r.checklist_id] = [];
     checks[r.checklist_id].push(r);
   });
+
+  renderNaamKiezer();
   renderChecklist();
+}
+
+function renderNaamKiezer() {
+  const container = document.getElementById('naam-kiezer');
+  container.innerHTML = '';
+  deelnemers.forEach(d => {
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-sm ' + (gekozenPersoon === d.naam ? 'btn-primary' : 'btn-outline');
+    btn.style.borderRadius = '20px';
+    btn.textContent = d.naam;
+    btn.addEventListener('click', () => {
+      gekozenPersoon = (gekozenPersoon === d.naam) ? null : d.naam;
+      if (gekozenPersoon) localStorage.setItem('checklist_persoon', gekozenPersoon);
+      else localStorage.removeItem('checklist_persoon');
+      renderNaamKiezer();
+      renderChecklist();
+    });
+    container.appendChild(btn);
+  });
 }
 
 function updateProgress() {
   const lijst = actieveItems();
-  const totaalMogelijk = lijst.length * deelnemers.length;
-  let gedaan = 0;
-  lijst.forEach(item => {
-    gedaan += (checks[item.id] || []).filter(c => c.gedaan).length;
-  });
-  const pct = totaalMogelijk ? Math.round(gedaan / totaalMogelijk * 100) : 0;
-  document.getElementById('progress-tekst').textContent = `Groep: ${pct}%`;
+  let pct = 0, tekst = '—';
+
+  if (actieveTab === 'persoonlijk' && gekozenPersoon) {
+    const totaal = lijst.length;
+    const gedaan = lijst.filter(item =>
+      (checks[item.id] || []).some(c => c.persoon_naam === gekozenPersoon && c.gedaan)
+    ).length;
+    pct = totaal ? Math.round(gedaan / totaal * 100) : 0;
+    tekst = `${gedaan} / ${totaal} ingepakt`;
+  } else if (actieveTab === 'gezamenlijk') {
+    const totaalMogelijk = lijst.length * deelnemers.length;
+    let gedaan = 0;
+    lijst.forEach(item => { gedaan += (checks[item.id] || []).filter(c => c.gedaan).length; });
+    pct = totaalMogelijk ? Math.round(gedaan / totaalMogelijk * 100) : 0;
+    tekst = `Groep: ${pct}%`;
+  } else {
+    tekst = 'Kies jouw naam ↑';
+  }
+
+  document.getElementById('progress-tekst').textContent = tekst;
   document.getElementById('progress-bar').style.width = pct + '%';
 }
 
@@ -135,80 +187,147 @@ function renderChecklist() {
   const container = document.getElementById('checklist-container');
   container.innerHTML = '';
   const lijst = actieveItems();
-  const categorieen = [...new Set(lijst.map(i => i.categorie))];
 
-  if (lijst.length === 0) {
-    container.innerHTML = `<div style="text-align:center;padding:3rem;color:var(--text-light);">
-      <i class="fa fa-list-check" style="font-size:2rem;display:block;margin-bottom:0.75rem;"></i>
-      Nog geen items. Voeg er een toe!
-    </div>`;
+  // Persoonlijk zonder naam → prompt
+  if (actieveTab === 'persoonlijk' && !gekozenPersoon) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:3.5rem 1rem;color:var(--text-light);">
+        <i class="fa fa-hand-pointer" style="font-size:2.2rem;display:block;margin-bottom:0.75rem;color:var(--border);"></i>
+        <div style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:0.35rem;">Kies jouw naam hierboven</div>
+        <div style="font-size:0.88rem;">Dan zie je precies wat jij nog moet inpakken</div>
+      </div>`;
     updateProgress();
     return;
   }
+
+  if (lijst.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:3rem;color:var(--text-light);">
+        <i class="fa fa-list-check" style="font-size:2rem;display:block;margin-bottom:0.75rem;"></i>
+        Nog geen items. Voeg er een toe!
+      </div>`;
+    updateProgress();
+    return;
+  }
+
+  const categorieen = [...new Set(lijst.map(i => i.categorie))];
 
   categorieen.forEach(cat => {
     const catItems = lijst.filter(i => i.categorie === cat);
     const safeId = btoa(encodeURIComponent(cat)).replace(/[^a-zA-Z0-9]/g, '');
     const section = document.createElement('div');
     section.className = 'checklist-section';
-    section.innerHTML = `
-      <div class="checklist-section-title">${cat}</div>
-      <div id="items-${safeId}"></div>
-    `;
-    const itemsDiv = section.querySelector(`#items-${safeId}`);
 
-    catItems.forEach(item => {
-      const itemChecks = checks[item.id] || [];
-      const totalGedaan = itemChecks.filter(c => c.gedaan).length;
+    if (actieveTab === 'persoonlijk') {
+      // ── PERSOONLIJK: compact view met 1 checkbox per item ──
+      const gedaanInCat = catItems.filter(item =>
+        (checks[item.id] || []).some(c => c.persoon_naam === gekozenPersoon && c.gedaan)
+      ).length;
 
-      const el = document.createElement('div');
-      el.className = 'check-item-expanded';
-
-      el.innerHTML = `
-        <div class="check-item-header">
-          <span class="check-item-naam">${item.naam}</span>
-          <div style="display:flex;align-items:center;gap:0.5rem;flex-shrink:0;">
-            <span style="font-size:0.75rem;color:var(--text-light);">${totalGedaan}/${deelnemers.length}</span>
-            <button onclick="event.stopPropagation();verwijderItem(${item.id})" class="del-btn" title="Verwijderen"
-              style="background:none;border:none;cursor:pointer;color:var(--text-light);font-size:0.8rem;padding:0.2rem 0.4rem;border-radius:4px;opacity:0;transition:opacity 0.2s;">
-              <i class="fa fa-trash"></i>
-            </button>
-          </div>
+      section.innerHTML = `
+        <div class="checklist-section-title">
+          ${cat}
+          <span style="font-size:0.8rem;font-weight:400;color:var(--text-light);margin-left:0.5rem;">${gedaanInCat}/${catItems.length}</span>
         </div>
-        ${actieveTab === 'gezamenlijk' ? '<div style="font-size:0.72rem;color:var(--text-light);font-weight:600;margin-bottom:0.4rem;">Wie neemt het mee?</div>' : ''}
-        <div class="check-persons" id="persons-${item.id}"></div>
+        <div class="checklist-items" id="items-${safeId}"></div>
       `;
 
-      el.addEventListener('mouseenter', () => el.querySelector('.del-btn').style.opacity = '1');
-      el.addEventListener('mouseleave', () => el.querySelector('.del-btn').style.opacity = '0');
+      const itemsDiv = section.querySelector(`#items-${safeId}`);
+      catItems.forEach(item => {
+        const itemChecks = checks[item.id] || [];
+        const myCheck = itemChecks.find(c => c.persoon_naam === gekozenPersoon);
+        const isGedaan = myCheck?.gedaan || false;
+        const totalGedaan = itemChecks.filter(c => c.gedaan).length;
 
-      const personsDiv = el.querySelector(`#persons-${item.id}`);
-      deelnemers.forEach(d => {
-        const check = itemChecks.find(c => c.persoon_naam === d.naam);
-        const isGedaan = check?.gedaan || false;
-        const span = document.createElement('label');
-        span.className = 'check-person' + (isGedaan ? ' checked' : '');
-        span.innerHTML = `<div class="dot"></div>${d.naam}<input type="checkbox" ${isGedaan ? 'checked' : ''}>`;
-        span.querySelector('input').addEventListener('change', async e => {
-          await db.from('checklist_checks').upsert(
-            { checklist_id: item.id, persoon_naam: d.naam, gedaan: e.target.checked },
-            { onConflict: 'checklist_id,persoon_naam' }
-          );
-          if (!checks[item.id]) checks[item.id] = [];
-          const ci = checks[item.id].findIndex(c => c.persoon_naam === d.naam);
-          if (ci !== -1) checks[item.id][ci].gedaan = e.target.checked;
-          else checks[item.id].push({ checklist_id: item.id, persoon_naam: d.naam, gedaan: e.target.checked });
-          renderChecklist();
-        });
-        personsDiv.appendChild(span);
+        const el = document.createElement('div');
+        el.className = 'check-item' + (isGedaan ? ' done' : '');
+        el.innerHTML = `
+          <div class="check-box">${isGedaan ? '✓' : ''}</div>
+          <span class="check-label">${item.naam}</span>
+          <span style="margin-left:auto;font-size:0.72rem;color:var(--text-light);padding:0 0.4rem;flex-shrink:0;"
+                title="${totalGedaan} van ${deelnemers.length} hebben ingepakt">${totalGedaan}/${deelnemers.length}</span>
+          <button onclick="event.stopPropagation();verwijderItem(${item.id})" class="del-btn" title="Verwijderen"
+            style="background:none;border:none;cursor:pointer;color:var(--text-light);font-size:0.8rem;padding:0.2rem 0.4rem;border-radius:4px;opacity:0;transition:opacity 0.2s;flex-shrink:0;">
+            <i class="fa fa-trash"></i>
+          </button>
+        `;
+        el.addEventListener('mouseenter', () => el.querySelector('.del-btn').style.opacity = '1');
+        el.addEventListener('mouseleave', () => el.querySelector('.del-btn').style.opacity = '0');
+        el.addEventListener('click', () => toggleCheck(item.id, gekozenPersoon, !isGedaan));
+        itemsDiv.appendChild(el);
       });
 
-      itemsDiv.appendChild(el);
-    });
+    } else {
+      // ── GEZAMENLIJK: uitgebreide view met naam-chips ──
+      const gedaanInCat = catItems.filter(item =>
+        (checks[item.id] || []).some(c => c.gedaan)
+      ).length;
+
+      section.innerHTML = `
+        <div class="checklist-section-title">
+          ${cat}
+          <span style="font-size:0.8rem;font-weight:400;color:var(--text-light);margin-left:0.5rem;">${gedaanInCat}/${catItems.length} geclaimd</span>
+        </div>
+        <div id="items-${safeId}"></div>
+      `;
+
+      const itemsDiv = section.querySelector(`#items-${safeId}`);
+      catItems.forEach(item => {
+        const itemChecks = checks[item.id] || [];
+        const totalGedaan = itemChecks.filter(c => c.gedaan).length;
+
+        const el = document.createElement('div');
+        el.className = 'check-item-expanded';
+        el.innerHTML = `
+          <div class="check-item-header">
+            <span class="check-item-naam">${item.naam}</span>
+            <div style="display:flex;align-items:center;gap:0.5rem;flex-shrink:0;">
+              <span style="font-size:0.75rem;color:var(--text-light);">${totalGedaan}/${deelnemers.length}</span>
+              <button onclick="event.stopPropagation();verwijderItem(${item.id})" class="del-btn" title="Verwijderen"
+                style="background:none;border:none;cursor:pointer;color:var(--text-light);font-size:0.8rem;padding:0.2rem 0.4rem;border-radius:4px;opacity:0;transition:opacity 0.2s;">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <div style="font-size:0.72rem;color:var(--text-light);font-weight:600;margin-bottom:0.4rem;">Wie neemt het mee?</div>
+          <div class="check-persons" id="persons-${item.id}"></div>
+        `;
+        el.addEventListener('mouseenter', () => el.querySelector('.del-btn').style.opacity = '1');
+        el.addEventListener('mouseleave', () => el.querySelector('.del-btn').style.opacity = '0');
+
+        const personsDiv = el.querySelector(`#persons-${item.id}`);
+        deelnemers.forEach(d => {
+          const check = itemChecks.find(c => c.persoon_naam === d.naam);
+          const isGedaan = check?.gedaan || false;
+          const span = document.createElement('label');
+          span.className = 'check-person' + (isGedaan ? ' checked' : '');
+          span.innerHTML = `<div class="dot"></div>${d.naam}<input type="checkbox" ${isGedaan ? 'checked' : ''}>`;
+          span.querySelector('input').addEventListener('change', e =>
+            toggleCheck(item.id, d.naam, e.target.checked)
+          );
+          personsDiv.appendChild(span);
+        });
+
+        itemsDiv.appendChild(el);
+      });
+    }
+
     container.appendChild(section);
   });
 
   updateProgress();
+}
+
+async function toggleCheck(itemId, persoonNaam, gedaan) {
+  await db.from('checklist_checks').upsert(
+    { checklist_id: itemId, persoon_naam: persoonNaam, gedaan },
+    { onConflict: 'checklist_id,persoon_naam' }
+  );
+  if (!checks[itemId]) checks[itemId] = [];
+  const ci = checks[itemId].findIndex(c => c.persoon_naam === persoonNaam);
+  if (ci !== -1) checks[itemId][ci].gedaan = gedaan;
+  else checks[itemId].push({ checklist_id: itemId, persoon_naam: persoonNaam, gedaan });
+  renderChecklist();
 }
 
 async function verwijderItem(id) {
@@ -230,7 +349,17 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
 document.getElementById('reset-btn').addEventListener('click', async () => {
   const ids = actieveItems().map(i => i.id);
-  if (ids.length) {
+  if (!ids.length) return;
+
+  if (actieveTab === 'persoonlijk') {
+    if (!gekozenPersoon) { alert('Kies eerst jouw naam.'); return; }
+    await db.from('checklist_checks').delete()
+      .in('checklist_id', ids)
+      .eq('persoon_naam', gekozenPersoon);
+    ids.forEach(id => {
+      if (checks[id]) checks[id] = checks[id].filter(c => c.persoon_naam !== gekozenPersoon);
+    });
+  } else {
     await db.from('checklist_checks').delete().in('checklist_id', ids);
     ids.forEach(id => { checks[id] = []; });
   }
@@ -240,14 +369,27 @@ document.getElementById('reset-btn').addEventListener('click', async () => {
 document.getElementById('alles-btn').addEventListener('click', async () => {
   const ids = actieveItems().map(i => i.id);
   if (!ids.length) return;
-  const upserts = [];
-  ids.forEach(id => deelnemers.forEach(d =>
-    upserts.push({ checklist_id: id, persoon_naam: d.naam, gedaan: true })
-  ));
-  await db.from('checklist_checks').upsert(upserts, { onConflict: 'checklist_id,persoon_naam' });
-  ids.forEach(id => {
-    checks[id] = deelnemers.map(d => ({ checklist_id: id, persoon_naam: d.naam, gedaan: true }));
-  });
+
+  if (actieveTab === 'persoonlijk') {
+    if (!gekozenPersoon) { alert('Kies eerst jouw naam.'); return; }
+    const upserts = ids.map(id => ({ checklist_id: id, persoon_naam: gekozenPersoon, gedaan: true }));
+    await db.from('checklist_checks').upsert(upserts, { onConflict: 'checklist_id,persoon_naam' });
+    upserts.forEach(u => {
+      if (!checks[u.checklist_id]) checks[u.checklist_id] = [];
+      const ci = checks[u.checklist_id].findIndex(c => c.persoon_naam === gekozenPersoon);
+      if (ci !== -1) checks[u.checklist_id][ci].gedaan = true;
+      else checks[u.checklist_id].push(u);
+    });
+  } else {
+    const upserts = [];
+    ids.forEach(id => deelnemers.forEach(d =>
+      upserts.push({ checklist_id: id, persoon_naam: d.naam, gedaan: true })
+    ));
+    await db.from('checklist_checks').upsert(upserts, { onConflict: 'checklist_id,persoon_naam' });
+    ids.forEach(id => {
+      checks[id] = deelnemers.map(d => ({ checklist_id: id, persoon_naam: d.naam, gedaan: true }));
+    });
+  }
   renderChecklist();
 });
 
