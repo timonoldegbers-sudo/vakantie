@@ -146,10 +146,7 @@ document.getElementById('dagelijks-quote').innerHTML =
   `"${q.tekst}" <strong>— ${q.ref}</strong>`;
 
 // ---- DEELNEMERS ----
-const DEFAULT_DEELNEMERS = [
-  'Papa', 'Mama', 'Timon', 'Job'
-];
-let deelnemers = loadData('deelnemers', DEFAULT_DEELNEMERS.map(n => ({ naam: n, foto: null })));
+let deelnemers = loadData('deelnemers', DEFAULT_DEELNEMERS);
 
 function renderDeelnemers() {
   const grid = document.getElementById('deelnemers-grid');

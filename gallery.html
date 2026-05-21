@@ -53,8 +53,7 @@
 <script src="js/app.js"></script>
 <script>
 let fotos = loadData('galerij', []);
-const DEFAULT_DEELNEMERS = ['Papa', 'Mama', 'Timon', 'Job'];
-const deelnemers = loadData('deelnemers', DEFAULT_DEELNEMERS.map(n => ({ naam: n, foto: null })));
+const deelnemers = loadData('deelnemers', DEFAULT_DEELNEMERS);
 
 // Vul filter dropdown
 const filterSelect = document.getElementById('filter-persoon');

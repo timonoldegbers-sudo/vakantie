@@ -1,7 +1,24 @@
 // Gedeelde state & helpers
 
-const VERTREKDATUM = new Date('2026-08-01T06:00:00'); // placeholder — pas aan als datum bekend is
+const VERTREKDATUM = new Date('2027-04-28T06:00:00');
 const LOCATIE = { lat: 37.1093, lng: -8.5282, naam: 'Ferragudo, Algarve, Portugal' };
+
+const DEFAULT_DEELNEMERS = [
+  { naam: 'Leo',     foto: null },
+  { naam: 'Anneke',  foto: null },
+  { naam: 'Jasper',  foto: null },
+  { naam: 'Megan',   foto: null },
+  { naam: 'Luuk',    foto: null },
+  { naam: 'Yara',    foto: null },
+  { naam: 'Baby 👶', foto: null },
+  { naam: 'Lotte',   foto: null },
+  { naam: 'Chris',   foto: null },
+  { naam: 'Timon',   foto: null },
+  { naam: 'Jasmijn', foto: null },
+  { naam: 'Eden',    foto: null },
+  { naam: 'Job',     foto: null },
+  { naam: 'Ymke',    foto: null },
+];
 
 const BIJBELSE_QUOTES = [
   { tekst: 'Ik hef mijn ogen op naar de bergen — vanwaar zal mijn hulp komen?', ref: 'Psalm 121:1' },
