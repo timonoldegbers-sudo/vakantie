@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="preconnect" href="https://unpkg.com">
   <link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -15,10 +17,10 @@
 
 <nav>
   <a href="index.html" class="logo">🌊 <span>Vakantie</span> Oldegbers</a>
-  <a href="index.html"><i class="fa fa-house"></i> Dashboard</a>
-  <a href="gallery.html"><i class="fa fa-images"></i> Galerij</a>
-  <a href="activities.html" class="active"><i class="fa fa-map-pin"></i> Activiteiten</a>
-  <a href="checklist.html"><i class="fa fa-list-check"></i> Inpaklijst</a>
+  <a href="index.html" class="nav-link"><i class="fa fa-house"></i> Dashboard</a>
+  <a href="gallery.html" class="nav-link"><i class="fa fa-images"></i> Galerij</a>
+  <a href="activities.html" class="nav-link active"><i class="fa fa-map-pin"></i> Activiteiten</a>
+  <a href="checklist.html" class="nav-link"><i class="fa fa-list-check"></i> Inpaklijst</a>
 </nav>
 
 <div class="page-header">
@@ -27,7 +29,7 @@
 </div>
 
 <div class="container">
-  <div style="display:grid;grid-template-columns:1fr 380px;gap:1.5rem;align-items:start;">
+  <div class="activities-layout" style="display:grid;grid-template-columns:1fr 380px;gap:1.5rem;align-items:start;">
 
     <!-- LINKER KOLOM -->
     <div>
@@ -50,7 +52,7 @@
     </div>
 
     <!-- RECHTER KOLOM: MINI KAART -->
-    <div class="card" style="position:sticky;top:80px;">
+    <div class="card map-sticky" style="position:sticky;top:80px;">
       <div class="card-title"><i class="fa fa-map"></i> Op de kaart</div>
       <div id="mini-map" style="height:300px;border-radius:10px;overflow:hidden;"></div>
       <div style="font-size:0.78rem;color:var(--text-light);margin-top:0.75rem;">
@@ -298,5 +300,12 @@ async function verwijderActiviteit(id) {
 
 init();
 </script>
+
+<nav class="mob-nav">
+  <a href="index.html"><i class="fa fa-house"></i><span>Dashboard</span></a>
+  <a href="gallery.html"><i class="fa fa-images"></i><span>Galerij</span></a>
+  <a href="activities.html" class="active"><i class="fa fa-map-pin"></i><span>Activiteiten</span></a>
+  <a href="checklist.html"><i class="fa fa-list-check"></i><span>Inpaklijst</span></a>
+</nav>
 </body>
 </html>
