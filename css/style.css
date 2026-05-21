@@ -501,6 +501,40 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
   cursor: pointer; background: none; border: none;
 }
 
+/* ── HUISJE FOTO GRID ── */
+.huisje-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.5rem;
+  height: 300px;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.huisje-grid img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.huisje-grid img:first-child { grid-row: span 2; }
+
+/* ── CHECKLIST EXPANDED ITEM ── */
+.check-item-expanded {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  transition: box-shadow 0.2s;
+}
+.check-item-expanded:hover { box-shadow: var(--shadow); }
+.check-item-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 0.6rem;
+}
+.check-item-naam { font-weight: 600; font-size: 0.95rem; color: var(--text); }
+.check-persons { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+/* ── LOCATIE ZOEK SUGGESTIES ── */
+#locatie-suggesties > div:last-child { border-bottom: none; }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
   .weer-card { grid-column: span 12; }
@@ -540,6 +574,18 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
   #mini-map { height: 220px; }
 
   .checklist-items { grid-template-columns: 1fr; }
+
+  .huisje-grid {
+    display: flex;
+    overflow-x: auto;
+    height: 200px;
+    gap: 0.4rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+  }
+  .huisje-grid img { width: 80vw; flex-shrink: 0; scroll-snap-align: start; height: 100%; border-radius: 0; }
+  .huisje-grid img:first-child { width: 88vw; grid-row: auto; }
 
   .gallery-grid { grid-template-columns: repeat(2, 1fr); }
 
