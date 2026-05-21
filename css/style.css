@@ -461,7 +461,7 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
   background: white; transition: border-color 0.2s;
 }
 .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-  outline: none; border-color: var(--primary);
+  outline: none; border-color: var(--secondary);
 }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .modal-footer { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem; }
@@ -590,17 +590,17 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
   font-family: 'Inter', sans-serif;
   line-height: 1;
 }
-.reactie-btn:hover { border-color: var(--primary); background: rgba(26,107,138,0.06); }
-.reactie-btn.actief { background: rgba(26,107,138,0.1); border-color: var(--primary); color: var(--primary); }
+.reactie-btn:hover { border-color: var(--secondary); background: rgba(217,95,82,0.07); }
+.reactie-btn.actief { background: rgba(217,95,82,0.12); border-color: var(--secondary); color: var(--secondary); }
 .reactie-count { font-size: 0.78rem; font-weight: 700; color: inherit; }
 
 /* ── REISINFO BEWERKBAAR ── */
 .reisinfo-item { cursor: pointer; }
-.reisinfo-item:hover { background: rgba(26,107,138,0.04); }
+.reisinfo-item:hover { background: rgba(217,95,82,0.04); }
 .reisinfo-item:hover .ri-edit-hint { opacity: 1; }
 .ri-edit-hint {
   font-size: 0.63rem;
-  color: var(--primary);
+  color: var(--secondary);
   opacity: 0;
   transition: opacity 0.2s;
   margin-top: 0.1rem;
@@ -611,7 +611,7 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
 .ri-inline-input {
   width: 100%;
   padding: 0.25rem 0.4rem;
-  border: 1.5px solid var(--primary);
+  border: 1.5px solid var(--secondary);
   border-radius: 6px;
   font-size: 0.92rem;
   font-weight: 600;
@@ -642,9 +642,9 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
 }
 .agenda-notitie-input:focus {
   outline: none;
-  border-bottom-color: var(--primary);
+  border-bottom-color: var(--secondary);
   color: var(--text);
-  background: rgba(26,107,138,0.04);
+  background: rgba(217,95,82,0.05);
   border-radius: 4px;
   padding: 0.2rem 0.3rem;
 }
@@ -672,7 +672,7 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
   padding: 0.9rem;
   transition: box-shadow 0.2s, border-color 0.2s;
 }
-.agenda-dag:hover { box-shadow: var(--shadow); border-color: var(--primary); }
+.agenda-dag:hover { box-shadow: var(--shadow); border-color: var(--secondary); }
 .agenda-dag.eerste {
   border-color: var(--accent);
   background: linear-gradient(135deg, #FFFBEE, #FFF8D6);
@@ -698,8 +698,8 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
 }
 .agenda-dag-activiteiten { margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.25rem; }
 .agenda-activiteit-pill {
-  font-size: 0.72rem; color: var(--primary); font-weight: 600;
-  background: rgba(26,107,138,0.09); border-radius: 6px;
+  font-size: 0.72rem; color: var(--secondary); font-weight: 600;
+  background: rgba(217,95,82,0.1); border-radius: 6px;
   padding: 0.15rem 0.45rem; white-space: nowrap;
   overflow: hidden; text-overflow: ellipsis;
 }
@@ -741,7 +741,7 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
   .form-row { grid-template-columns: 1fr; }
 
   #map { height: 280px; }
-  #mini-map { height: 220px; }
+  #mini-map { height: 220px !important; }
 
   .checklist-items { grid-template-columns: 1fr; }
 
@@ -773,6 +773,23 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
   /* Activiteiten filter op mobiel — horizontaal scrollen */
   .activities-toolbar { flex-direction: column !important; align-items: stretch !important; }
   .activities-toolbar .btn { align-self: flex-start; }
+
+  /* Hero ondertitel: kleiner op mobiel */
+  .hero p { font-size: 0.82rem; }
+
+  /* Countdown: iets smaller zodat 4 blokken passen */
+  .countdown-unit { min-width: 64px; padding: 0.85rem 0.9rem; }
+  .countdown-unit .num { font-size: 1.9rem; }
+}
+
+/* ── TOUCH APPARATEN: delete-knoppen altijd zichtbaar ── */
+@media (hover: none) {
+  .gallery-item .del-btn,
+  .check-item .del-btn,
+  .check-item-expanded .del-btn { opacity: 0.6 !important; }
+  .gallery-item:hover .del-btn,
+  .check-item:hover .del-btn,
+  .check-item-expanded:hover .del-btn { opacity: 1 !important; }
 }
 
 @media (max-width: 480px) {
