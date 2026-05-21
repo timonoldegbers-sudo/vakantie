@@ -51,101 +51,100 @@
   <img id="lightbox-img" src="" alt="">
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
 <script src="js/app.js"></script>
 <script>
-let fotos = loadData('galerij', []);
-const deelnemers = loadData('deelnemers', DEFAULT_DEELNEMERS);
+let fotos = [];
 
-// Vul filter dropdown
-const filterSelect = document.getElementById('filter-persoon');
-deelnemers.forEach(d => {
-  const opt = document.createElement('option');
-  opt.value = d.naam;
-  opt.textContent = d.naam;
-  filterSelect.appendChild(opt);
-});
+async function init() {
+  const [{ data: deelnemers }, { data: data }] = await Promise.all([
+    db.from('deelnemers').select('naam').order('id'),
+    db.from('galerij').select('*').order('created_at', { ascending: false })
+  ]);
+  fotos = data || [];
+  const filterSelect = document.getElementById('filter-persoon');
+  (deelnemers || []).forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d.naam; opt.textContent = d.naam;
+    filterSelect.appendChild(opt);
+  });
+  renderGalerij();
+}
 
 function renderGalerij() {
   const grid = document.getElementById('gallery-grid');
-  const filter = filterSelect.value;
+  const filter = document.getElementById('filter-persoon').value;
   const gefilterd = filter ? fotos.filter(f => f.uploader === filter) : fotos;
-
-  // Bewaar upload-box
   grid.innerHTML = `
     <label class="gallery-upload-box" for="foto-upload" style="aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;">
       <i class="fa fa-cloud-arrow-up" style="font-size:2.5rem;color:var(--border)"></i>
       <span>Klik om foto's toe te voegen</span>
     </label>
   `;
-
-  gefilterd.forEach((foto, i) => {
+  gefilterd.forEach(foto => {
     const item = document.createElement('div');
     item.className = 'gallery-item';
     item.innerHTML = `
-      <img src="${foto.data}" alt="${foto.naam || ''}">
+      <img src="${foto.foto_url}" alt="${foto.bestandsnaam || ''}">
       <div class="overlay">
         <div style="color:white;text-align:center;">
           <i class="fa fa-magnifying-glass-plus" style="font-size:1.5rem;"></i>
           ${foto.uploader ? `<div style="font-size:0.8rem;margin-top:0.3rem;">${foto.uploader}</div>` : ''}
         </div>
       </div>
-      <button onclick="verwijderFoto(${fotos.indexOf(foto)})" style="position:absolute;top:0.5rem;right:0.5rem;background:rgba(0,0,0,0.5);color:white;border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:0.8rem;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;">
+      <button onclick="verwijderFoto(${foto.id},'${foto.foto_url}')" style="position:absolute;top:0.5rem;right:0.5rem;background:rgba(0,0,0,0.5);color:white;border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:0.8rem;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;" class="del-btn">
         <i class="fa fa-trash"></i>
       </button>
     `;
-    item.addEventListener('mouseenter', () => item.querySelector('button').style.opacity = '1');
-    item.addEventListener('mouseleave', () => item.querySelector('button').style.opacity = '0');
-    item.querySelector('img').addEventListener('click', () => openLightbox(foto.data));
+    item.addEventListener('mouseenter', () => item.querySelector('.del-btn').style.opacity = '1');
+    item.addEventListener('mouseleave', () => item.querySelector('.del-btn').style.opacity = '0');
+    item.querySelector('img').addEventListener('click', () => openLightbox(foto.foto_url));
     grid.appendChild(item);
   });
-
   document.getElementById('foto-teller').textContent =
     `${gefilterd.length} foto${gefilterd.length !== 1 ? "'s" : ''}${filter ? ` van ${filter}` : ''}`;
 }
 
-document.getElementById('foto-upload').addEventListener('change', e => {
-  const persoon = filterSelect.value || '';
+document.getElementById('foto-upload').addEventListener('change', async e => {
+  const persoon = document.getElementById('filter-persoon').value || '';
   const files = Array.from(e.target.files);
-  let geladen = 0;
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = ev => {
-      fotos.push({ data: ev.target.result, naam: file.name, uploader: persoon, datum: new Date().toISOString() });
-      geladen++;
-      if (geladen === files.length) {
-        saveData('galerij', fotos);
-        renderGalerij();
-      }
-    };
-    reader.readAsDataURL(file);
-  });
-  e.target.value = '';
+  const btn = document.querySelector('.btn-primary');
+  btn.textContent = 'Bezig...'; btn.disabled = true;
+  for (const file of files) {
+    const url = await uploadFoto('galerij', file);
+    const { data } = await db.from('galerij').insert({ foto_url: url, uploader: persoon, bestandsnaam: file.name }).select().single();
+    if (data) fotos.unshift(data);
+  }
+  btn.innerHTML = '<i class="fa fa-plus"></i> Foto\'s toevoegen'; btn.disabled = false;
+  renderGalerij(); e.target.value = '';
 });
 
-function verwijderFoto(index) {
-  if (confirm('Foto verwijderen?')) {
-    fotos.splice(index, 1);
-    saveData('galerij', fotos);
-    renderGalerij();
-  }
+async function verwijderFoto(id, url) {
+  if (!confirm('Foto verwijderen?')) return;
+  const pad = url.split('/fotos/')[1];
+  await Promise.all([
+    db.storage.from('fotos').remove([pad]),
+    db.from('galerij').delete().eq('id', id)
+  ]);
+  fotos = fotos.filter(f => f.id !== id);
+  renderGalerij();
 }
 
-filterSelect.addEventListener('change', renderGalerij);
+document.getElementById('filter-persoon').addEventListener('change', renderGalerij);
 
-// Lightbox
 function openLightbox(src) {
   document.getElementById('lightbox-img').src = src;
   document.getElementById('lightbox').classList.add('open');
 }
-document.getElementById('lightbox-close').addEventListener('click', () => {
-  document.getElementById('lightbox').classList.remove('open');
-});
+document.getElementById('lightbox-close').addEventListener('click', () =>
+  document.getElementById('lightbox').classList.remove('open'));
 document.getElementById('lightbox').addEventListener('click', e => {
   if (e.target === document.getElementById('lightbox'))
     document.getElementById('lightbox').classList.remove('open');
 });
 
-renderGalerij();
+init();
 </script>
 </body>
 </html>

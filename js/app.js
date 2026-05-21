@@ -42,10 +42,22 @@ function getDagelijkseQuote() {
   return BIJBELSE_QUOTES[dag % BIJBELSE_QUOTES.length];
 }
 
+// Supabase client (config.js moet voor app.js geladen worden)
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Upload foto naar Supabase Storage, geeft publieke URL terug
+async function uploadFoto(map, file) {
+  const ext = file.name.split('.').pop();
+  const pad = `${map}/${Date.now()}.${ext}`;
+  const { error } = await db.storage.from('fotos').upload(pad, file);
+  if (error) throw error;
+  return db.storage.from('fotos').getPublicUrl(pad).data.publicUrl;
+}
+
+// Alleen voor weercache (localStorage is prima voor tijdelijke data)
 function saveData(key, data) {
   localStorage.setItem('vakantie_' + key, JSON.stringify(data));
 }
-
 function loadData(key, fallback = null) {
   const raw = localStorage.getItem('vakantie_' + key);
   return raw ? JSON.parse(raw) : fallback;

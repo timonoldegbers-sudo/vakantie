@@ -149,29 +149,30 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
 <script src="js/app.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 // ---- TROUWFOTO ----
-const trouwfotoOpgeslagen = loadData('trouwfoto', null);
-if (trouwfotoOpgeslagen) {
-  document.getElementById('trouwfoto-img').src = trouwfotoOpgeslagen;
-  document.getElementById('trouwfoto-img').style.display = 'block';
-  document.getElementById('trouwfoto-placeholder').style.display = 'none';
-}
-document.getElementById('trouwfoto-wrap').addEventListener('click', () =>
-  document.getElementById('trouwfoto-upload').click());
-document.getElementById('trouwfoto-upload').addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    saveData('trouwfoto', ev.target.result);
-    document.getElementById('trouwfoto-img').src = ev.target.result;
+(async () => {
+  const { data } = await db.from('instellingen').select('waarde').eq('sleutel','trouwfoto').single();
+  if (data?.waarde) {
+    document.getElementById('trouwfoto-img').src = data.waarde;
     document.getElementById('trouwfoto-img').style.display = 'block';
     document.getElementById('trouwfoto-placeholder').style.display = 'none';
-  };
-  reader.readAsDataURL(file);
+  }
+})();
+document.getElementById('trouwfoto-wrap').addEventListener('click', () =>
+  document.getElementById('trouwfoto-upload').click());
+document.getElementById('trouwfoto-upload').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const url = await uploadFoto('trouw', file);
+  await db.from('instellingen').upsert({ sleutel: 'trouwfoto', waarde: url });
+  document.getElementById('trouwfoto-img').src = url;
+  document.getElementById('trouwfoto-img').style.display = 'block';
+  document.getElementById('trouwfoto-placeholder').style.display = 'none';
 });
 
 // ---- COUNTDOWN ----
@@ -203,40 +204,42 @@ document.getElementById('dagelijks-quote').innerHTML =
   `"${q.tekst}" <strong>— ${q.ref}</strong>`;
 
 // ---- DEELNEMERS ----
-let deelnemers = loadData('deelnemers', DEFAULT_DEELNEMERS);
+let deelnemers = [];
+
+async function laadDeelnemers() {
+  const { data } = await db.from('deelnemers').select('*').order('id');
+  deelnemers = data || [];
+  renderDeelnemers();
+}
 
 function renderDeelnemers() {
   const grid = document.getElementById('deelnemers-grid');
   grid.innerHTML = '';
-  deelnemers.forEach((d, i) => {
+  deelnemers.forEach(d => {
     const el = document.createElement('div');
     el.className = 'deelnemer';
-    el.innerHTML = d.foto
-      ? `<img class="deelnemer-avatar" src="${d.foto}" alt="${d.naam}">`
+    el.innerHTML = d.foto_url
+      ? `<img class="deelnemer-avatar" src="${d.foto_url}" alt="${d.naam}">`
       : `<div class="avatar-placeholder">${d.naam[0]}</div>`;
     el.innerHTML += `
       <div class="deelnemer-name">${d.naam}</div>
       <div class="upload-hint">📷 klik voor foto</div>
-      <input type="file" class="deelnemer-upload" accept="image/*" data-index="${i}">
+      <input type="file" class="deelnemer-upload" accept="image/*">
     `;
-    el.querySelector('.deelnemer-upload').addEventListener('change', e => uploadFoto(e, i));
+    el.querySelector('.deelnemer-upload').addEventListener('change', e => uploadProfielfoto(e, d.id));
     el.addEventListener('click', () => el.querySelector('.deelnemer-upload').click());
     grid.appendChild(el);
   });
 }
 
-function uploadFoto(e, index) {
+async function uploadProfielfoto(e, id) {
   const file = e.target.files[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    deelnemers[index].foto = ev.target.result;
-    saveData('deelnemers', deelnemers);
-    renderDeelnemers();
-  };
-  reader.readAsDataURL(file);
+  const url = await uploadFoto('profiel', file);
+  await db.from('deelnemers').update({ foto_url: url }).eq('id', id);
+  laadDeelnemers();
 }
-renderDeelnemers();
+laadDeelnemers();
 
 // ---- WEER ----
 async function laadWeer() {
@@ -323,20 +326,16 @@ L.marker([LOCATIE.lat, LOCATIE.lng], { icon: huisIcon })
   .bindPopup('<strong>Ons huisje</strong><br>Ferragudo, Algarve, Portugal')
   .openPopup();
 
-// Activiteiten pins laden
-function laadActiviteitPins() {
-  const activiteiten = loadData('activiteiten', []);
-  activiteiten.forEach(a => {
+async function laadActiviteitPins() {
+  const { data } = await db.from('activiteiten').select('naam, lat, lng, categorie, datum');
+  (data || []).forEach(a => {
     if (a.lat && a.lng) {
-      const pinIcon = L.divIcon({
-        html: `<div style="font-size:1.6rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))">${a.icon || '📍'}</div>`,
-        className: '',
-        iconSize: [28, 28],
-        iconAnchor: [14, 28],
-      });
-      L.marker([a.lat, a.lng], { icon: pinIcon })
-        .addTo(map)
-        .bindPopup(`<strong>${a.naam}</strong><br>${a.datum || ''}`);
+      L.marker([a.lat, a.lng], {
+        icon: L.divIcon({
+          html: `<div style="font-size:1.6rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))">${a.categorie || '📍'}</div>`,
+          className: '', iconSize: [28,28], iconAnchor: [14,28],
+        })
+      }).addTo(map).bindPopup(`<strong>${a.naam}</strong>${a.datum ? '<br>' + new Date(a.datum).toLocaleDateString('nl-NL') : ''}`);
     }
   });
 }

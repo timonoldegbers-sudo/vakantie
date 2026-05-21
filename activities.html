@@ -124,21 +124,30 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
 <script src="js/app.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const deelnemers = loadData('deelnemers', DEFAULT_DEELNEMERS);
-let activiteiten = loadData('activiteiten', []);
+let deelnemers = [];
+let activiteiten = [];
 let actieveFilter = 'alles';
 
-// Vul aandrager dropdown
-const aandragerSel = document.getElementById('f-aandrager');
-deelnemers.forEach(d => {
-  const opt = document.createElement('option');
-  opt.value = d.naam;
-  opt.textContent = d.naam;
-  aandragerSel.appendChild(opt);
-});
+async function init() {
+  const [{ data: d }, { data: a }] = await Promise.all([
+    db.from('deelnemers').select('naam').order('id'),
+    db.from('activiteiten').select('*, activiteit_checks(*)').order('datum', { ascending: true, nullsFirst: false }).order('created_at')
+  ]);
+  deelnemers = d || [];
+  activiteiten = a || [];
+  const aandragerSel = document.getElementById('f-aandrager');
+  deelnemers.forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d.naam; opt.textContent = d.naam;
+    aandragerSel.appendChild(opt);
+  });
+  renderActiviteiten();
+}
 
 // ---- MINI KAART ----
 const miniMap = L.map('mini-map').setView([LOCATIE.lat, LOCATIE.lng], 11);
@@ -170,24 +179,21 @@ function renderActiviteiten() {
 
   let gefilterd = activiteiten;
   if (actieveFilter === 'gedaan') {
-    gefilterd = activiteiten.filter(a => {
-      const checks = a.checks || {};
-      return deelnemers.every(d => checks[d.naam]);
-    });
+    gefilterd = activiteiten.filter(a =>
+      deelnemers.every(d => (a.activiteit_checks||[]).find(c => c.persoon_naam === d.naam && c.gedaan))
+    );
   } else if (actieveFilter === 'actief') {
-    gefilterd = activiteiten.filter(a => {
-      const checks = a.checks || {};
-      return !deelnemers.every(d => checks[d.naam]);
-    });
+    gefilterd = activiteiten.filter(a =>
+      !deelnemers.every(d => (a.activiteit_checks||[]).find(c => c.persoon_naam === d.naam && c.gedaan))
+    );
   }
 
   document.getElementById('geen-activiteiten').style.display =
     gefilterd.length === 0 ? 'block' : 'none';
 
-  gefilterd.forEach((a, idx) => {
-    const realIdx = activiteiten.indexOf(a);
-    const checks = a.checks || {};
-    const aantalGedaan = deelnemers.filter(d => checks[d.naam]).length;
+  gefilterd.forEach(a => {
+    const checks = a.activiteit_checks || [];
+    const aantalGedaan = checks.filter(c => c.gedaan).length;
     const allesGedaan = aantalGedaan === deelnemers.length;
 
     const card = document.createElement('div');
@@ -206,28 +212,30 @@ function renderActiviteiten() {
         </div>
         <div style="display:flex;gap:0.5rem;align-items:center;flex-shrink:0;">
           ${a.kosten ? `<span class="activity-cost">€${parseFloat(a.kosten).toFixed(2)} p.p.</span>` : ''}
-          <button class="btn btn-outline btn-sm" onclick="verwijderActiviteit(${realIdx})" title="Verwijderen">
+          <button class="btn btn-outline btn-sm" onclick="verwijderActiviteit(${a.id})" title="Verwijderen">
             <i class="fa fa-trash"></i>
           </button>
         </div>
       </div>
-      <div class="deelnemers-check" id="checks-${realIdx}"></div>
+      <div class="deelnemers-check" id="checks-${a.id}"></div>
       <div style="font-size:0.75rem;color:var(--text-light);margin-top:0.5rem;">${aantalGedaan}/${deelnemers.length} gaan mee</div>
     `;
 
-    const checksDiv = card.querySelector(`#checks-${realIdx}`);
+    const checksDiv = card.querySelector(`#checks-${a.id}`);
     deelnemers.forEach(d => {
+      const check = checks.find(c => c.persoon_naam === d.naam);
+      const isGedaan = check?.gedaan || false;
       const span = document.createElement('label');
-      span.className = 'check-person' + (checks[d.naam] ? ' checked' : '');
-      span.innerHTML = `
-        <div class="dot"></div>
-        ${d.naam}
-        <input type="checkbox" ${checks[d.naam] ? 'checked' : ''}>
-      `;
-      span.querySelector('input').addEventListener('change', e => {
-        if (!activiteiten[realIdx].checks) activiteiten[realIdx].checks = {};
-        activiteiten[realIdx].checks[d.naam] = e.target.checked;
-        saveData('activiteiten', activiteiten);
+      span.className = 'check-person' + (isGedaan ? ' checked' : '');
+      span.innerHTML = `<div class="dot"></div>${d.naam}<input type="checkbox" ${isGedaan ? 'checked' : ''}>`;
+      span.querySelector('input').addEventListener('change', async e => {
+        await db.from('activiteit_checks').upsert({ activiteit_id: a.id, persoon_naam: d.naam, gedaan: e.target.checked });
+        const act = activiteiten.find(x => x.id === a.id);
+        if (act) {
+          const ci = act.activiteit_checks.findIndex(c => c.persoon_naam === d.naam);
+          if (ci !== -1) act.activiteit_checks[ci].gedaan = e.target.checked;
+          else act.activiteit_checks.push({ activiteit_id: a.id, persoon_naam: d.naam, gedaan: e.target.checked });
+        }
         renderActiviteiten();
       });
       checksDiv.appendChild(span);
@@ -261,37 +269,34 @@ document.getElementById('modal').addEventListener('click', e => {
     document.getElementById('modal').classList.remove('open');
 });
 
-document.getElementById('opslaan-btn').addEventListener('click', () => {
+document.getElementById('opslaan-btn').addEventListener('click', async () => {
   const naam = document.getElementById('f-naam').value.trim();
   if (!naam) { alert('Vul een naam in.'); return; }
-  activiteiten.push({
+  const { data } = await db.from('activiteiten').insert({
     naam,
-    datum: document.getElementById('f-datum').value,
-    kosten: document.getElementById('f-kosten').value,
-    beschrijving: document.getElementById('f-beschrijving').value,
+    datum: document.getElementById('f-datum').value || null,
+    kosten: parseFloat(document.getElementById('f-kosten').value) || null,
+    beschrijving: document.getElementById('f-beschrijving').value || null,
     categorie: document.getElementById('f-categorie').value,
-    aandrager: document.getElementById('f-aandrager').value,
+    aandrager: document.getElementById('f-aandrager').value || null,
     lat: parseFloat(document.getElementById('f-lat').value) || null,
     lng: parseFloat(document.getElementById('f-lng').value) || null,
-    checks: {},
-  });
-  saveData('activiteiten', activiteiten);
+  }).select('*, activiteit_checks(*)').single();
+  if (data) activiteiten.push(data);
   renderActiviteiten();
   document.getElementById('modal').classList.remove('open');
-  // reset form
   ['f-naam','f-datum','f-kosten','f-beschrijving','f-lat','f-lng'].forEach(id =>
     document.getElementById(id).value = '');
 });
 
-function verwijderActiviteit(index) {
-  if (confirm('Activiteit verwijderen?')) {
-    activiteiten.splice(index, 1);
-    saveData('activiteiten', activiteiten);
-    renderActiviteiten();
-  }
+async function verwijderActiviteit(id) {
+  if (!confirm('Activiteit verwijderen?')) return;
+  await db.from('activiteiten').delete().eq('id', id);
+  activiteiten = activiteiten.filter(a => a.id !== id);
+  renderActiviteiten();
 }
 
-renderActiviteiten();
+init();
 </script>
 </body>
 </html>
