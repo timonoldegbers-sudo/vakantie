@@ -34,6 +34,9 @@
   <a href="index.html" class="nav-link"><i class="fa fa-house"></i> Dashboard</a>
   <a href="gallery.html" class="nav-link"><i class="fa fa-images"></i> Galerij</a>
   <a href="activities.html" class="nav-link active"><i class="fa fa-map-pin"></i> Activiteiten</a>
+  <a href="berichten.html" class="nav-link"><i class="fa fa-comments"></i> Berichten</a>
+  <a href="menu.html" class="nav-link"><i class="fa fa-utensils"></i> Menu</a>
+  <a href="dagboek.html" class="nav-link"><i class="fa fa-book-open"></i> Dagboek</a>
   <a href="checklist.html" class="nav-link"><i class="fa fa-list-check"></i> Inpaklijst</a>
 </nav>
 
@@ -168,14 +171,16 @@ let actieveFilter = 'alles';
 let gekozenLat = null, gekozenLng = null;
 let zoekTimeout = null;
 let reactieMap = {};
+let stemMap = {};
 const sessieId = getSessieId();
 const REACTIE_EMOJIS = ['👍', '🔥', '❤️', '😄'];
 
 async function init() {
-  const [{ data: d }, { data: a }, { data: r }] = await Promise.all([
+  const [{ data: d }, { data: a }, { data: r }, { data: s }] = await Promise.all([
     db.from('deelnemers').select('naam').order('id'),
     db.from('activiteiten').select('*, activiteit_checks(*)').order('datum', { ascending: true, nullsFirst: false }).order('created_at'),
     db.from('activiteit_reacties').select('*'),
+    db.from('activiteit_stemmen').select('*'),
   ]);
   deelnemers = d || [];
   activiteiten = a || [];
@@ -185,6 +190,13 @@ async function init() {
   (r || []).forEach(reactie => {
     if (!reactieMap[reactie.activiteit_id]) reactieMap[reactie.activiteit_id] = [];
     reactieMap[reactie.activiteit_id].push(reactie);
+  });
+
+  // Bouw stem-map op
+  stemMap = {};
+  (s || []).forEach(stem => {
+    if (!stemMap[stem.activiteit_id]) stemMap[stem.activiteit_id] = [];
+    stemMap[stem.activiteit_id].push(stem);
   });
 
   const aandragerSel = document.getElementById('f-aandrager');
@@ -225,6 +237,34 @@ function renderReactiesVoor(actId, container) {
     });
     container.appendChild(btn);
   });
+}
+
+function renderStemVoor(actId, container) {
+  container.innerHTML = '';
+  const stemmen = stemMap[actId] || [];
+  const hebbGestemd = stemmen.some(s => s.sessie_id === sessieId);
+  const count = stemmen.length;
+  const btn = document.createElement('button');
+  btn.className = 'stem-btn' + (hebbGestemd ? ' actief' : '');
+  btn.innerHTML = count > 0
+    ? `✋ ${count} ${count === 1 ? 'wil dit' : 'willen dit'}`
+    : '✋ Wil ik!';
+  btn.addEventListener('click', async e => {
+    e.stopPropagation();
+    const bestaand = (stemMap[actId] || []).find(s => s.sessie_id === sessieId);
+    if (bestaand) {
+      await db.from('activiteit_stemmen').delete().eq('id', bestaand.id);
+      stemMap[actId] = stemMap[actId].filter(s => s.sessie_id !== sessieId);
+    } else {
+      const { data } = await db.from('activiteit_stemmen')
+        .insert({ activiteit_id: actId, sessie_id: sessieId })
+        .select().single();
+      if (!stemMap[actId]) stemMap[actId] = [];
+      if (data) stemMap[actId].push(data);
+    }
+    renderStemVoor(actId, container);
+  });
+  container.appendChild(btn);
 }
 
 // ---- MINI KAART ----
@@ -293,6 +333,7 @@ function renderActiviteiten() {
       </div>
       <div class="deelnemers-check" id="checks-${a.id}"></div>
       <div class="reacties-rij" id="reacties-${a.id}"></div>
+      <div class="stem-rij" id="stem-${a.id}"></div>
     `;
 
     const checksDiv = card.querySelector(`#checks-${a.id}`);
@@ -315,8 +356,9 @@ function renderActiviteiten() {
       checksDiv.appendChild(span);
     });
 
-    // Render reactie-knoppen
+    // Render reactie-knoppen en stemmen
     renderReactiesVoor(a.id, card.querySelector(`#reacties-${a.id}`));
+    renderStemVoor(a.id, card.querySelector(`#stem-${a.id}`));
 
     lijst.appendChild(card);
   });
@@ -446,7 +488,9 @@ toonMeldingBanner();
   <a href="index.html"><i class="fa fa-house"></i><span>Dashboard</span></a>
   <a href="gallery.html"><i class="fa fa-images"></i><span>Galerij</span></a>
   <a href="activities.html" class="active"><i class="fa fa-map-pin"></i><span>Activiteiten</span></a>
-  <a href="checklist.html"><i class="fa fa-list-check"></i><span>Inpaklijst</span></a>
+  <a href="berichten.html"><i class="fa fa-comments"></i><span>Berichten</span></a>
+  <a href="#" id="meer-btn"><i class="fa fa-ellipsis"></i><span>Meer</span></a>
 </nav>
+<script>initMeerMenu();</script>
 </body>
 </html>

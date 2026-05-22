@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Berichten — Vakantie Oldegbers</title>
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#D95F52">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Vakantie">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Berichten — Vakantie Oldegbers 2027">
+  <meta property="og:description" content="Het berichtenboard voor de vakantie. Stel vragen, maak aankondigingen!">
+  <meta property="og:image" content="https://villacocheira.com/wp-content/uploads/2018/09/Villa-Cocheira-Beach-House-Ferragudo-Pool-6-1.jpg">
+  <meta property="og:url" content="https://vakantie.oldegbers.nl/berichten.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">🌊 <span>Vakantie</span> Oldegbers</a>
+  <a href="index.html" class="nav-link"><i class="fa fa-house"></i> Dashboard</a>
+  <a href="gallery.html" class="nav-link"><i class="fa fa-images"></i> Galerij</a>
+  <a href="activities.html" class="nav-link"><i class="fa fa-map-pin"></i> Activiteiten</a>
+  <a href="berichten.html" class="nav-link active"><i class="fa fa-comments"></i> Berichten</a>
+  <a href="menu.html" class="nav-link"><i class="fa fa-utensils"></i> Menu</a>
+  <a href="dagboek.html" class="nav-link"><i class="fa fa-book-open"></i> Dagboek</a>
+  <a href="checklist.html" class="nav-link"><i class="fa fa-list-check"></i> Inpaklijst</a>
+</nav>
+
+<div class="page-header">
+  <h1><i class="fa fa-comments"></i> Berichtenboard</h1>
+  <p>Stel een vraag, maak een aankondiging of plan iets samen</p>
+</div>
+
+<div class="container" style="max-width:700px;">
+
+  <!-- Compose -->
+  <div class="card" style="margin-bottom:1.5rem;">
+    <div class="card-title"><i class="fa fa-pen"></i> Nieuw bericht</div>
+    <select id="b-naam" style="width:100%;padding:0.6rem 0.9rem;border:1.5px solid var(--border);border-radius:10px;font-size:0.9rem;font-family:'Inter',sans-serif;background:white;margin-bottom:0.75rem;color:var(--text);transition:border-color 0.2s;">
+      <option value="">— Wie ben jij? —</option>
+    </select>
+    <textarea id="b-tekst" rows="3"
+      placeholder="Schrijf een bericht...&#10;&#10;Bijv: 'Wie gaat er mee naar het strand om 15:00? 🏖️'"
+      style="width:100%;padding:0.65rem 0.9rem;border:1.5px solid var(--border);border-radius:10px;font-size:0.9rem;font-family:'Inter',sans-serif;resize:vertical;background:white;transition:border-color 0.2s;color:var(--text);line-height:1.6;"></textarea>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.75rem;flex-wrap:wrap;gap:0.5rem;">
+      <div style="font-size:0.75rem;color:var(--text-light);"><i class="fa fa-circle-info"></i> Shift+Enter voor een nieuwe regel</div>
+      <button class="btn btn-primary" id="b-stuur">
+        <i class="fa fa-paper-plane"></i> Versturen
+      </button>
+    </div>
+  </div>
+
+  <!-- Berichten lijst -->
+  <div id="berichten-lijst">
+    <div style="text-align:center;padding:3rem;color:var(--text-light);">
+      <i class="fa fa-spinner fa-spin" style="font-size:1.5rem;display:block;margin-bottom:0.5rem;"></i>
+      Berichten laden...
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+<script>
+let berichten = [];
+let deelnemers = [];
+
+async function init() {
+  const [{ data: d }, { data: b }] = await Promise.all([
+    db.from('deelnemers').select('naam').order('id'),
+    db.from('berichten').select('*').order('created_at', { ascending: false }).limit(150),
+  ]);
+  deelnemers = d || [];
+  berichten = b || [];
+
+  // Naam-select vullen
+  const sel = document.getElementById('b-naam');
+  const opgeslagen = localStorage.getItem('berichten_naam');
+  deelnemers.forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d.naam; opt.textContent = d.naam;
+    if (d.naam === opgeslagen) opt.selected = true;
+    sel.appendChild(opt);
+  });
+
+  renderBerichten();
+
+  // Realtime — nieuwe berichten verschijnen automatisch
+  db.channel('berichten-live')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'berichten' }, payload => {
+      if (!berichten.find(b => b.id === payload.new.id)) {
+        berichten.unshift(payload.new);
+        renderBerichten();
+      }
+    })
+    .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'berichten' }, payload => {
+      berichten = berichten.filter(b => b.id !== payload.old.id);
+      renderBerichten();
+    })
+    .subscribe();
+}
+
+function tijdLabel(dateStr) {
+  const d = new Date(dateStr);
+  const dagNamen = ['zo','ma','di','wo','do','vr','za'];
+  return `${dagNamen[d.getDay()]} ${d.getDate()}/${d.getMonth()+1} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+function renderBerichten() {
+  const lijst = document.getElementById('berichten-lijst');
+  if (!berichten.length) {
+    lijst.innerHTML = `
+      <div style="text-align:center;padding:4rem 1rem;color:var(--text-light);">
+        <i class="fa fa-comments" style="font-size:3rem;display:block;margin-bottom:0.85rem;opacity:0.2;"></i>
+        <div style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:0.35rem;">Nog geen berichten</div>
+        <div style="font-size:0.88rem;">Wees de eerste!</div>
+      </div>`;
+    return;
+  }
+
+  lijst.innerHTML = '';
+  berichten.forEach(b => {
+    const el = document.createElement('div');
+    el.className = 'bericht-card';
+    // Escape HTML
+    const tekst = b.bericht.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    el.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;">
+        <div>
+          <span class="bericht-naam">${b.naam}</span>
+          <span class="bericht-tijd">${tijdLabel(b.created_at)}</span>
+        </div>
+        <button onclick="verwijderBericht(${b.id})" class="del-btn" title="Verwijderen"
+          style="background:none;border:none;cursor:pointer;color:var(--text-light);font-size:0.85rem;padding:0.25rem 0.4rem;border-radius:6px;opacity:0;transition:opacity 0.2s;flex-shrink:0;">
+          <i class="fa fa-trash"></i>
+        </button>
+      </div>
+      <div class="bericht-tekst">${tekst}</div>
+    `;
+    el.addEventListener('mouseenter', () => el.querySelector('.del-btn').style.opacity = '1');
+    el.addEventListener('mouseleave', () => el.querySelector('.del-btn').style.opacity = '0');
+    lijst.appendChild(el);
+  });
+}
+
+async function verwijderBericht(id) {
+  if (!confirm('Bericht verwijderen?')) return;
+  await db.from('berichten').delete().eq('id', id);
+  berichten = berichten.filter(b => b.id !== id);
+  renderBerichten();
+}
+
+// Naam onthouden
+document.getElementById('b-naam').addEventListener('change', e => {
+  if (e.target.value) localStorage.setItem('berichten_naam', e.target.value);
+});
+
+// Focus-stijl
+const tekstveld = document.getElementById('b-tekst');
+tekstveld.addEventListener('focus', () => tekstveld.style.borderColor = 'var(--secondary)');
+tekstveld.addEventListener('blur',  () => tekstveld.style.borderColor = 'var(--border)');
+
+// Enter versturen (Shift+Enter = nieuwe regel)
+tekstveld.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('b-stuur').click(); }
+});
+
+document.getElementById('b-stuur').addEventListener('click', async () => {
+  const naam  = document.getElementById('b-naam').value;
+  const tekst = document.getElementById('b-tekst').value.trim();
+  if (!naam)  { alert('Kies jouw naam.'); return; }
+  if (!tekst) { alert('Schrijf een bericht.'); return; }
+
+  const btn = document.getElementById('b-stuur');
+  btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Verzenden...';
+
+  const { data } = await db.from('berichten').insert({ naam, bericht: tekst }).select().single();
+  if (data && !berichten.find(b => b.id === data.id)) {
+    berichten.unshift(data);
+    renderBerichten();
+  }
+  document.getElementById('b-tekst').value = '';
+  btn.disabled = false; btn.innerHTML = '<i class="fa fa-paper-plane"></i> Versturen';
+  localStorage.setItem('berichten_naam', naam);
+});
+
+// Touch: delete altijd zichtbaar
+document.addEventListener('touchstart', () => {
+  document.querySelectorAll('.bericht-card .del-btn').forEach(b => b.style.opacity = '0.5');
+}, { passive: true });
+
+init();
+toonMeldingBanner();
+</script>
+
+<nav class="mob-nav">
+  <a href="index.html"><i class="fa fa-house"></i><span>Dashboard</span></a>
+  <a href="gallery.html"><i class="fa fa-images"></i><span>Galerij</span></a>
+  <a href="activities.html"><i class="fa fa-map-pin"></i><span>Activiteiten</span></a>
+  <a href="berichten.html" class="active"><i class="fa fa-comments"></i><span>Berichten</span></a>
+  <a href="#" id="meer-btn"><i class="fa fa-ellipsis"></i><span>Meer</span></a>
+</nav>
+<script>initMeerMenu();</script>
+</body>
+</html>

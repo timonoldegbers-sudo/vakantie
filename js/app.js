@@ -212,3 +212,40 @@ function formatDatum(dateStr) {
   const dagen = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
   return { dag: dagen[d.getDay()], datum: `${d.getDate()}/${d.getMonth() + 1}` };
 }
+
+// ── MEER MENU (mobiele nav) ─────────────────────────────────
+function initMeerMenu() {
+  const doSetup = () => {
+    const meerBtn = document.getElementById('meer-btn');
+    if (!meerBtn) return;
+
+    const menu = document.createElement('div');
+    menu.id = 'meer-menu';
+    menu.style.cssText = 'display:none;position:fixed;bottom:calc(var(--mob-nav-h) + 0.5rem);left:1rem;right:1rem;background:white;border-radius:16px;box-shadow:0 -8px 32px rgba(0,0,0,0.18);z-index:199;border:1.5px solid var(--border);padding:1rem;animation:meerSlideUp 0.2s ease;';
+    menu.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;text-align:center;">
+        <a href="menu.html" class="meer-menu-item"><i class="fa fa-utensils"></i><span>Menu</span></a>
+        <a href="dagboek.html" class="meer-menu-item"><i class="fa fa-book-open"></i><span>Dagboek</span></a>
+        <a href="checklist.html" class="meer-menu-item"><i class="fa fa-list-check"></i><span>Inpaklijst</span></a>
+      </div>
+    `;
+    document.body.appendChild(menu);
+
+    meerBtn.addEventListener('click', e => {
+      e.preventDefault();
+      const open = menu.style.display !== 'none';
+      menu.style.display = open ? 'none' : 'block';
+      meerBtn.classList.toggle('active', !open);
+    });
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#meer-btn') && !e.target.closest('#meer-menu')) {
+        menu.style.display = 'none';
+        meerBtn.classList.remove('active');
+      }
+    });
+  };
+
+  if (document.readyState !== 'loading') doSetup();
+  else document.addEventListener('DOMContentLoaded', doSetup);
+}

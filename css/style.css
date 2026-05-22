@@ -806,3 +806,92 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
   .avatar-placeholder, .deelnemer-avatar { width: 64px; height: 64px; }
   .reisinfo-grid { grid-template-columns: 1fr; }
 }
+
+/* ── STEMMEN ── */
+.stem-rij {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin-top: 0.65rem; padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+}
+.stem-btn {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.28rem 0.8rem; border: 1.5px solid var(--border);
+  border-radius: 20px; background: var(--bg); font-size: 0.82rem;
+  font-weight: 600; cursor: pointer; transition: all 0.18s;
+  color: var(--text-light); font-family: 'Inter', sans-serif; line-height: 1;
+}
+.stem-btn:hover { border-color: var(--secondary); color: var(--secondary); background: rgba(217,95,82,0.07); }
+.stem-btn.actief { background: rgba(217,95,82,0.12); border-color: var(--secondary); color: var(--secondary); }
+
+/* ── BERICHTEN ── */
+.bericht-card {
+  background: white; border: 1.5px solid var(--border);
+  border-radius: 16px; padding: 1rem 1.25rem;
+  margin-bottom: 0.85rem; transition: box-shadow 0.2s; position: relative;
+}
+.bericht-card:hover { box-shadow: var(--shadow); }
+.bericht-naam { font-weight: 700; color: var(--secondary); font-size: 0.9rem; }
+.bericht-tijd { font-size: 0.72rem; color: var(--text-light); margin-left: 0.5rem; }
+.bericht-tekst { margin-top: 0.4rem; font-size: 0.92rem; color: var(--text); line-height: 1.65; white-space: pre-wrap; word-break: break-word; }
+
+/* ── MENUPLAN ── */
+.menu-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 12px; border: 1.5px solid var(--border); }
+.menu-table { border-collapse: collapse; min-width: 580px; width: 100%; }
+.menu-table thead th {
+  background: var(--secondary); color: white;
+  padding: 0.65rem 0.9rem; font-size: 0.8rem; font-weight: 700;
+  text-align: left; white-space: nowrap; border-bottom: 2px solid #b84038;
+}
+.menu-table thead th:first-child { background: #b84038; min-width: 86px; }
+.menu-table tbody td {
+  padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border); vertical-align: top;
+  min-width: 130px; cursor: pointer; transition: background 0.15s;
+}
+.menu-table tbody td:first-child {
+  background: var(--bg); font-size: 0.78rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-light);
+  cursor: default; white-space: nowrap; min-width: 86px;
+}
+.menu-table tbody td:not(:first-child):hover { background: rgba(217,95,82,0.06); }
+.menu-table tbody tr:last-child td { border-bottom: none; }
+.menu-table tbody td:last-child { border-right: none; }
+.menu-cel-gerecht { font-weight: 600; color: var(--text); font-size: 0.88rem; line-height: 1.35; }
+.menu-cel-kok { font-size: 0.72rem; color: var(--text-light); margin-top: 0.2rem; }
+.menu-cel-leeg { color: var(--border); font-style: italic; font-size: 0.78rem; }
+
+/* ── DAGBOEK ── */
+.dagboek-entry {
+  background: white; border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 1.5rem;
+  margin-bottom: 1.25rem; position: relative; transition: box-shadow 0.2s;
+}
+.dagboek-entry:hover { box-shadow: var(--shadow-hover); }
+.dagboek-datum-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: linear-gradient(135deg, var(--secondary), #b84038);
+  color: white; padding: 0.25rem 0.85rem; border-radius: 20px;
+  font-size: 0.78rem; font-weight: 700; margin-bottom: 0.85rem;
+}
+.dagboek-titel {
+  font-family: 'Playfair Display', serif; font-size: 1.2rem;
+  font-weight: 700; color: var(--text); margin-bottom: 0.65rem; line-height: 1.3;
+}
+.dagboek-tekst {
+  font-size: 0.92rem; color: var(--text); line-height: 1.7;
+  white-space: pre-wrap; word-break: break-word; margin-bottom: 0.75rem;
+}
+.dagboek-foto { width: 100%; max-height: 340px; object-fit: cover; border-radius: 12px; margin-bottom: 0.75rem; cursor: pointer; }
+.dagboek-auteur { font-size: 0.8rem; color: var(--text-light); font-style: italic; }
+
+/* ── MEER MENU ── */
+.meer-menu-item {
+  text-decoration: none; color: var(--text); display: flex;
+  flex-direction: column; align-items: center; gap: 0.4rem;
+  padding: 0.9rem 0.5rem; border-radius: 12px; background: var(--bg);
+  border: 1.5px solid var(--border); transition: all 0.2s;
+}
+.meer-menu-item:hover, .meer-menu-item:active { border-color: var(--secondary); background: rgba(217,95,82,0.06); }
+.meer-menu-item i { font-size: 1.4rem; color: var(--secondary); }
+.meer-menu-item span { font-size: 0.75rem; font-weight: 600; color: var(--text); }
+@keyframes meerSlideUp { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }

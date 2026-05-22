@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dagboek — Vakantie Oldegbers</title>
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#D95F52">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Vakantie">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Dagboek — Vakantie Oldegbers 2027">
+  <meta property="og:description" content="Het vakantiedagboek van de familie Oldegbers in Ferragudo, Algarve 2027.">
+  <meta property="og:image" content="https://villacocheira.com/wp-content/uploads/2018/09/Villa-Cocheira-Beach-House-Ferragudo-Pool-6-1.jpg">
+  <meta property="og:url" content="https://vakantie.oldegbers.nl/dagboek.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">🌊 <span>Vakantie</span> Oldegbers</a>
+  <a href="index.html" class="nav-link"><i class="fa fa-house"></i> Dashboard</a>
+  <a href="gallery.html" class="nav-link"><i class="fa fa-images"></i> Galerij</a>
+  <a href="activities.html" class="nav-link"><i class="fa fa-map-pin"></i> Activiteiten</a>
+  <a href="berichten.html" class="nav-link"><i class="fa fa-comments"></i> Berichten</a>
+  <a href="menu.html" class="nav-link"><i class="fa fa-utensils"></i> Menu</a>
+  <a href="dagboek.html" class="nav-link active"><i class="fa fa-book-open"></i> Dagboek</a>
+  <a href="checklist.html" class="nav-link"><i class="fa fa-list-check"></i> Inpaklijst</a>
+</nav>
+
+<div class="page-header">
+  <h1><i class="fa fa-book-open"></i> Vakantiedagboek</h1>
+  <p>De mooiste momenten, dag voor dag vastgelegd</p>
+</div>
+
+<div class="container" style="max-width:800px;">
+
+  <!-- Toevoegen knop -->
+  <div style="display:flex;justify-content:flex-end;margin-bottom:1.5rem;">
+    <button class="btn btn-primary" id="open-dagboek-modal">
+      <i class="fa fa-plus"></i> Nieuw dagboekitem
+    </button>
+  </div>
+
+  <!-- Dagboek entries -->
+  <div id="dagboek-lijst">
+    <div style="text-align:center;padding:4rem 1rem;color:var(--text-light);">
+      <i class="fa fa-spinner fa-spin" style="font-size:1.5rem;display:block;margin-bottom:0.5rem;"></i>
+      Dagboek laden...
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL: nieuw item -->
+<div class="modal-overlay" id="dagboek-modal">
+  <div class="modal">
+    <h2><i class="fa fa-book-open" style="color:var(--secondary)"></i> Nieuw dagboekitem</h2>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Datum *</label>
+        <input type="date" id="d-datum" min="2027-04-28" max="2027-05-10">
+      </div>
+      <div class="form-group">
+        <label>Auteur</label>
+        <select id="d-auteur">
+          <option value="">— kies —</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Titel *</label>
+      <input type="text" id="d-titel" placeholder="Bijv. Geweldig dagje strand! 🌊">
+    </div>
+    <div class="form-group">
+      <label>Beschrijving</label>
+      <textarea id="d-tekst" rows="5" placeholder="Vertel over deze dag... Wat maakten jullie mee? Wat was het hoogtepunt?"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Foto <span style="color:var(--text-light);font-weight:400;">(optioneel)</span></label>
+      <label style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;border:1.5px dashed var(--border);border-radius:10px;cursor:pointer;transition:all 0.2s;" id="foto-label">
+        <i class="fa fa-cloud-arrow-up" style="font-size:1.3rem;color:var(--border);"></i>
+        <span id="foto-naam" style="font-size:0.88rem;color:var(--text-light);">Klik om een foto te kiezen</span>
+        <input type="file" id="d-foto" accept="image/*" style="display:none">
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="sluit-dagboek-modal">Annuleren</button>
+      <button class="btn btn-primary" id="sla-dagboek-op">
+        <i class="fa fa-floppy-disk"></i> Opslaan
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close"><i class="fa fa-xmark"></i></button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+<script>
+let entries = [];
+let deelnemers = [];
+
+const MAANDEN_LANG = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+const DAGEN_NL = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+
+async function init() {
+  const [{ data: d }, { data: e }] = await Promise.all([
+    db.from('deelnemers').select('naam').order('id'),
+    db.from('dagboek').select('*').order('datum', { ascending: true }).order('created_at', { ascending: true }),
+  ]);
+  deelnemers = d || [];
+  entries = e || [];
+
+  const sel = document.getElementById('d-auteur');
+  const opgeslagen = localStorage.getItem('dagboek_auteur');
+  deelnemers.forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d.naam; opt.textContent = d.naam;
+    if (d.naam === opgeslagen) opt.selected = true;
+    sel.appendChild(opt);
+  });
+
+  // Standaard datum = eerste vakantiedag
+  document.getElementById('d-datum').value = '2027-04-28';
+
+  renderDagboek();
+}
+
+function renderDagboek() {
+  const lijst = document.getElementById('dagboek-lijst');
+  if (!entries.length) {
+    lijst.innerHTML = `
+      <div style="text-align:center;padding:4.5rem 1rem;color:var(--text-light);">
+        <i class="fa fa-book-open" style="font-size:3rem;display:block;margin-bottom:1rem;opacity:0.2;"></i>
+        <div style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:0.4rem;">Het dagboek is nog leeg</div>
+        <div style="font-size:0.88rem;">Voeg na elke vakantiedag een mooie herinnering toe!</div>
+      </div>`;
+    return;
+  }
+
+  lijst.innerHTML = '';
+  entries.forEach(e => {
+    const d = new Date(e.datum + 'T12:00:00');
+    const datumLabel = `${DAGEN_NL[d.getDay()]} ${d.getDate()} ${MAANDEN_LANG[d.getMonth()]}`;
+
+    const el = document.createElement('div');
+    el.className = 'dagboek-entry';
+
+    const titel = e.titel.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    const tekst = e.tekst ? e.tekst.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '';
+
+    el.innerHTML = `
+      <button onclick="verwijderEntry(${e.id},'${e.foto_url || ''}')" class="del-btn" title="Verwijderen"
+        style="position:absolute;top:1rem;right:1rem;background:rgba(0,0,0,0.06);border:none;cursor:pointer;color:var(--text-light);font-size:0.85rem;padding:0.35rem 0.5rem;border-radius:8px;opacity:0;transition:opacity 0.2s;">
+        <i class="fa fa-trash"></i>
+      </button>
+      <div class="dagboek-datum-badge"><i class="fa fa-calendar"></i> ${datumLabel}</div>
+      ${e.foto_url ? `<img class="dagboek-foto" src="${e.foto_url}" alt="${titel}" loading="lazy">` : ''}
+      <div class="dagboek-titel">${titel}</div>
+      ${tekst ? `<div class="dagboek-tekst">${tekst}</div>` : ''}
+      ${e.auteur ? `<div class="dagboek-auteur"><i class="fa fa-pen-nib"></i> ${e.auteur}</div>` : ''}
+    `;
+
+    el.addEventListener('mouseenter', () => el.querySelector('.del-btn').style.opacity = '1');
+    el.addEventListener('mouseleave', () => el.querySelector('.del-btn').style.opacity = '0');
+
+    if (e.foto_url) {
+      el.querySelector('.dagboek-foto').addEventListener('click', () => openLightbox(e.foto_url));
+    }
+
+    lijst.appendChild(el);
+  });
+}
+
+async function verwijderEntry(id, fotoUrl) {
+  if (!confirm('Dagboekitem verwijderen?')) return;
+  const taken = [db.from('dagboek').delete().eq('id', id)];
+  if (fotoUrl) {
+    const pad = fotoUrl.split('/fotos/')[1];
+    if (pad) taken.push(db.storage.from('fotos').remove([pad]));
+  }
+  await Promise.all(taken);
+  entries = entries.filter(e => e.id !== id);
+  renderDagboek();
+}
+
+// Foto preview
+document.getElementById('d-foto').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (f) {
+    document.getElementById('foto-naam').textContent = f.name;
+    document.getElementById('foto-label').style.borderColor = 'var(--secondary)';
+  } else {
+    document.getElementById('foto-naam').textContent = 'Klik om een foto te kiezen';
+    document.getElementById('foto-label').style.borderColor = 'var(--border)';
+  }
+});
+
+// Modal openen/sluiten
+document.getElementById('open-dagboek-modal').addEventListener('click', () =>
+  document.getElementById('dagboek-modal').classList.add('open'));
+document.getElementById('sluit-dagboek-modal').addEventListener('click', () =>
+  document.getElementById('dagboek-modal').classList.remove('open'));
+document.getElementById('dagboek-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('dagboek-modal'))
+    document.getElementById('dagboek-modal').classList.remove('open');
+});
+
+// Opslaan
+document.getElementById('sla-dagboek-op').addEventListener('click', async () => {
+  const datum  = document.getElementById('d-datum').value;
+  const titel  = document.getElementById('d-titel').value.trim();
+  const tekst  = document.getElementById('d-tekst').value.trim();
+  const auteur = document.getElementById('d-auteur').value;
+  const fotoFile = document.getElementById('d-foto').files[0];
+
+  if (!datum) { alert('Kies een datum.'); return; }
+  if (!titel) { alert('Vul een titel in.'); return; }
+
+  const btn = document.getElementById('sla-dagboek-op');
+  btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Opslaan...';
+
+  let fotoUrl = null;
+  if (fotoFile) {
+    try { fotoUrl = await uploadFoto('dagboek', fotoFile); } catch {}
+  }
+
+  const { data } = await db.from('dagboek').insert({
+    datum, titel,
+    tekst: tekst || null,
+    auteur: auteur || null,
+    foto_url: fotoUrl,
+  }).select().single();
+
+  if (data) {
+    // Voeg in op juiste positie (gesorteerd op datum)
+    entries.push(data);
+    entries.sort((a, b) => a.datum.localeCompare(b.datum) || a.created_at.localeCompare(b.created_at));
+    renderDagboek();
+    if (auteur) localStorage.setItem('dagboek_auteur', auteur);
+  }
+
+  // Reset
+  document.getElementById('d-titel').value = '';
+  document.getElementById('d-tekst').value = '';
+  document.getElementById('d-foto').value = '';
+  document.getElementById('foto-naam').textContent = 'Klik om een foto te kiezen';
+  document.getElementById('foto-label').style.borderColor = 'var(--border)';
+  document.getElementById('dagboek-modal').classList.remove('open');
+  btn.disabled = false; btn.innerHTML = '<i class="fa fa-floppy-disk"></i> Opslaan';
+});
+
+// Auteur onthouden
+document.getElementById('d-auteur').addEventListener('change', e => {
+  if (e.target.value) localStorage.setItem('dagboek_auteur', e.target.value);
+});
+
+// Lightbox
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+document.getElementById('lightbox-close').addEventListener('click', () =>
+  document.getElementById('lightbox').classList.remove('open'));
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === document.getElementById('lightbox'))
+    document.getElementById('lightbox').classList.remove('open');
+});
+
+init();
+toonMeldingBanner();
+</script>
+
+<nav class="mob-nav">
+  <a href="index.html"><i class="fa fa-house"></i><span>Dashboard</span></a>
+  <a href="gallery.html"><i class="fa fa-images"></i><span>Galerij</span></a>
+  <a href="activities.html"><i class="fa fa-map-pin"></i><span>Activiteiten</span></a>
+  <a href="berichten.html"><i class="fa fa-comments"></i><span>Berichten</span></a>
+  <a href="#" id="meer-btn" class="active"><i class="fa fa-ellipsis"></i><span>Meer</span></a>
+</nav>
+<script>initMeerMenu();</script>
+</body>
+</html>

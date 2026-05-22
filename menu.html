@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menuplan — Vakantie Oldegbers</title>
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#D95F52">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Vakantie">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Menuplan — Vakantie Oldegbers 2027">
+  <meta property="og:description" content="Wie kookt wanneer? Plan de maaltijden voor de vakantie!">
+  <meta property="og:image" content="https://villacocheira.com/wp-content/uploads/2018/09/Villa-Cocheira-Beach-House-Ferragudo-Pool-6-1.jpg">
+  <meta property="og:url" content="https://vakantie.oldegbers.nl/menu.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">🌊 <span>Vakantie</span> Oldegbers</a>
+  <a href="index.html" class="nav-link"><i class="fa fa-house"></i> Dashboard</a>
+  <a href="gallery.html" class="nav-link"><i class="fa fa-images"></i> Galerij</a>
+  <a href="activities.html" class="nav-link"><i class="fa fa-map-pin"></i> Activiteiten</a>
+  <a href="berichten.html" class="nav-link"><i class="fa fa-comments"></i> Berichten</a>
+  <a href="menu.html" class="nav-link active"><i class="fa fa-utensils"></i> Menu</a>
+  <a href="dagboek.html" class="nav-link"><i class="fa fa-book-open"></i> Dagboek</a>
+  <a href="checklist.html" class="nav-link"><i class="fa fa-list-check"></i> Inpaklijst</a>
+</nav>
+
+<div class="page-header">
+  <h1><i class="fa fa-utensils"></i> Menuplan</h1>
+  <p>Wie kookt wanneer? Klik op een vakje om het in te vullen</p>
+</div>
+
+<div class="container">
+
+  <!-- Tip -->
+  <div style="display:flex;align-items:center;gap:0.75rem;background:#FFF8E7;border:1.5px solid var(--accent);border-radius:12px;padding:0.85rem 1.1rem;margin-bottom:1.5rem;font-size:0.88rem;color:var(--text);">
+    <i class="fa fa-lightbulb" style="color:var(--accent);font-size:1.1rem;flex-shrink:0;"></i>
+    <span>Klik op een vakje om het gerecht en de kok in te vullen. Handig voor boodschappen en afspreken wie er kookt!</span>
+  </div>
+
+  <!-- Tabel -->
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:1.25rem 1.5rem 0.75rem;border-bottom:1px solid var(--border);">
+      <div class="card-title" style="margin-bottom:0;"><i class="fa fa-calendar-days"></i> 28 april – 5 mei 2027</div>
+    </div>
+    <div class="menu-wrap">
+      <table class="menu-table" id="menu-tabel"></table>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL: bewerken -->
+<div class="modal-overlay" id="menu-modal">
+  <div class="modal">
+    <h2><i class="fa fa-utensils" style="color:var(--secondary)"></i> Maaltijd invullen</h2>
+    <div id="menu-modal-info" style="font-size:0.85rem;color:var(--text-light);margin:-0.75rem 0 1.25rem;font-weight:600;"></div>
+    <div class="form-group">
+      <label>Gerecht</label>
+      <input type="text" id="m-gerecht" placeholder="Bijv. BBQ met vis en salade 🐟">
+    </div>
+    <div class="form-group">
+      <label>Kok(s)</label>
+      <input type="text" id="m-kok" placeholder="Bijv. Leo & Timon">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline btn-sm" id="m-leegmaken" style="margin-right:auto;color:var(--text-light);border-color:var(--border);">
+        <i class="fa fa-trash"></i> Leegmaken
+      </button>
+      <button class="btn btn-outline" id="m-annuleer">Annuleren</button>
+      <button class="btn btn-primary" id="m-opslaan">Opslaan</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+<script>
+let menuData = {}; // key: 'datum|maaltijd' → { id, gerecht, kok }
+let editKey = null;
+
+const VAKANTIE_START = new Date('2027-04-28');
+const VAKANTIE_EIND  = new Date('2027-05-05');
+const MAALTIJDEN = [
+  { id: 'ontbijt', label: '🌅 Ontbijt' },
+  { id: 'lunch',   label: '☀️ Lunch' },
+  { id: 'diner',   label: '🌙 Diner' },
+];
+const DAGEN_NL = ['zo','ma','di','wo','do','vr','za'];
+const MAANDEN_NL = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+
+function vakantiedagen() {
+  const lijst = [];
+  let d = new Date(VAKANTIE_START);
+  while (d <= VAKANTIE_EIND) { lijst.push(new Date(d)); d.setDate(d.getDate() + 1); }
+  return lijst;
+}
+
+async function init() {
+  const { data } = await db.from('menuplan').select('*');
+  (data || []).forEach(r => { menuData[`${r.datum}|${r.maaltijd}`] = r; });
+  renderMenu();
+}
+
+function renderMenu() {
+  const tabel = document.getElementById('menu-tabel');
+  const dagen = vakantiedagen();
+
+  // Header
+  let html = '<thead><tr><th></th>';
+  dagen.forEach(dag => {
+    const dateStr = dag.toISOString().slice(0,10);
+    const isVertrek = dateStr === '2027-04-28';
+    const isTerug   = dateStr === '2027-05-05';
+    const label = isVertrek ? '✈️ Vertrek' : isTerug ? '🏠 Terug' : '';
+    html += `<th>
+      ${label ? `<div style="font-size:0.65rem;opacity:0.8;margin-bottom:0.1rem;">${label}</div>` : ''}
+      <div>${DAGEN_NL[dag.getDay()]} ${dag.getDate()} ${MAANDEN_NL[dag.getMonth()]}</div>
+    </th>`;
+  });
+  html += '</tr></thead><tbody>';
+
+  // Rijen
+  MAALTIJDEN.forEach(m => {
+    html += `<tr><td>${m.label}</td>`;
+    dagen.forEach(dag => {
+      const dateStr = dag.toISOString().slice(0,10);
+      const key = `${dateStr}|${m.id}`;
+      const item = menuData[key];
+      if (item?.gerecht) {
+        const g = item.gerecht.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        const k = item.kok ? item.kok.replace(/&/g,'&amp;').replace(/</g,'&lt;') : '';
+        html += `<td class="menu-cel" data-key="${key}" data-datum="${dateStr}" data-maaltijd="${m.id}">
+          <div class="menu-cel-gerecht">${g}</div>
+          ${k ? `<div class="menu-cel-kok">👨‍🍳 ${k}</div>` : ''}
+        </td>`;
+      } else {
+        html += `<td class="menu-cel" data-key="${key}" data-datum="${dateStr}" data-maaltijd="${m.id}">
+          <div class="menu-cel-leeg">+ invullen</div>
+        </td>`;
+      }
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  tabel.innerHTML = html;
+
+  // Klik-handlers
+  tabel.querySelectorAll('.menu-cel').forEach(cel => {
+    cel.addEventListener('click', () => openMenuModal(cel.dataset.key, cel.dataset.datum, cel.dataset.maaltijd));
+  });
+}
+
+function openMenuModal(key, datum, maaltijdId) {
+  editKey = key;
+  const item = menuData[key];
+  const d = new Date(datum);
+  const maaltijd = MAALTIJDEN.find(m => m.id === maaltijdId);
+  const maandNamenLang = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+  document.getElementById('menu-modal-info').textContent =
+    `${DAGEN_NL[d.getDay()]} ${d.getDate()} ${maandNamenLang[d.getMonth()]} · ${maaltijd.label}`;
+  document.getElementById('m-gerecht').value = item?.gerecht || '';
+  document.getElementById('m-kok').value = item?.kok || '';
+  document.getElementById('menu-modal').classList.add('open');
+  setTimeout(() => document.getElementById('m-gerecht').focus(), 100);
+}
+
+document.getElementById('m-opslaan').addEventListener('click', async () => {
+  const gerecht = document.getElementById('m-gerecht').value.trim();
+  const kok     = document.getElementById('m-kok').value.trim();
+  if (!gerecht) { alert('Vul een gerecht in.'); return; }
+
+  const [datum, maaltijd] = editKey.split('|');
+  const { data } = await db.from('menuplan')
+    .upsert({ datum, maaltijd, gerecht, kok: kok || null }, { onConflict: 'datum,maaltijd' })
+    .select().single();
+  if (data) menuData[editKey] = data;
+  renderMenu();
+  document.getElementById('menu-modal').classList.remove('open');
+});
+
+document.getElementById('m-leegmaken').addEventListener('click', async () => {
+  const item = menuData[editKey];
+  if (item?.id) {
+    await db.from('menuplan').delete().eq('id', item.id);
+    delete menuData[editKey];
+    renderMenu();
+  }
+  document.getElementById('menu-modal').classList.remove('open');
+});
+
+document.getElementById('m-annuleer').addEventListener('click', () =>
+  document.getElementById('menu-modal').classList.remove('open'));
+document.getElementById('menu-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('menu-modal'))
+    document.getElementById('menu-modal').classList.remove('open');
+});
+
+// Enter opslaan
+document.getElementById('m-kok').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('m-opslaan').click();
+});
+
+init();
+toonMeldingBanner();
+</script>
+
+<nav class="mob-nav">
+  <a href="index.html"><i class="fa fa-house"></i><span>Dashboard</span></a>
+  <a href="gallery.html"><i class="fa fa-images"></i><span>Galerij</span></a>
+  <a href="activities.html"><i class="fa fa-map-pin"></i><span>Activiteiten</span></a>
+  <a href="berichten.html"><i class="fa fa-comments"></i><span>Berichten</span></a>
+  <a href="#" id="meer-btn" class="active"><i class="fa fa-ellipsis"></i><span>Meer</span></a>
+</nav>
+<script>initMeerMenu();</script>
+</body>
+</html>
