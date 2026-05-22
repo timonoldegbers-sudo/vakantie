@@ -42,6 +42,100 @@ function getDagelijkseQuote() {
   return BIJBELSE_QUOTES[dag % BIJBELSE_QUOTES.length];
 }
 
+// ── PUSH MELDINGEN ──────────────────────────────────────────
+
+const VAPID_PUBLIC_KEY = 'BOd9X_MkloxrsmOBxsFaK6MIlWQCkUytYF1JARkpLkV4oN4TSadats1lZGJNgZ8eFmVa17GZylp27_oe1eRsJo4';
+
+function urlBase64ToUint8Array(b64) {
+  const pad = '='.repeat((4 - b64.length % 4) % 4);
+  const base64 = (b64 + pad).replace(/-/g, '+').replace(/_/g, '/');
+  return new Uint8Array([...atob(base64)].map(c => c.charCodeAt(0)));
+}
+
+async function abonneerOpPush() {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) return false;
+  try {
+    const reg = await navigator.serviceWorker.register('/sw.js');
+    await navigator.serviceWorker.ready;
+    const sub = await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+    });
+    const j = sub.toJSON();
+    await db.from('push_subscriptions').upsert(
+      { endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth },
+      { onConflict: 'endpoint' }
+    );
+    return true;
+  } catch (err) {
+    console.warn('Push abonnement mislukt:', err);
+    return false;
+  }
+}
+
+async function stuurPushMelding(titel, bericht, url = '/') {
+  try {
+    await fetch(`${SUPABASE_URL}/functions/v1/send-push`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      },
+      body: JSON.stringify({ titel, bericht, url }),
+    });
+  } catch { /* stil falen — melding is niet kritiek */ }
+}
+
+function toonMeldingBanner() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission !== 'default') return;
+  if (localStorage.getItem('vakantie_push_nee')) return;
+
+  setTimeout(() => {
+    const banner = document.createElement('div');
+    banner.id = 'push-banner';
+    banner.innerHTML = `
+      <span style="font-size:1.5rem;flex-shrink:0;">🔔</span>
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:700;font-size:0.88rem;color:#2D3748;">Meldingen aan?</div>
+        <div style="font-size:0.75rem;color:#718096;margin-top:0.1rem;">Seintje bij nieuwe foto's of activiteiten</div>
+      </div>
+      <button id="push-ja" style="background:#D95F52;color:white;border:none;border-radius:8px;padding:0.45rem 1rem;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:Inter,sans-serif;flex-shrink:0;">Ja!</button>
+      <button id="push-nee" style="background:none;border:none;color:#718096;font-size:1.2rem;cursor:pointer;padding:0.25rem;line-height:1;flex-shrink:0;">✕</button>
+    `;
+    Object.assign(banner.style, {
+      position: 'fixed',
+      bottom: 'calc(var(--mob-nav-h) + 0.75rem)',
+      left: '1rem', right: '1rem',
+      background: 'white',
+      borderRadius: '14px',
+      padding: '0.9rem 1rem',
+      boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
+      zIndex: '499',
+      border: '1.5px solid #D95F52',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.75rem',
+      fontFamily: 'Inter, sans-serif',
+      animation: 'pushSlideUp 0.35s ease',
+    });
+    document.body.appendChild(banner);
+
+    document.getElementById('push-ja').addEventListener('click', async () => {
+      banner.remove();
+      const toestemming = await Notification.requestPermission();
+      if (toestemming === 'granted') {
+        await abonneerOpPush();
+        new Notification('Gelukt! 🎉', { body: 'Je krijgt voortaan een seintje bij nieuws.', icon: '/icons/icon.svg' });
+      }
+    });
+    document.getElementById('push-nee').addEventListener('click', () => {
+      banner.remove();
+      localStorage.setItem('vakantie_push_nee', '1');
+    });
+  }, 2500);
+}
+
 // Supabase client (config.js moet voor app.js geladen worden)
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 

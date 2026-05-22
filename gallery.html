@@ -134,6 +134,14 @@ document.getElementById('foto-upload').addEventListener('change', async e => {
   }
   btn.innerHTML = '<i class="fa fa-plus"></i> Foto\'s toevoegen'; btn.disabled = false;
   renderGalerij(); e.target.value = '';
+
+  // Push-melding naar alle familieleden
+  const uploader = document.getElementById('filter-persoon').value || 'Iemand';
+  stuurPushMelding(
+    '📸 Nieuwe foto\'s geüpload',
+    `${uploader} heeft ${files.length} foto${files.length !== 1 ? "'s" : ''} toegevoegd aan de galerij`,
+    'gallery.html'
+  );
 });
 
 async function verwijderFoto(id, url) {
@@ -161,6 +169,7 @@ document.getElementById('lightbox').addEventListener('click', e => {
 });
 
 init();
+toonMeldingBanner();
 </script>
 
 <nav class="mob-nav">

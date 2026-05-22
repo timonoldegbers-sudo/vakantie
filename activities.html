@@ -414,6 +414,14 @@ document.getElementById('opslaan-btn').addEventListener('click', async () => {
   renderActiviteiten();
   document.getElementById('modal').classList.remove('open');
 
+  // Push-melding naar alle familieleden
+  const door = document.getElementById('f-aandrager').value || 'Iemand';
+  stuurPushMelding(
+    '🗺️ Nieuwe activiteit voorgesteld',
+    `${door} heeft "${naam}" toegevoegd aan de planning`,
+    'activities.html'
+  );
+
   ['f-naam','f-datum','f-kosten','f-beschrijving','f-locatie-zoek','f-lat','f-lng'].forEach(id =>
     document.getElementById(id).value = '');
   document.getElementById('locatie-gekozen').textContent = '';
@@ -431,6 +439,7 @@ async function verwijderActiviteit(id) {
 }
 
 init();
+toonMeldingBanner();
 </script>
 
 <nav class="mob-nav">
