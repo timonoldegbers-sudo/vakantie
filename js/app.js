@@ -87,11 +87,26 @@ async function stuurPushMelding(titel, bericht, url = '/') {
 }
 
 function toonMeldingBanner() {
-  if (!('Notification' in window)) return;
-  if (Notification.permission !== 'default') return;
+  if (!('Notification' in window) || !('serviceWorker' in navigator)) return;
+
+  // Op iOS werkt push alleen vanuit standalone-modus (beginscherm-app)
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  if (isIOS && !isStandalone) return; // In Safari op iOS werkt push niet — niet vragen
+
+  if (Notification.permission === 'denied') return;
   if (localStorage.getItem('vakantie_push_nee')) return;
 
+  // Indien al toestemming maar nog niet geabonneerd: alsnog abonneren
+  if (Notification.permission === 'granted') {
+    abonneerOpPush();
+    return;
+  }
+
+  // Nog niet gevraagd: banner tonen na 2,5s
   setTimeout(() => {
+    if (document.getElementById('push-banner')) return; // al zichtbaar
     const banner = document.createElement('div');
     banner.id = 'push-banner';
     banner.innerHTML = `
@@ -123,10 +138,23 @@ function toonMeldingBanner() {
 
     document.getElementById('push-ja').addEventListener('click', async () => {
       banner.remove();
-      const toestemming = await Notification.requestPermission();
-      if (toestemming === 'granted') {
-        await abonneerOpPush();
-        new Notification('Gelukt! 🎉', { body: 'Je krijgt voortaan een seintje bij nieuws.', icon: '/icons/icon.svg' });
+      try {
+        const toestemming = await Notification.requestPermission();
+        if (toestemming === 'granted') {
+          const gelukt = await abonneerOpPush();
+          if (gelukt) {
+            // Bevestiging via service worker (werkt op iOS)
+            const reg = await navigator.serviceWorker.ready;
+            reg.showNotification('Gelukt! 🎉', {
+              body: 'Je krijgt voortaan een seintje bij nieuws.',
+              icon: '/icons/icon.svg',
+            });
+          } else {
+            alert('Meldingen activeren mislukt. Probeer de app opnieuw te openen.');
+          }
+        }
+      } catch (err) {
+        console.error('Push toestemming fout:', err);
       }
     });
     document.getElementById('push-nee').addEventListener('click', () => {
