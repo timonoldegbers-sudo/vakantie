@@ -120,7 +120,7 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
 .hero {
   background: linear-gradient(140deg, #c94a3e 0%, var(--secondary) 60%, #e8705f 100%);
   color: white;
-  padding: 3rem 2rem 2.5rem;
+  padding: 3rem 2rem 5.5rem;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -129,7 +129,7 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
   content: '';
   position: absolute;
   bottom: -1px; left: 0; right: 0;
-  height: 44px;
+  height: 56px;
   background: var(--bg);
   clip-path: ellipse(55% 100% at 50% 100%);
 }
@@ -146,7 +146,17 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
 .page-header {
   background: linear-gradient(140deg, #c94a3e 0%, var(--secondary) 100%);
   color: white;
-  padding: 2rem;
+  padding: 2rem 2rem 2.75rem;
+  position: relative;
+  overflow: hidden;
+}
+.page-header::before {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 44px;
+  background: var(--bg);
+  clip-path: ellipse(55% 100% at 50% 100%);
 }
 .page-header h1 {
   font-family: 'Playfair Display', serif;
@@ -565,9 +575,9 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
 .filter-scroll::-webkit-scrollbar { display: none; }
 .filter-scroll .filter-btn { flex-shrink: 0; white-space: nowrap; }
 
-/* ── PAGE HEADER (verbeterd) ── */
-.page-header {
-  border-bottom: 4px solid var(--secondary);
+/* ── PAGE HEADER mobiel ── */
+@media (max-width: 768px) {
+  .page-header { padding: 1.75rem 1rem 3.5rem; }
 }
 
 /* ── EMOJI REACTIES ── */
@@ -725,7 +735,7 @@ nav a.nav-link.active { background: rgba(255,255,255,0.2); }
   nav { display: none; }
   .mob-nav { display: flex; }
 
-  .hero { padding: 2rem 1rem 2rem; }
+  .hero { padding: 2rem 1rem 5rem; }
   .hero h1 { font-size: 1.9rem; }
   .hero p { font-size: 0.9rem; }
 
