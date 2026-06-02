@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tips & Suggesties — Vakantie Oldegbers</title>
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#D95F52">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Vakantie">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Tips & Suggesties — Vakantie Oldegbers 2027">
+  <meta property="og:description" content="De beste stranden, restaurants, uitjes en avontuur rondom Vale do Lobo, Algarve.">
+  <meta property="og:image" content="https://cdn.hometogo.net/large/e_v5/e4b/c42/d12c05bf570acf633b957c179a.jpg">
+  <meta property="og:url" content="https://vakantie.oldegbers.nl/suggesties.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .cat-tabs {
+      display: flex; gap: 0.5rem; overflow-x: auto;
+      padding: 0 0 0.75rem; margin-bottom: 1.5rem;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
+      flex-wrap: nowrap;
+    }
+    .cat-tabs::-webkit-scrollbar { display: none; }
+    .cat-tab {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.55rem 1.1rem; border-radius: 20px; cursor: pointer;
+      font-size: 0.88rem; font-weight: 600; white-space: nowrap;
+      border: 1.5px solid var(--border); background: white;
+      color: var(--text-light); font-family: 'Inter', sans-serif;
+      transition: all 0.18s; flex-shrink: 0;
+    }
+    .cat-tab.actief {
+      background: var(--secondary); color: white; border-color: var(--secondary);
+      box-shadow: 0 4px 12px rgba(217,95,82,0.3);
+    }
+    .cat-tab:hover:not(.actief) { border-color: var(--secondary); color: var(--secondary); }
+
+    .cat-sectie { display: none; }
+    .cat-sectie.actief { display: block; }
+
+    .cat-header {
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.9rem;
+      border-bottom: 2px solid var(--border);
+    }
+    .cat-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 700; color: var(--text);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .cat-header p { color: var(--text-light); font-size: 0.88rem; margin-top: 0.3rem; }
+
+    .tip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+    .tip-card {
+      background: white; border: 1.5px solid var(--border);
+      border-radius: var(--radius); padding: 1.2rem;
+      transition: box-shadow 0.2s, border-color 0.2s;
+      position: relative;
+    }
+    .tip-card:hover { box-shadow: var(--shadow-hover); border-color: rgba(217,95,82,0.3); }
+
+    .tip-rang {
+      position: absolute; top: 1rem; right: 1rem;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--bg); border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: var(--text-light);
+    }
+    .tip-rang.top3 {
+      background: linear-gradient(135deg, var(--secondary), #b84038);
+      border-color: var(--secondary); color: white;
+    }
+
+    .tip-naam {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700; color: var(--text);
+      margin-bottom: 0.5rem; padding-right: 2rem; line-height: 1.3;
+    }
+    .tip-meta {
+      display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.7rem;
+    }
+    .tip-badge {
+      display: inline-flex; align-items: center; gap: 0.25rem;
+      padding: 0.2rem 0.6rem; border-radius: 20px;
+      font-size: 0.72rem; font-weight: 600;
+    }
+    .tip-badge.afstand {
+      background: rgba(217,95,82,0.1); color: var(--secondary); border: 1px solid rgba(217,95,82,0.25);
+    }
+    .tip-badge.prijs {
+      background: rgba(56,161,105,0.1); color: #276749; border: 1px solid rgba(56,161,105,0.25);
+    }
+    .tip-badge.ster {
+      background: rgba(240,180,41,0.15); color: #975a16; border: 1px solid rgba(240,180,41,0.4);
+    }
+    .tip-badge.aanrader {
+      background: rgba(49,130,206,0.1); color: #2a69ac; border: 1px solid rgba(49,130,206,0.25);
+    }
+    .tip-omschrijving {
+      font-size: 0.85rem; color: var(--text-light); line-height: 1.55;
+      margin-bottom: 0.6rem;
+    }
+    .tip-waarom {
+      font-size: 0.82rem; color: var(--text); line-height: 1.5;
+      padding: 0.5rem 0.7rem;
+      background: var(--bg); border-radius: 8px;
+      border-left: 3px solid var(--secondary);
+    }
+    .tip-waarom::before { content: '💡 '; }
+
+    .afstand-disclaimer {
+      background: #FFF8E7; border: 1.5px solid var(--accent);
+      border-radius: 12px; padding: 0.85rem 1.1rem;
+      font-size: 0.82rem; color: var(--text);
+      display: flex; gap: 0.6rem; align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .tip-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">🌊 <span>Vakantie</span> Oldegbers</a>
+  <a href="index.html" class="nav-link"><i class="fa fa-house"></i> Dashboard</a>
+  <a href="gallery.html" class="nav-link"><i class="fa fa-images"></i> Galerij</a>
+  <a href="activities.html" class="nav-link"><i class="fa fa-map-pin"></i> Activiteiten</a>
+  <a href="berichten.html" class="nav-link"><i class="fa fa-comments"></i> Berichten</a>
+  <a href="menu.html" class="nav-link"><i class="fa fa-utensils"></i> Menu</a>
+  <a href="dagboek.html" class="nav-link"><i class="fa fa-book-open"></i> Dagboek</a>
+  <a href="suggesties.html" class="nav-link active"><i class="fa fa-lightbulb"></i> Tips</a>
+  <a href="checklist.html" class="nav-link"><i class="fa fa-list-check"></i> Inpaklijst</a>
+</nav>
+
+<div class="page-header">
+  <h1><i class="fa fa-lightbulb"></i> Tips & Suggesties</h1>
+  <p>De beste uitjes, stranden, restaurants en meer rondom Vale do Lobo</p>
+</div>
+
+<div class="container">
+
+  <!-- Disclaimer -->
+  <div class="afstand-disclaimer">
+    <i class="fa fa-circle-info" style="color:var(--accent);font-size:1.1rem;flex-shrink:0;margin-top:0.1rem;"></i>
+    <span>Alle afstanden zijn rijafstanden vanuit <strong>Quinta Pequena, Vale do Lobo</strong> en zijn bij benadering. Tip: voeg favorieten direct toe via de <a href="activities.html" style="color:var(--secondary);font-weight:700;">Activiteiten-pagina</a>.</span>
+  </div>
+
+  <!-- Categorie-tabs -->
+  <div class="cat-tabs">
+    <button class="cat-tab actief" data-cat="stranden">🏖️ Stranden</button>
+    <button class="cat-tab" data-cat="uitjes">🎭 Uitjes</button>
+    <button class="cat-tab" data-cat="restaurants">🍽️ Restaurants</button>
+    <button class="cat-tab" data-cat="bars">🍺 Bar & avond uit</button>
+    <button class="cat-tab" data-cat="water">🚣 Water & avontuur</button>
+    <button class="cat-tab" data-cat="kinderen">👨‍👩‍👧‍👦 Met kinderen</button>
+  </div>
+
+  <!-- ═══════════════════════════════════ STRANDEN ═══ -->
+  <div class="cat-sectie actief" id="cat-stranden">
+    <div class="cat-header">
+      <h2>🏖️ Stranden</h2>
+      <p>Van rustige familiestranden tot spectaculaire rotswanden — de Algarve heeft de mooiste stranden van Europa</p>
+    </div>
+    <div class="tip-grid" id="grid-stranden"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════ UITJES ═══ -->
+  <div class="cat-sectie" id="cat-uitjes">
+    <div class="cat-header">
+      <h2>🎭 Uitjes & bezienswaardigheden</h2>
+      <p>Van historische stadjes tot spectaculaire grotten en boottochten — de Algarve is meer dan alleen strand</p>
+    </div>
+    <div class="tip-grid" id="grid-uitjes"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════ RESTAURANTS ═══ -->
+  <div class="cat-sectie" id="cat-restaurants">
+    <div class="cat-header">
+      <h2>🍽️ Restaurants</h2>
+      <p>Van Michelin-sterren tot echte lokale tascas — voor elk budget en elke smaak iets</p>
+    </div>
+    <div class="tip-grid" id="grid-restaurants"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════ BARS ═══ -->
+  <div class="cat-sectie" id="cat-bars">
+    <div class="cat-header">
+      <h2>🍺 Bar & avond uit</h2>
+      <p>Cocktails bij de marina, strandbars en gezellige dorpskroegen voor een avond stappen</p>
+    </div>
+    <div class="tip-grid" id="grid-bars"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════ WATER ═══ -->
+  <div class="cat-sectie" id="cat-water">
+    <div class="cat-header">
+      <h2>🚣 Water & avontuur</h2>
+      <p>De Atlantische Oceaan voor de deur — surfen, kajakken, zeilen en meer</p>
+    </div>
+    <div class="tip-grid" id="grid-water"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════ KINDEREN ═══ -->
+  <div class="cat-sectie" id="cat-kinderen">
+    <div class="cat-header">
+      <h2>👨‍👩‍👧‍👦 Met kinderen</h2>
+      <p>Speciaal voor de kleine Oldegbers — waterparken, dieren en strandplezier</p>
+    </div>
+    <div class="tip-grid" id="grid-kinderen"></div>
+  </div>
+
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+<script>
+
+const DATA = {
+  stranden: [
+    { naam: 'Praia de Vale do Lobo', afstand: '1 km', prijs: 'Gratis', omschrijving: 'Het eigen strandgedeelte direct vanuit het resort, bereikbaar te voet. Mooi wit zand, strandtent aanwezig.', waarom: 'Letterlijk om de hoek — ideaal voor een ochtendduik of luie middag zonder auto.' },
+    { naam: 'Praia de Garrão', afstand: '4 km', prijs: 'Gratis', omschrijving: 'Rustig breed strand tussen Vale do Lobo en Quinta do Lago, omgeven door dennenbos. Weinig drukte.', waarom: 'Een van de rustigste stranden in de omgeving, perfect voor families met kinderen.' },
+    { naam: 'Praia do Ancão', afstand: '8 km', prijs: 'Gratis', omschrijving: 'Onderdeel van het Ria Formosa Natuurpark. Breed strand met helder water, goede parkeerplaats.', waarom: 'Hier liggen flamingo\'s soms zichtbaar in de lagune op de achtergrond — uniek uitzicht.' },
+    { naam: 'Praia de Quarteira', afstand: '13 km', prijs: 'Gratis', omschrijving: 'Levendig stadsstrand met volop strandtenten, ijsjes en faciliteiten. Gezellige boulevard.', waarom: 'Goed als je even wat meer reuring wil — strandtenten met muziek en verkoeling.' },
+    { naam: 'Praia de Vilamoura', afstand: '17 km', prijs: 'Gratis', omschrijving: 'Breed strand direct naast de jachthaven van Vilamoura, meerdere beach clubs aanwezig.', waarom: 'Combineer strand met een wandeling langs de prachtige jachthaven en een drankje erbij.' },
+    { naam: 'Praia da Falésia', afstand: '24 km', prijs: 'Gratis', omschrijving: 'Spectaculair strand met 6 km hoge oranje en rode kliffen. Uniek in Europa, absoluut een plaatje.', waarom: 'Eén van de mooiste stranden van Portugal — de kliffen bij zonsondergang zijn onvergetelijk.' },
+    { naam: 'Ilha de Tavira', afstand: '50 km', prijs: '€ (boot heen/terug)', omschrijving: 'Eiland in de Ria Formosa, alleen bereikbaar per bootje vanuit Tavira of Fuzeta. Paradijselijk.', waarom: 'Het gevoel van "afgelegen eiland" terwijl je gewoon in Portugal bent — een echte aanrader voor een dag.' },
+    { naam: 'Praia da Marinha', afstand: '72 km', prijs: 'Gratis', omschrijving: 'Regelmatig verkozen tot mooiste strand van Portugal. Spectaculaire rotsbogen, grotten en turquoise water.', waarom: 'Als je maar één ver strand doet: dit is het. Breng lunch mee, het is er prachtig.' },
+    { naam: 'Praia de Benagil', afstand: '76 km', prijs: 'Gratis', omschrijving: 'Kleine inham met beroemde zeegrot (Algar de Benagil) die alleen per boot of kajak te bereiken is.', waarom: 'Het strand zelf is klein, maar de grot is iconisch — neem een boottour of kajak voor de volle beleving.' },
+    { naam: 'Meia Praia', afstand: '82 km', prijs: 'Gratis', omschrijving: 'Een van de langste stranden van de Algarve (4 km!), bij Lagos, met rustig water en weinig rotsen.', waarom: 'Perfect voor een combinatie met Lagos bezoeken — breed strand voor de hele familie.' },
+  ],
+
+  uitjes: [
+    { naam: 'Ria Formosa boottour', afstand: '22 km (Faro)', prijs: '€€', omschrijving: 'Tocht door het Ria Formosa lagunenpark langs eilanden, zandbanken en flamingo\'s. Tours van 1–3 uur.', waarom: 'Faro ligt vlakbij en de lagune is UNESCO-beschermd natuurgebied — zeker de moeite waard.' },
+    { naam: 'Benagil grot tocht', afstand: '76 km', prijs: '€€', omschrijving: 'Boottour of kajakexcursie naar de wereldberoemde zeegrot. Reserveer ver van tevoren want heel populair.', waarom: 'De Benagil grot staat in elke top-10 van Portugal. Maak er een halve dag van.' },
+    { naam: 'Faro oude stad', afstand: '22 km', prijs: 'Gratis', omschrijving: 'Historische Cidade Velha met kathedraal (Sé de Faro), stadsmuren en een gezellig plein. Ook Ossenbeenderkerk!', waarom: 'Leuk voor een ochtend — kathedraal beklimmen voor het uitzicht en daarna koffie op het plein.' },
+    { naam: 'Loulé zaterdagmarkt', afstand: '18 km', prijs: 'Gratis (inkopen €)', omschrijving: 'Elke zaterdagochtend een levendige markt in een prachtig Moors gebouw. Verse producten, lokale ambachten.', waarom: 'Dé plek voor vers fruit, lokale wijnen en Portugese specialiteiten. Sfeervoller dan een supermarkt!' },
+    { naam: 'Kasteel van Silves', afstand: '57 km', prijs: '€', omschrijving: 'Imposant rood Moors kasteel uit de 8e eeuw, een van de best bewaarde kastelen van Portugal.', waarom: 'Een hele mooie halve dag: kasteel + de charmante wijnstad Silves met lunch erbij.' },
+    { naam: 'Cabo São Vicente', afstand: '108 km', prijs: 'Gratis', omschrijving: 'Het meest zuidwestelijke punt van Europa: spectaculaire kliffen van 60 meter hoog boven de Atlantische Oceaan.', waarom: 'De zonsondergang hier is onbeschrijflijk. Combineer met Lagos en Sagres voor een mooie dagtour.' },
+    { naam: 'Dolfijnen spotten', afstand: '60 km (Portimão)', prijs: '€€', omschrijving: 'Boottochten vanuit Portimão of Faro waarbij je wilde dolfijnen kunt zien zwemmen langs de boot.', waarom: 'Kinderen (en volwassenen) worden hier heel blij van. Geweldige ervaring op zee.' },
+    { naam: 'Tavira — charmantste stad', afstand: '47 km', prijs: 'Gratis', omschrijving: 'Het meest Portugese stadje van de Algarve: Romeinse brug, witte kerkjes, azulejos en terrasjes.', waarom: 'Minder toeristisch dan andere steden. Heerlijk slenteren en lunchen in een echt Portugees stadje.' },
+    { naam: 'Serra de Monchique', afstand: '80 km', prijs: 'Gratis (auto)', omschrijving: 'Groene bergstreek met het hoogste punt van de Algarve (902m). Prachtig uitzicht, pittoresk dorpje Monchique.', waarom: 'Verrassend groen en fris na al het strand. Figueira do Lobo is een leuke kleine stop onderweg.' },
+    { naam: 'Vilamoura jachthaven', afstand: '17 km', prijs: 'Gratis', omschrijving: 'Een van de grootste jachthavens van Europa met dure jachten, restaurants, bars en een casino.', waarom: 'Leuk voor een avondwandeling: 's avonds goed verlicht, gezellige terrassen en een heel andere sfeer.' },
+  ],
+
+  restaurants: [
+    { naam: 'Henrique Leis', afstand: '3 km (Almancil)', prijs: '€€€€', extra: '⭐ Michelin', omschrijving: 'Braziliaanse topchef met al jaren een Michelinster. Creatieve fusion van Portugese en Braziliaanse keuken.', waarom: 'Voor dé speciale avond van de vakantie. Reserveer ver van tevoren — wachttijden kunnen lang zijn.' },
+    { naam: 'São Gabriel', afstand: '3 km (Almancil)', prijs: '€€€€', extra: '⭐ Michelin', omschrijving: 'Een vaste waarde van de Algarve-fine dining, al decennialang een Michelinster. Klassiek elegant.', waarom: 'Tijdloos en betrouwbaar — als Henrique Leis vol is, is dit een gelijkwaardig alternatief.' },
+    { naam: 'Casa Velha', afstand: '5 km (Quinta do Lago)', prijs: '€€€', omschrijving: 'Charmant oud landhuisje omgebouwd tot gezellig restaurant met een mooie tuin. Portugese en internationale keuken.', waarom: 'Goede sfeer voor een familiediner — niet te formeel, wel lekker. Vraag naar buiten zitten.' },
+    { naam: 'Bovino Steakhouse', afstand: '17 km (Vilamoura)', prijs: '€€€', omschrijving: 'Spectaculaire koelvitrine vol topvlees, steaks bereid op open houtskoolgrill. Hartje Vilamoura.', waarom: 'Als niet iedereen vis wil: dit is de beste steakplek van de Algarve. Portiegrootte is enorm.' },
+    { naam: 'O Camponês', afstand: '5 km (Almancil)', prijs: '€', omschrijving: 'Authentiek lokaal Portugees restaurant, geen poespas, gewoon eerlijk eten voor een eerlijke prijs.', waarom: 'Favoriet bij locals. Gegrilde vis, cataplana stoofschotel en verse grelhados voor weinig geld.' },
+    { naam: 'Restaurante Veneza', afstand: '3 km (Almancil)', prijs: '€€', omschrijving: 'Klassiek Portugees restaurant in Almancil, verse vis en gegrild vlees. Al jaren een begrip in de regio.', waarom: 'Betrouwbaar, overzichtelijk en goed — reserveer wel, want het zit altijd vol.' },
+    { naam: 'Evaristo', afstand: '37 km (Albufeira)', prijs: '€€€', omschrijving: 'Romantisch gelegen aan zee bij Albufeira, terras direct aan het water, verse vis en zeevruchten.', waarom: 'Ga er voor zonsondergang — het uitzicht + een glas vinho verde is onbetaalbaar.' },
+    { naam: 'Tasca do Zé Lopes', afstand: '5 km (Almancil)', prijs: '€', omschrijving: 'Kleine tasca met zelfgemaakte gerechten, dagverse vis op een krijtbord en hausgemachte desserts.', waarom: 'Zo eet Portugal zelf. Goedkoop, gezellig en authentiek — reserveren is een must.' },
+    { naam: 'Akvavit Vilamoura', afstand: '17 km', prijs: '€€€', omschrijving: 'Scandinavisch restaurant aan de marina van Vilamoura. Verrassend goed en een ander smaakpalet.', waarom: 'Leuk als je even wat anders wil dan Portugees. Mooi terras met uitzicht op de jachten.' },
+    { naam: 'Adega do Cantor', afstand: '35 km (Guia, Albufeira)', prijs: '€€', omschrijving: 'Het restaurant van Cliff Richard — charmante quinta, goede Portugese klassiekers, lokale wijnen.', waarom: 'Lekker eten op een mooi terrein, leuk weetje voor bij de tafel. Populair, dus reserveer!' },
+  ],
+
+  bars: [
+    { naam: 'Vilamoura Marina bars', afstand: '17 km', prijs: '€€', omschrijving: 'Tientallen bars en terrassen rondom de jachthaven — van rustige wijnbar tot luidruchtige cocktailbar.', waarom: 'Ideaal voor een avond stappen als groep: voor elk wat wils, alles op loopafstand van elkaar.' },
+    { naam: 'Casino Vilamoura', afstand: '17 km', prijs: '€€', omschrijving: 'Groot casino met gokzalen, restaurant, shows en een stijlvolle bar. Dresscode geldt.', waarom: 'Voor een andere avond uit — ook leuk als je niet gokt, gewoon voor de sfeer en een cocktail.' },
+    { naam: 'Bar do Rio — Quinta do Lago', afstand: '5 km', prijs: '€€', omschrijving: 'Geweldig gelegen aan het meer van Quinta do Lago. Zonsondergang kijken met een caipirinha.', waarom: 'Dé plek voor de mooiste zonsondergang van de vakantie — kom een uur voor sunset.' },
+    { naam: 'The Shack — Vale do Lobo', afstand: '1 km', prijs: '€€', omschrijving: 'Casual beach club bar binnen het resort, cocktails, lichte hapjes en relaxte sfeer.', waarom: 'Handig voor een drankje vlak bij het huisje — geen auto nodig na een avondje.' },
+    { naam: 'Kapital Beach Club', afstand: '14 km (Quarteira)', prijs: '€€', omschrijving: 'Beach club overdag, feestlocatie \'s avonds met DJ\'s, cocktailbar en dansruimte.', waarom: 'Als de jongeren van de groep echt willen dansen — dit is de plek in de omgeving.' },
+    { naam: 'Sol e Pesca — Faro', afstand: '22 km', prijs: '€', omschrijving: 'Unieke bar in een voormalige vishandel — tinnen sardieneblikjes als decor, petiscos en wijnen.', waarom: 'Meest originele bar van Faro. Leuk als voorborrel bij een avond in de stad Faro.' },
+    { naam: 'Muu Lounge — Vilamoura', afstand: '17 km', prijs: '€€€', omschrijving: 'Stijlvolle cocktailbar aan de marina met loungemuziek en een goede wijnkaart.', waarom: 'Voor een elegante avond met de groep, mooiere sfeer dan de doorsnee strandbar.' },
+    { naam: 'Albufeira Oude Stad', afstand: '37 km', prijs: '€', omschrijving: 'Gezellige terrasjes rondom het plein van de oude stad, leuker dan de toeristische "strip".', waarom: 'Verrassend gezellig — ga naar de Praça Miguel Bombarda, niet naar de Rua São Gonçalo.' },
+    { naam: 'Sunset Bar Ancão', afstand: '8 km', prijs: '€€', omschrijving: 'Relaxte strandbar bij Praia do Ancão, perfect voor een late middag drankje bij zonsondergang.', waarom: 'Als je toch richting het strand gaat — dit is een perfecte afsluiter van een stranddag.' },
+    { naam: 'Quinta do Lago Bar', afstand: '5 km', prijs: '€€€', omschrijving: 'Stijlvolle bar van het Quinta do Lago resort, open voor niet-gasten, mooi terras met uitzicht.', waarom: 'Even de luxe sfeer van het buurresort meepikken. Duur maar een bijzondere avond waard.' },
+  ],
+
+  water: [
+    { naam: 'Zeekajak Benagil grot', afstand: '76 km', prijs: '€€', omschrijving: 'Zelf peddelen naar de beroemde Benagil grot — beter dan de boot omdat je op het binnengelegen strandje kunt landen.', waarom: 'Een echte beleving: het gevoel van ontdekken op eigen kracht. Boek bij Kayak Tours Benagil.' },
+    { naam: 'Stand-up paddleboard', afstand: '1 km (eigen strand)', prijs: '€€', omschrijving: 'Te huur direct op het strand van Vale do Lobo of Vilamoura. Rustig water langs de kust, ook voor beginners.', waarom: 'Makkelijk te regelen, leuk voor alle leeftijden en fijn als warming-up voor avontuur op zee.' },
+    { naam: 'Surfles Albufeira', afstand: '37 km', prijs: '€€', omschrijving: 'Meerdere surfscholen (bv. Albufeira Surf) bieden beginnerlessen aan op geschikte stranden.', waarom: 'Zelfs als je nog nooit hebt gesurfd, sta je na 2 uur beginner-les rechtop. Goed voor alle leeftijden.' },
+    { naam: 'Dolfijnen zwemmen', afstand: '60 km (Portimão)', prijs: '€€€', omschrijving: 'Begeleide boottour waarbij je (afhankelijk van de tour) naast wilde dolfijnen in het water kunt zwemmen.', waarom: 'Een levensveranderende ervaring — wilde dolfijnen van dichtbij zien is onvergetelijk.' },
+    { naam: 'Ria Formosa kajaktour', afstand: '25 km (Faro/Olhão)', prijs: '€€', omschrijving: 'Begeleide kajakexcursie door het lagunengebied langs onbewoonde eilanden en kreeftenbedden.', waarom: 'Rustig en prachtig — je ziet delen van de Algarve die je met een auto nooit bereikt.' },
+    { naam: 'Zeiltocht langs de kust', afstand: '17 km (Vilamoura marina)', prijs: '€€€', omschrijving: 'Halve of hele dag zeilen of catamarantocht langs de Algarve kust, snorkelen onderweg.', waarom: 'De kust van boven de zee zien geeft een heel ander perspectief. Caipirinha aan boord inbegrepen (meestal).' },
+    { naam: 'Jeepsafari Monchique', afstand: '80 km', prijs: '€€', omschrijving: 'Avontuurlijke 4x4 tocht door de Serra de Monchique, langs bergdorpen en citrusplantages.', waarom: 'Perfect voor een dag anders dan strand — groepsuitje met spektakel en uitzichten.' },
+    { naam: 'Paardrijden op het strand', afstand: '5 km', prijs: '€€€', omschrijving: 'Meerdere manèges rondom Vale do Lobo bieden strandritten aan, ook voor kinderen en beginners.', waarom: 'Magisch bij zonsondergang — paard op het strand langs de zee is een onvergetelijk plaatje.' },
+    { naam: 'Dune buggy tour', afstand: '15 km (Quarteira)', prijs: '€€', omschrijving: 'Zelf rijden in buggy\'s door duinen en bosgebied van de Algarve. Tours van 1–3 uur.', waarom: 'Leuk alternatief voor jeepsafari, jij rijdt zelf. Leuk groepsuitje voor de actievere vakantiegangers.' },
+    { naam: 'Sloeptocht door de Ria', afstand: '22 km (Faro)', prijs: '€€', omschrijving: 'Kleine sloep (tot 6 personen) huren en zelf door het lagunengebied varen. Geen vaarbewijs nodig.', waarom: 'Vrijheid op het water — stop waar je wilt, zwem in de lagune en vaar langs ongerepte natuur.' },
+  ],
+
+  kinderen: [
+    { naam: 'Aquashow Park', afstand: '13 km (Quarteira)', prijs: '€€', omschrijving: 'Waterpark met grote glijbanen, kiddiepools, golfslagbad en attracties. Ook voor kleine kinderen.', waarom: 'De dichtstbijzijnde optie voor een volle dag waterplezier voor alle leeftijden. Neem lunch mee.' },
+    { naam: 'Zoomarine', afstand: '37 km (Guia, Albufeira)', prijs: '€€€', omschrijving: 'Dolfijnenshow, zeehonden, pinguïns, waterpark en interactieve attracties. Hele dag entertainment.', waarom: 'Voor de kinderen een absolute highlight — dolfijnen van dichtbij zien én in het water. Geweldig.' },
+    { naam: 'Krazy World', afstand: '50 km (Lagoa)', prijs: '€€', omschrijving: 'Mini-zoo met krokodillen, slangen, schildpadden én een mini-waterpark. Informeel en sfeervol.', waarom: 'Kleinschaliger dan Zoomarine maar juist daardoor gezelliger — kinderen zien hier dieren van heel dichtbij.' },
+    { naam: 'Praia de Garrão — zandbouwen', afstand: '4 km', prijs: 'Gratis', omschrijving: 'Rustig strand met fijn wit zand, perfect voor zandkastelen bouwen, schatten zoeken en spelen.', waarom: 'Het simpelste is soms het beste — emmer en schep mee en je hebt uren entertainment.' },
+    { naam: 'Ria Formosa boottocht', afstand: '22 km (Faro)', prijs: '€€', omschrijving: 'Rustige tour langs eilandjes van de Ria Formosa — flamingo\'s spotten, zeehonden zien, mooi water.', waarom: 'Kinderen vinden dieren spotten op het water geweldig — ook voor de baby een fijne, rustige tocht.' },
+    { naam: 'Loulé markt (zaterdag)', afstand: '18 km', prijs: 'Gratis', omschrijving: 'Levendig en kleurrijk Moors marktgebouw vol verse producten, zoetigheid en lokale ambachten.', waarom: 'Kinderen vinden het geweldig: drukke markt, vers fruit proeven, Portugese koeken kopen.' },
+    { naam: 'Vilamoura Marina', afstand: '17 km', prijs: 'Gratis', omschrijving: 'Rondlopen langs enorme jachten, ijsje eten aan het water en de boten in- en uitvaren zien.', waarom: 'Kinderen zijn gefascineerd door de grote jachten. En overal verkopen ze ijs.' },
+    { naam: 'Pedalo\'s huren', afstand: '13 km (Quarteira)', prijs: '€', omschrijving: 'Waterfietsjes en pedaloboten te huur op meerdere stranden, ook voor heel kleine kinderen.', waarom: 'Veilig, leuk en voor elk kind te doen. Kwartier peddelen en dan terug voor ijs.' },
+    { naam: 'Minigolf Vale do Lobo', afstand: '1 km (resort)', prijs: '€', omschrijving: 'Minigolfbaan binnen het resort, een klassieker voor na het zwemmen of op een bewolkte dag.', waarom: 'Vlakbij het huisje, voor alle leeftijden leuk en gegarandeerd ruzie over wie wint.' },
+    { naam: 'IJsjesronde Almancil', afstand: '3 km', prijs: '€', omschrijving: 'Gelateria\'s in Almancil en Vilamoura met Italiaans ijs en Portugees gelado. Dagelijks ritueel.', waarom: 'Maak er een dagelijks ritueel van — elke middag een andere smaak. De kinderen zullen het nooit vergeten.' },
+  ],
+};
+
+const PRIJSKLASSE = {
+  'Gratis': { kleur: '#276749', bg: 'rgba(56,161,105,0.1)', border: 'rgba(56,161,105,0.25)' },
+  '€ (boot heen/terug)': { kleur: '#276749', bg: 'rgba(56,161,105,0.1)', border: 'rgba(56,161,105,0.25)' },
+  '€': { kleur: '#276749', bg: 'rgba(56,161,105,0.1)', border: 'rgba(56,161,105,0.25)' },
+  '€€': { kleur: '#744210', bg: 'rgba(237,137,54,0.12)', border: 'rgba(237,137,54,0.3)' },
+  '€€€': { kleur: '#744210', bg: 'rgba(237,137,54,0.12)', border: 'rgba(237,137,54,0.3)' },
+  '€€€€': { kleur: '#822727', bg: 'rgba(229,62,62,0.1)', border: 'rgba(229,62,62,0.25)' },
+};
+
+function renderGrid(catId, items) {
+  const grid = document.getElementById('grid-' + catId);
+  if (!grid) return;
+  grid.innerHTML = '';
+  items.forEach((item, i) => {
+    const rang = i + 1;
+    const p = PRIJSKLASSE[item.prijs] || PRIJSKLASSE['€€'];
+    const card = document.createElement('div');
+    card.className = 'tip-card';
+    card.innerHTML = `
+      <div class="tip-rang ${rang <= 3 ? 'top3' : ''}">${rang}</div>
+      <div class="tip-naam">${item.naam}</div>
+      <div class="tip-meta">
+        <span class="tip-badge afstand"><i class="fa fa-location-dot"></i> ${item.afstand}</span>
+        <span class="tip-badge" style="background:${p.bg};color:${p.kleur};border:1px solid ${p.border};">
+          ${item.prijs}
+        </span>
+        ${item.extra ? `<span class="tip-badge ster">${item.extra}</span>` : ''}
+      </div>
+      <div class="tip-omschrijving">${item.omschrijving}</div>
+      <div class="tip-waarom">${item.waarom}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// Render alle grids
+Object.keys(DATA).forEach(cat => renderGrid(cat, DATA[cat]));
+
+// Tab-switching
+document.querySelectorAll('.cat-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('actief'));
+    document.querySelectorAll('.cat-sectie').forEach(s => s.classList.remove('actief'));
+    tab.classList.add('actief');
+    document.getElementById('cat-' + tab.dataset.cat).classList.add('actief');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+toonMeldingBanner();
+</script>
+
+<nav class="mob-nav">
+  <a href="index.html"><i class="fa fa-house"></i><span>Dashboard</span></a>
+  <a href="gallery.html"><i class="fa fa-images"></i><span>Galerij</span></a>
+  <a href="activities.html"><i class="fa fa-map-pin"></i><span>Activiteiten</span></a>
+  <a href="berichten.html"><i class="fa fa-comments"></i><span>Berichten</span></a>
+  <a href="#" id="meer-btn"><i class="fa fa-ellipsis"></i><span>Meer</span></a>
+</nav>
+<script>initMeerMenu();</script>
+</body>
+</html>

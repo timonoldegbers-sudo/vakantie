@@ -223,9 +223,10 @@ function initMeerMenu() {
     menu.id = 'meer-menu';
     menu.style.cssText = 'display:none;position:fixed;bottom:calc(var(--mob-nav-h) + 0.5rem);left:1rem;right:1rem;background:white;border-radius:16px;box-shadow:0 -8px 32px rgba(0,0,0,0.18);z-index:199;border:1.5px solid var(--border);padding:1rem;animation:meerSlideUp 0.2s ease;';
     menu.innerHTML = `
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;text-align:center;">
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;text-align:center;">
         <a href="menu.html" class="meer-menu-item"><i class="fa fa-utensils"></i><span>Menu</span></a>
         <a href="dagboek.html" class="meer-menu-item"><i class="fa fa-book-open"></i><span>Dagboek</span></a>
+        <a href="suggesties.html" class="meer-menu-item"><i class="fa fa-lightbulb"></i><span>Tips & Suggesties</span></a>
         <a href="checklist.html" class="meer-menu-item"><i class="fa fa-list-check"></i><span>Inpaklijst</span></a>
       </div>
     `;
