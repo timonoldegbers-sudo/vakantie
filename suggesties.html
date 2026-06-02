@@ -170,6 +170,7 @@
     <button class="cat-tab" data-cat="bars">🍺 Bar & avond uit</button>
     <button class="cat-tab" data-cat="water">🚣 Water & avontuur</button>
     <button class="cat-tab" data-cat="kinderen">👨‍👩‍👧‍👦 Met kinderen</button>
+    <button class="cat-tab" data-cat="wijn">🍷 Wijnhuizen</button>
   </div>
 
   <!-- ═══════════════════════════════════ STRANDEN ═══ -->
@@ -215,6 +216,19 @@
       <p>De Atlantische Oceaan voor de deur — surfen, kajakken, zeilen en meer</p>
     </div>
     <div class="tip-grid" id="grid-water"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════ WIJN ═══ -->
+  <div class="cat-sectie" id="cat-wijn">
+    <div class="cat-header">
+      <h2>🍷 Wijnhuizen</h2>
+      <p>Van lokale Algarve-kelders tot wereldklasse Alentejo-quinta's — allemaal binnen anderhalf uur rijden</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:0.6rem;background:rgba(114,47,55,0.07);border:1.5px solid rgba(114,47,55,0.2);border-radius:10px;padding:0.75rem 1rem;margin-bottom:1.25rem;font-size:0.82rem;color:#5a2030;">
+      <i class="fa fa-circle-exclamation" style="flex-shrink:0;"></i>
+      <span><strong>Belangrijk:</strong> vrijwel alle wijnhuizen vereisen een <strong>reservering vooraf</strong>. Controleer ook de openingstijden — veel kelders zijn alleen op doordeweekse dagen geopend.</span>
+    </div>
+    <div class="tip-grid" id="grid-wijn"></div>
   </div>
 
   <!-- ═══════════════════════════════════ KINDEREN ═══ -->
@@ -297,6 +311,19 @@ const DATA = {
     { naam: 'Paardrijden op het strand', afstand: '5 km', prijs: '€€€', omschrijving: 'Meerdere manèges rondom Vale do Lobo bieden strandritten aan, ook voor kinderen en beginners.', waarom: 'Magisch bij zonsondergang — paard op het strand langs de zee is een onvergetelijk plaatje.' },
     { naam: 'Dune buggy tour', afstand: '15 km (Quarteira)', prijs: '€€', omschrijving: 'Zelf rijden in buggy\'s door duinen en bosgebied van de Algarve. Tours van 1–3 uur.', waarom: 'Leuk alternatief voor jeepsafari, jij rijdt zelf. Leuk groepsuitje voor de actievere vakantiegangers.' },
     { naam: 'Sloeptocht door de Ria', afstand: '22 km (Faro)', prijs: '€€', omschrijving: 'Kleine sloep (tot 6 personen) huren en zelf door het lagunengebied varen. Geen vaarbewijs nodig.', waarom: 'Vrijheid op het water — stop waar je wilt, zwem in de lagune en vaar langs ongerepte natuur.' },
+  ],
+
+  wijn: [
+    { naam: "Quinta da Tôr", afstand: "20 km (Loulé)", prijs: "€€", omschrijving: "Kleinschalig familiebedrijf in de heuvels van Loulé, een van de dichtsbijzijnde wijnhuizen. Intieme proeverij met uitzicht over de wijngaard.", waarom: "Letterlijk om de hoek — perfect voor een spontane middag met goed glas en prachtig uitzicht zonder ver te rijden." },
+    { naam: "Cantor Winery", afstand: "37 km (Guia, Albufeira)", prijs: "€€", omschrijving: "Het wijnhuis van Cliff Richard, de zanger. Biologische wijngaard op een prachtige quinta. Bekroonde rosé en rode wijnen.", waarom: "Geweldig gespreksonderwerp: wijn drinken van Cliff Richard. Combineer met zijn restaurant Adega do Cantor vlakbij." },
+    { naam: "Quinta do Barranco Longo", afstand: "50 km (Algoz)", prijs: "€€", omschrijving: "Winnaar van talloze internationale prijzen. Bijzonder: proeverij in de kelder gevolgd door lunch of borrel op het spectaculaire dakterras met panoramisch uitzicht.", waarom: "Het dakterras is uniek in de Algarve — wijn proeven met 360-graden uitzicht over het groene binnenland. Reserveer ver van tevoren." },
+    { naam: "Morgado do Quintão", afstand: "62 km (Lagoa)", prijs: "€€", omschrijving: "Charmant wijnhuis midden in een olijfgaard. Proeverij buiten aan lange tafels met kaas, charcuterie en ambachtelijke wijnen van eigen land.", waarom: "De sfeer is onverslaanbaar: onder een eeuwenoude olijfboom zitten met een glas lokale wijn en een plank vleeswaren. Authentiek Portugal." },
+    { naam: "Quinta dos Vales", afstand: "65 km (Estômbar)", prijs: "€€€", omschrijving: "Het grootste wijnhuis van de Algarve: 44 hectare, meer dan 100 internationale prijzen en een uniek beeldhouwtuinpark. Begeleide tours van 1,5 uur.", waarom: "Meest professionele wijnervaring in de regio. De combinatie van topwijnen, sculptuurpark en prachtige quinta-architectuur maakt het een echte uitstap." },
+    { naam: "ARVAD Wine", afstand: "65 km (Estômbar, Silves)", prijs: "€€", omschrijving: "Aan de oevers van de rivier de Arade, tegenover het kasteel van Silves. Kampioen van de Negra Mole — de inheemse Algarve-druif. Rivierpicknick mogelijk.", waarom: "Unieke locatie aan het water met uitzicht op Silves kasteel. De wijn van de lokale Negra Mole-druif proef je nergens anders zo mooi. Combineer met een bezoek aan Silves." },
+    { naam: "Quinta do Francês", afstand: "70 km (Silves)", prijs: "€€", omschrijving: "Kleinschalig wijnhuis in de heuvels boven Silves. Typisch Portugese quinta met azulejo-tegels en prachtige buitenterrassen. Persoonlijke proeverij met de eigenaar.", waarom: "Het meest authentieke en persoonlijke wijnhuis in de omgeving. De eigenaar vertelt zelf het verhaal achter elke fles — bijna als bij iemand thuis op bezoek." },
+    { naam: "Monte da Casteleja", afstand: "82 km (Lagos)", prijs: "€€", omschrijving: "Biodynamisch en organisch familiebedrijf net buiten Lagos. Geprezen wijnen in kleine batches, indrukwekkende ligging in het heuvelandschap bij de westkust.", waarom: "Voor de wijnliefhebber die écht iets bijzonders wil: biodynamische wijnen van topkwaliteit in een ongerept landschap. Combineer met Lagos bezoeken." },
+    { naam: "Herdade dos Grous", afstand: "95 km (Albernoa, Alentejo)", prijs: "€€€", omschrijving: "Top wijnhuis net over de grens in de Alentejo, op 1u10 rijden. Prachtige herdade van 750 hectare met luxe hotel, restaurant en professionele wijnbeleving.", waarom: "De beste Alentejo-ervaring op dagtrip-afstand. De wijnen zijn wereldklasse en de setting — eindeloze vlakten, kurkeiken, witte quinta — is typisch Alentejo op zijn best." },
+    { naam: "Herdade do Rocim", afstand: "120 km (Vidigueira, Alentejo)", prijs: "€€€", omschrijving: "Een van de meest bezochte en bekroonde wijnhuizen van de Alentejo. Moderne wijnmakerij met historische roots, begeleide tours en uitstekende proeverijen.", waarom: "Als je één keer naar de Alentejo gaat: dit is de kroon op de dag. Internationale faam, prachtige quinta en wijnen die je mee naar huis wilt nemen. Anderhalf uur rijden — elk minuut waard." },
   ],
 
   kinderen: [
