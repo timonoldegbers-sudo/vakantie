@@ -228,6 +228,7 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
 <script src="js/app.js"></script>
 <script>
@@ -256,7 +257,7 @@ const DATA = {
     { naam: 'Dolfijnen spotten', afstand: '60 km (Portimão)', prijs: '€€', omschrijving: 'Boottochten vanuit Portimão of Faro waarbij je wilde dolfijnen kunt zien zwemmen langs de boot.', waarom: 'Kinderen (en volwassenen) worden hier heel blij van. Geweldige ervaring op zee.' },
     { naam: 'Tavira — charmantste stad', afstand: '47 km', prijs: 'Gratis', omschrijving: 'Het meest Portugese stadje van de Algarve: Romeinse brug, witte kerkjes, azulejos en terrasjes.', waarom: 'Minder toeristisch dan andere steden. Heerlijk slenteren en lunchen in een echt Portugees stadje.' },
     { naam: 'Serra de Monchique', afstand: '80 km', prijs: 'Gratis (auto)', omschrijving: 'Groene bergstreek met het hoogste punt van de Algarve (902m). Prachtig uitzicht, pittoresk dorpje Monchique.', waarom: 'Verrassend groen en fris na al het strand. Figueira do Lobo is een leuke kleine stop onderweg.' },
-    { naam: 'Vilamoura jachthaven', afstand: '17 km', prijs: 'Gratis', omschrijving: 'Een van de grootste jachthavens van Europa met dure jachten, restaurants, bars en een casino.', waarom: 'Leuk voor een avondwandeling: 's avonds goed verlicht, gezellige terrassen en een heel andere sfeer.' },
+    { naam: "Vilamoura jachthaven", afstand: "17 km", prijs: "Gratis", omschrijving: "Een van de grootste jachthavens van Europa met dure jachten, restaurants, bars en een casino.", waarom: "Mooi verlicht in de avond — gezellige terrassen en een heel andere sfeer dan het strand." },
   ],
 
   restaurants: [
@@ -277,7 +278,7 @@ const DATA = {
     { naam: 'Casino Vilamoura', afstand: '17 km', prijs: '€€', omschrijving: 'Groot casino met gokzalen, restaurant, shows en een stijlvolle bar. Dresscode geldt.', waarom: 'Voor een andere avond uit — ook leuk als je niet gokt, gewoon voor de sfeer en een cocktail.' },
     { naam: 'Bar do Rio — Quinta do Lago', afstand: '5 km', prijs: '€€', omschrijving: 'Geweldig gelegen aan het meer van Quinta do Lago. Zonsondergang kijken met een caipirinha.', waarom: 'Dé plek voor de mooiste zonsondergang van de vakantie — kom een uur voor sunset.' },
     { naam: 'The Shack — Vale do Lobo', afstand: '1 km', prijs: '€€', omschrijving: 'Casual beach club bar binnen het resort, cocktails, lichte hapjes en relaxte sfeer.', waarom: 'Handig voor een drankje vlak bij het huisje — geen auto nodig na een avondje.' },
-    { naam: 'Kapital Beach Club', afstand: '14 km (Quarteira)', prijs: '€€', omschrijving: 'Beach club overdag, feestlocatie \'s avonds met DJ\'s, cocktailbar en dansruimte.', waarom: 'Als de jongeren van de groep echt willen dansen — dit is de plek in de omgeving.' },
+    { naam: "Kapital Beach Club", afstand: "14 km (Quarteira)", prijs: "€€", omschrijving: "Beach club overdag, feestlocatie in de avond met DJ's, cocktailbar en dansruimte.", waarom: "Als de jongeren van de groep echt willen dansen — dit is de plek in de omgeving." },
     { naam: 'Sol e Pesca — Faro', afstand: '22 km', prijs: '€', omschrijving: 'Unieke bar in een voormalige vishandel — tinnen sardieneblikjes als decor, petiscos en wijnen.', waarom: 'Meest originele bar van Faro. Leuk als voorborrel bij een avond in de stad Faro.' },
     { naam: 'Muu Lounge — Vilamoura', afstand: '17 km', prijs: '€€€', omschrijving: 'Stijlvolle cocktailbar aan de marina met loungemuziek en een goede wijnkaart.', waarom: 'Voor een elegante avond met de groep, mooiere sfeer dan de doorsnee strandbar.' },
     { naam: 'Albufeira Oude Stad', afstand: '37 km', prijs: '€', omschrijving: 'Gezellige terrasjes rondom het plein van de oude stad, leuker dan de toeristische "strip".', waarom: 'Verrassend gezellig — ga naar de Praça Miguel Bombarda, niet naar de Rua São Gonçalo.' },
@@ -306,9 +307,9 @@ const DATA = {
     { naam: 'Ria Formosa boottocht', afstand: '22 km (Faro)', prijs: '€€', omschrijving: 'Rustige tour langs eilandjes van de Ria Formosa — flamingo\'s spotten, zeehonden zien, mooi water.', waarom: 'Kinderen vinden dieren spotten op het water geweldig — ook voor de baby een fijne, rustige tocht.' },
     { naam: 'Loulé markt (zaterdag)', afstand: '18 km', prijs: 'Gratis', omschrijving: 'Levendig en kleurrijk Moors marktgebouw vol verse producten, zoetigheid en lokale ambachten.', waarom: 'Kinderen vinden het geweldig: drukke markt, vers fruit proeven, Portugese koeken kopen.' },
     { naam: 'Vilamoura Marina', afstand: '17 km', prijs: 'Gratis', omschrijving: 'Rondlopen langs enorme jachten, ijsje eten aan het water en de boten in- en uitvaren zien.', waarom: 'Kinderen zijn gefascineerd door de grote jachten. En overal verkopen ze ijs.' },
-    { naam: 'Pedalo\'s huren', afstand: '13 km (Quarteira)', prijs: '€', omschrijving: 'Waterfietsjes en pedaloboten te huur op meerdere stranden, ook voor heel kleine kinderen.', waarom: 'Veilig, leuk en voor elk kind te doen. Kwartier peddelen en dan terug voor ijs.' },
+    { naam: "Pedalo's huren", afstand: "13 km (Quarteira)", prijs: "€", omschrijving: "Waterfietsjes en pedaloboten te huur op meerdere stranden, ook voor heel kleine kinderen.", waarom: "Veilig, leuk en voor elk kind te doen. Kwartier peddelen en dan terug voor ijs." },
     { naam: 'Minigolf Vale do Lobo', afstand: '1 km (resort)', prijs: '€', omschrijving: 'Minigolfbaan binnen het resort, een klassieker voor na het zwemmen of op een bewolkte dag.', waarom: 'Vlakbij het huisje, voor alle leeftijden leuk en gegarandeerd ruzie over wie wint.' },
-    { naam: 'IJsjesronde Almancil', afstand: '3 km', prijs: '€', omschrijving: 'Gelateria\'s in Almancil en Vilamoura met Italiaans ijs en Portugees gelado. Dagelijks ritueel.', waarom: 'Maak er een dagelijks ritueel van — elke middag een andere smaak. De kinderen zullen het nooit vergeten.' },
+    { naam: "IJsjesronde Almancil", afstand: "3 km", prijs: "€", omschrijving: "Gelateria's in Almancil en Vilamoura met Italiaans ijs en Portugees gelado. Dagelijks ritueel.", waarom: "Maak er een dagelijks ritueel van — elke middag een andere smaak. De kinderen zullen het nooit vergeten." },
   ],
 };
 
