@@ -1,7 +1,7 @@
 // Gedeelde state & helpers
 
 const VERTREKDATUM = new Date('2027-04-28T06:00:00');
-const LOCATIE = { lat: 37.1205, lng: -8.5204, naam: 'Villa Cocheira, Ferragudo, Algarve, Portugal' };
+const LOCATIE = { lat: 37.0549, lng: -8.0642, naam: 'Quinta Pequena, Vale do Lobo, Almancil, Portugal' };
 
 const DEFAULT_DEELNEMERS = [
   { naam: 'Leo',     foto: null },
