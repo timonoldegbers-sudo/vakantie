@@ -1,13 +1,13 @@
 {
   "name": "Vakantie Oldegbers",
   "short_name": "Vakantie",
-  "description": "Familievakantie naar Ferragudo, Algarve 2027 — Leo & Anneke 40 jaar getrouwd",
+  "description": "Familievakantie naar Vale do Lobo, Algarve 2027 — Leo & Anneke 40 jaar getrouwd",
   "start_url": "index.html",
   "scope": ".",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#FDF6EF",
-  "theme_color": "#1A6B8A",
+  "theme_color": "#D95F52",
   "lang": "nl",
   "categories": ["travel", "lifestyle"],
   "icons": [
@@ -26,7 +26,7 @@
   ],
   "screenshots": [
     {
-      "src": "https://villacocheira.com/wp-content/uploads/2018/09/Villa-Cocheira-Beach-House-Ferragudo-Pool-6-1.jpg",
+      "src": "https://cdn.hometogo.net/large/e_v5/e4b/c42/d12c05bf570acf633b957c179a.jpg",
       "sizes": "1200x800",
       "type": "image/jpeg"
     }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vakantie Oldegbers — Ferragudo 2027</title>
+  <title>Vakantie Oldegbers — Vale do Lobo 2027</title>
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#D95F52">
@@ -443,7 +443,7 @@ initReisinfoBewerkbaar();
 // ---- VAKANTIEAGENDA ----
 async function laadAgenda() {
   const VERTREK = new Date('2027-04-28');
-  const TERUG   = new Date('2027-05-05');
+  const TERUG   = new Date('2027-05-07');
 
   const [{ data: activiteiten }, { data: notities }] = await Promise.all([
     db.from('activiteiten').select('naam, datum, categorie'),

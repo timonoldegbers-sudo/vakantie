@@ -53,7 +53,7 @@
   <!-- Tabel -->
   <div class="card" style="padding:0;overflow:hidden;">
     <div style="padding:1.25rem 1.5rem 0.75rem;border-bottom:1px solid var(--border);">
-      <div class="card-title" style="margin-bottom:0;"><i class="fa fa-calendar-days"></i> 28 april – 5 mei 2027</div>
+      <div class="card-title" style="margin-bottom:0;"><i class="fa fa-calendar-days"></i> 28 april – 7 mei 2027</div>
     </div>
     <div class="menu-wrap">
       <table class="menu-table" id="menu-tabel"></table>
@@ -93,7 +93,7 @@ let menuData = {}; // key: 'datum|maaltijd' → { id, gerecht, kok }
 let editKey = null;
 
 const VAKANTIE_START = new Date('2027-04-28');
-const VAKANTIE_EIND  = new Date('2027-05-05');
+const VAKANTIE_EIND  = new Date('2027-05-07');
 const MAALTIJDEN = [
   { id: 'ontbijt', label: '🌅 Ontbijt' },
   { id: 'lunch',   label: '☀️ Lunch' },
@@ -124,7 +124,7 @@ function renderMenu() {
   dagen.forEach(dag => {
     const dateStr = dag.toISOString().slice(0,10);
     const isVertrek = dateStr === '2027-04-28';
-    const isTerug   = dateStr === '2027-05-05';
+    const isTerug   = dateStr === '2027-05-07';
     const label = isVertrek ? '✈️ Vertrek' : isTerug ? '🏠 Terug' : '';
     html += `<th>
       ${label ? `<div style="font-size:0.65rem;opacity:0.8;margin-bottom:0.1rem;">${label}</div>` : ''}
