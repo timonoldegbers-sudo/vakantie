@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeugdplan 2026–2031 — CGK Zwolle</title>
+  <link rel="stylesheet" href="style.css?v=20">
+</head>
+<body>
+
+<!-- ── PINCODE OVERLAY ── -->
+<div id="pin-overlay">
+  <div class="pin-box">
+    <div class="logo-area">⛪</div>
+    <h2>Jeugdplan CGK Zwolle</h2>
+    <p>Voer de pincode in om verder te gaan</p>
+    <div class="pin-dots">
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+    </div>
+    <div class="pin-keypad">
+      <button class="pin-key" data-val="1">1</button>
+      <button class="pin-key" data-val="2">2</button>
+      <button class="pin-key" data-val="3">3</button>
+      <button class="pin-key" data-val="4">4</button>
+      <button class="pin-key" data-val="5">5</button>
+      <button class="pin-key" data-val="6">6</button>
+      <button class="pin-key" data-val="7">7</button>
+      <button class="pin-key" data-val="8">8</button>
+      <button class="pin-key" data-val="9">9</button>
+      <button class="pin-key empty"></button>
+      <button class="pin-key" data-val="0">0</button>
+      <button class="pin-key delete" data-val="del">⌫</button>
+    </div>
+    <div class="pin-error" id="pin-error"></div>
+  </div>
+</div>
+
+<!-- ── HEADER ── -->
+<header>
+  <a class="header-logo" href="#">
+    ⛪ Jeugdplan CGK Zwolle
+    <span class="badge">2026–2031</span>
+  </a>
+  <div class="header-actions">
+    <button class="btn-export">📋 Exporteer als prompt</button>
+  </div>
+  <button class="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div class="overlay"></div>
+
+<div class="layout">
+
+<!-- ── SIDEBAR ── -->
+<nav class="sidebar">
+  <div class="sidebar-section">Start</div>
+  <a class="nav-item active" data-section="dashboard"><span class="icon">📋</span> Dashboard</a>
+
+  <div class="sidebar-section">Visie & Kansen</div>
+  <a class="nav-item" data-section="visie"><span class="icon">✨</span> Drie bewegingen</a>
+  <a class="nav-item" data-section="kansen"><span class="icon">🌍</span> Kansen & onderzoek</a>
+
+  <div class="sidebar-section">Analyse</div>
+  <a class="nav-item" data-section="situatie"><span class="icon">📍</span> Huidige situatie</a>
+  <a class="nav-item" data-section="swot"><span class="icon">📊</span> SWOT</a>
+  <a class="nav-item" data-section="leeftijden"><span class="icon">👥</span> Leeftijden</a>
+
+  <div class="sidebar-section">Leeftijdsgroepen</div>
+  <a class="nav-item" data-section="lg-1114"><span class="icon">🟢</span> 11–14 jaar</a>
+  <a class="nav-item" data-section="lg-1416"><span class="icon">🟡</span> 14–16 jaar</a>
+  <a class="nav-item" data-section="lg-1618"><span class="icon">🔴</span> 16–18 jaar (GAT)</a>
+  <a class="nav-item" data-section="lg-1822"><span class="icon">🔵</span> 18–22 jaar</a>
+  <a class="nav-item" data-section="lg-2225"><span class="icon">🟣</span> 22–25 jaar</a>
+
+  <div class="sidebar-section">Koers 2026–2031</div>
+  <a class="nav-item" data-section="prioriteiten"><span class="icon">✅</span> Prioriteiten</a>
+  <a class="nav-item" data-section="vijfjarenplan"><span class="icon">🔥</span> 5-Jarenplan</a>
+
+  <div class="sidebar-section">Samen</div>
+  <a class="nav-item" data-section="vragenlijst"><span class="icon">📝</span> Vragenlijst</a>
+  <a class="nav-item" data-section="allenotities"><span class="icon">💬</span> Notities</a>
+</nav>
+
+<!-- ── MAIN ── -->
+<main>
+
+  <!-- INTRO -->
+  <!-- DASHBOARD -->
+  <section class="section" id="dashboard">
+
+    <!-- Koepelvisie hero -->
+    <div style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-radius:20px;padding:2rem 1.75rem;margin-bottom:1.5rem;position:relative;overflow:hidden">
+      <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;opacity:0.7;margin-bottom:0.4rem">CGK Zwolle · Jeugdwerk 2026–2031</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;line-height:1.3;margin-bottom:0.5rem">Jonge, vurige volgelingen van Jezus</div>
+      <div style="font-size:0.9rem;opacity:0.85">Gevormd in Zwolle · Levend voor Gods Koninkrijk</div>
+      <div style="position:absolute;right:1.5rem;bottom:1rem;font-size:3rem;opacity:0.15">🔥</div>
+    </div>
+
+    <!-- Drie bewegingen -->
+    <div class="beweging-hero" style="margin-bottom:1.5rem">
+      <div class="beweging-kaart ontmoeten" onclick="document.getElementById('visie').scrollIntoView({behavior:'smooth'})">
+        <span class="beweging-icon">✨</span>
+        <div class="beweging-nr">Beweging 1</div>
+        <div class="beweging-naam">Ontmoeten</div>
+        <div class="beweging-tekst">Echte ervaringen met God</div>
+      </div>
+      <div class="beweging-kaart gevormd" onclick="document.getElementById('prioriteiten').scrollIntoView({behavior:'smooth'})">
+        <span class="beweging-icon">🌱</span>
+        <div class="beweging-nr">Beweging 2</div>
+        <div class="beweging-naam">Gevormd worden</div>
+        <div class="beweging-tekst">Talent voor het Koninkrijk</div>
+      </div>
+      <div class="beweging-kaart meenemen" onclick="document.getElementById('vijfjarenplan').scrollIntoView({behavior:'smooth'})">
+        <span class="beweging-icon">🔥</span>
+        <div class="beweging-nr">Beweging 3</div>
+        <div class="beweging-naam">Meenemen</div>
+        <div class="beweging-tekst">Kerk van vandaag in Zwolle</div>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="dash-grid" id="dash-stats" style="margin-bottom:1rem">
+      <div class="dash-stat" onclick="document.getElementById('vragenlijst').scrollIntoView({behavior:'smooth'})">
+        <div class="dash-stat-nr" id="dash-vl-nr">–</div>
+        <div class="dash-stat-label">van 3 teamleden ingevuld</div>
+      </div>
+      <div class="dash-stat" onclick="document.getElementById('allenotities').scrollIntoView({behavior:'smooth'})">
+        <div class="dash-stat-nr" id="dash-notities-nr">–</div>
+        <div class="dash-stat-label">notities te bespreken</div>
+      </div>
+      <div class="dash-stat" onclick="document.getElementById('prioriteiten').scrollIntoView({behavior:'smooth'})">
+        <div class="dash-stat-nr" id="dash-prio-nr">–</div>
+        <div class="dash-stat-label">prioriteiten zonder trekker</div>
+      </div>
+    </div>
+
+    <!-- Snelkoppelingen -->
+    <div class="dash-actions" style="margin-bottom:1.25rem">
+      <button class="dash-action" onclick="document.getElementById('vragenlijst').scrollIntoView({behavior:'smooth'})">
+        <span class="icon">📝</span>Vul vragenlijst in
+      </button>
+      <button class="dash-action" onclick="document.getElementById('prioriteiten').scrollIntoView({behavior:'smooth'})">
+        <span class="icon">✅</span>Prioriteiten
+      </button>
+      <button class="dash-action secondary" onclick="document.getElementById('kansen').scrollIntoView({behavior:'smooth'})">
+        <span class="icon">🌍</span>Kansen & onderzoek
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>🕐 Recente notities</h3>
+      <div id="dash-recent"><p style="color:var(--text-muted);font-size:0.875rem">Laden...</p></div>
+    </div>
+  </section>
+
+  <!-- INTRO (achtergrond, verborgen uit sidebar) -->
+  <section class="section" id="intro">
+    <div class="section-label">👋 Welkom</div>
+    <h1 class="section-title">Jeugdplan CGK Zwolle<br>2026–2031</h1>
+    <p class="section-intro">
+      Dit plan gaat over één ding: jongeren van 12–25 jaar die volgeling van Jezus worden — en anderen meenemen op die weg. Alles wat we doen staat in dienst van dat doel. Dit document beschrijft waar we staan, de kansen die er liggen, en hoe we de komende vijf jaar stap voor stap bewegen.
+    </p>
+
+    <div class="quote-block">
+      <p>Jonge, vurige volgelingen van Jezus — gevormd in de kerk van Zwolle, levend voor Gods Koninkrijk.</p>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--primary)">
+      <h3>🔁 Drie bewegingen</h3>
+      <p style="margin-bottom:0.75rem">Alles in dit plan draait om drie bewegingen die op elkaar voortbouwen:</p>
+      <div style="display:flex;flex-direction:column;gap:0.6rem">
+        <div style="display:flex;gap:0.75rem;align-items:flex-start">
+          <span style="font-size:1.4rem">✨</span>
+          <div><strong>Ontmoeten</strong> — Jongeren ontmoeten Jezus in echte, diepgaande ervaringen. Niet dun geloof, maar een God die echt is.</div>
+        </div>
+        <div style="display:flex;gap:0.75rem;align-items:flex-start">
+          <span style="font-size:1.4rem">🌱</span>
+          <div><strong>Gevormd worden</strong> — Jongeren worden discipelen: talenten voor Gods Koninkrijk, meelopen met volwassenen, formatie in de praktijk.</div>
+        </div>
+        <div style="display:flex;gap:0.75rem;align-items:flex-start">
+          <span style="font-size:1.4rem">🔥</span>
+          <div><strong>Meenemen</strong> — Jongeren nemen anderen mee. Niet de kerk van morgen — de kerk van vandaag, in Zwolle.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🔑 Hoe gebruik je dit document?</h3>
+      <ul>
+        <li><strong>Lees</strong> elk onderdeel via de navigatie links.</li>
+        <li><strong>Reageer</strong> onderaan elk onderdeel via de gele notitieknop. Notities zijn <strong>gedeeld</strong> — iedereen ziet elkaars reacties direct.</li>
+        <li><strong>Bewerk</strong> prioriteiten, SWOT-items en het leeftijdsoverzicht direct op de pagina.</li>
+        <li><strong>Exporteer als prompt</strong> via de knop rechtsboven — kopieert alle open notities als kant-en-klare vraag voor Claude.</li>
+        <li>Pincode: <strong>2026</strong></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>📍 Waar staan we in het proces?</h3>
+      <div class="steps">
+        <div class="step done"><div class="step-nr">✓</div><div class="step-content"><h4>Huidige situatie in kaart gebracht</h4><p>Website, documenten en gesprekken als basis.</p></div></div>
+        <div class="step done"><div class="step-nr">✓</div><div class="step-content"><h4>Bronnen verzameld en goedgekeurd</h4><p>16 bronnen op het gebied van theologie, onderzoek en vrijwilligers.</p></div></div>
+        <div class="step done"><div class="step-nr">✓</div><div class="step-content"><h4>SWOT-analyse gemaakt</h4><p>Sterktes, zwaktes, kansen en bedreigingen voor ons jeugdwerk.</p></div></div>
+        <div class="step done"><div class="step-nr">✓</div><div class="step-content"><h4>Start / Stop / Doorgaan / Updaten</h4><p>Strategische keuzes op basis van de SWOT.</p></div></div>
+        <div class="step done"><div class="step-nr">✓</div><div class="step-content"><h4>Trends vrijwilligers in kaart gebracht</h4><p>Maatschappelijke en kerkelijke trends die ons werk beïnvloeden.</p></div></div>
+        <div class="step done"><div class="step-nr">✓</div><div class="step-content"><h4>5-Jarenplan 2026–2031</h4><p>Strategisch kader voor de komende vijf jaar.</p></div></div>
+        <div class="step done"><div class="step-nr">✓</div><div class="step-content"><h4>Jaarplan 2026/2027</h4><p>Concreet en uitvoerbaar plan voor het eerste jaar.</p></div></div>
+        <div class="step"><div class="step-nr">→</div><div class="step-content"><h4>Aanscherping met het team</h4><p>Jouw notities en reacties verwerken we in de volgende versie.</p></div></div>
+      </div>
+    </div>
+
+    <button class="note-btn" data-section="intro">💬 Notitie toevoegen</button>
+    <div class="notes-panel" id="notes-panel-intro">
+      <div class="notes-list"></div>
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-intro" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-intro" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="intro">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- AANPAK -->
+  <section class="section" id="aanpak">
+    <div class="section-label">🗺️ Aanpak</div>
+    <h2 class="section-title">Hoe zijn we te werk gegaan?</h2>
+    <p class="section-intro">We hebben dit plan opgebouwd in zeven stappen, van analyse naar actie. Elke stap bouwt voort op de vorige — zo is het plan geworteld in de werkelijkheid en niet in de lucht.</p>
+
+    <div class="steps">
+      <div class="step done">
+        <div class="step-nr">✓</div>
+        <div class="step-content">
+          <h4>Stap 1 — Huidige situatie in kaart brengen</h4>
+          <p>We hebben de website van CGK Zwolle uitgekamd, interne documenten gelezen (#Durfte, Samen op Koers, Samen Jong) en aangevuld met informatie van Timon over aantallen, vrijwilligers, knelpunten en kansen.</p>
+        </div>
+      </div>
+      <div class="step done">
+        <div class="step-nr">✓</div>
+        <div class="step-content">
+          <h4>Stap 2 — Bronnen verzamelen</h4>
+          <p>We zochten naar relevante theologie, onderzoek en praktijkkennis over jeugdwerk, geloofsoverdracht, vrijwilligers en trends. Alle bronnen werden eerst ter goedkeuring voorgelegd.</p>
+        </div>
+      </div>
+      <div class="step done">
+        <div class="step-nr">✓</div>
+        <div class="step-content">
+          <h4>Stap 3 — SWOT-analyse</h4>
+          <p>Op basis van stap 1 en 2 maakten we een analyse van sterktes, zwaktes, kansen en bedreigingen — specifiek voor het jeugdwerk van CGK Zwolle.</p>
+        </div>
+      </div>
+      <div class="step done">
+        <div class="step-nr">✓</div>
+        <div class="step-content">
+          <h4>Stap 4 — Start / Stop / Doorgaan / Updaten</h4>
+          <p>We vertaalden de SWOT naar concrete strategische keuzes: wat versterken we, wat laten we los, wat starten we nieuw, wat heeft een upgrade nodig?</p>
+        </div>
+      </div>
+      <div class="step done">
+        <div class="step-nr">✓</div>
+        <div class="step-content">
+          <h4>Stap 5 — Trends vrijwilligers</h4>
+          <p>We analyseerden maatschappelijke en kerkelijke trends rondom vrijwilligers en vertaalden die naar wat het vraagt van CGK Zwolle.</p>
+        </div>
+      </div>
+      <div class="step done">
+        <div class="step-nr">✓</div>
+        <div class="step-content">
+          <h4>Stap 6 — 5-Jarenplan 2026–2031</h4>
+          <p>We stelden een strategisch kader op voor vijf jaar, verdeeld in vijf jaarthema's met concrete prioriteiten per jaar.</p>
+        </div>
+      </div>
+      <div class="step done">
+        <div class="step-nr">✓</div>
+        <div class="step-content">
+          <h4>Stap 7 — Jaarplan 2026/2027</h4>
+          <p>Het eerste jaar is uitgewerkt als een concreet, uitvoerbaar plan met maand-voor-maand prioriteiten en meetbare doelen.</p>
+        </div>
+      </div>
+    </div>
+
+    <button class="note-btn" data-section="aanpak" style="margin-top:1.5rem">💬 Notitie toevoegen</button>
+    <div class="notes-panel" id="notes-panel-aanpak">
+      <div class="notes-list"></div>
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-aanpak" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-aanpak" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="aanpak">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIE -->
+  <section class="section" id="visie">
+    <div class="section-label">✨ Visie</div>
+    <h2 class="section-title">Drie bewegingen</h2>
+    <p class="section-intro">Alles wat we doen stroomt voort uit één doel: <strong>jongeren die volgeling van Jezus worden en anderen meenemen.</strong> Dat doel concretiseren we in drie bewegingen.</p>
+
+    <div class="beweging-hero">
+      <div class="beweging-kaart ontmoeten">
+        <span class="beweging-icon">✨</span>
+        <div class="beweging-nr">Beweging 1</div>
+        <div class="beweging-naam">Ontmoeten</div>
+        <div class="beweging-tekst">Jongeren ontmoeten Jezus in echte, diepgaande ervaringen. Niet dun geloof — maar een God die echt is en echt raakt.</div>
+      </div>
+      <div class="beweging-kaart gevormd">
+        <span class="beweging-icon">🌱</span>
+        <div class="beweging-nr">Beweging 2</div>
+        <div class="beweging-naam">Gevormd worden</div>
+        <div class="beweging-tekst">Jongeren worden discipelen: hun talent voor Gods Koninkrijk, meelopen met mensen die geloven, formatie in de praktijk.</div>
+      </div>
+      <div class="beweging-kaart meenemen">
+        <span class="beweging-icon">🔥</span>
+        <div class="beweging-nr">Beweging 3</div>
+        <div class="beweging-naam">Meenemen</div>
+        <div class="beweging-tekst">Jongeren nemen anderen mee. Ze zijn de kerk van vandaag — niet van morgen. In CGK Zwolle én in de stad.</div>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      <p>"Jonge, vurige volgelingen van Jezus — gevormd in de kerk van Zwolle, levend voor Gods Koninkrijk."</p>
+      <cite>Koepelvisie jeugdwerk CGK Zwolle 2026–2031</cite>
+    </div>
+
+    <div class="accordion">
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion('visie-detail')">
+          <span class="accordion-title">Missie, visie & kernwaarden CGK Zwolle</span>
+          <span class="accordion-subtitle">Klik om te lezen</span>
+          <span class="accordion-chevron">▼</span>
+        </div>
+        <div class="accordion-body" id="visie-detail">
+          <div class="quote-block" style="margin-top:1rem">
+            <p>"Als gemeente van Jezus Christus, bewogen door Gods liefde, bouwen aan Zijn Koninkrijk."</p>
+          </div>
+          <p style="font-size:0.875rem;font-style:italic;margin:1rem 0">"Geïnspireerd door Gods Woord en Geest willen wij, als volgelingen van Jezus Christus, een liefdevolle en bewogen gemeente zijn voor iedereen."</p>
+          <div class="route-card"><div class="route-nr">1</div><div class="route-content"><h4>Discipelschap</h4><p>Iedereen mag discipel worden en groeien als leerling van Jezus</p></div></div>
+          <div class="route-card"><div class="route-nr">2</div><div class="route-content"><h4>Verbonden Generaties</h4><p>Kerk zijn mét, vóór en dóór alle generaties — jongeren zijn de kerk van vandaag</p></div></div>
+          <div class="route-card"><div class="route-nr">3</div><div class="route-content"><h4>Kerk voor de Stad</h4><p>Uitnodigend en betrokken voor Zwolle</p></div></div>
+          <div class="kernwaarde-grid" style="margin-top:1rem">
+            <span class="kernwaarde-pill">✝️ Evangelie van genade</span>
+            <span class="kernwaarde-pill">📖 Gods Woord en Geest</span>
+            <span class="kernwaarde-pill">🙏 Gebed</span>
+            <span class="kernwaarde-pill">🎁 Gaven en talenten</span>
+            <span class="kernwaarde-pill">⚖️ Gerechtigheid</span>
+            <span class="kernwaarde-pill">🤝 Gastvrijheid</span>
+            <span class="kernwaarde-pill">🌍 Getuigende levensstijl</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="note-btn" data-section="visie" style="margin-top:1rem">💬 Notitie toevoegen</button>
+    <div class="notes-panel" id="notes-panel-visie">
+      <div class="notes-list"></div>
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-visie" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-visie" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="visie">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- KANSEN & ONDERZOEK -->
+  <section class="section" id="kansen">
+    <div class="section-label">🌍 Kansen</div>
+    <h2 class="section-title">De kansen zijn groter dan ooit</h2>
+    <p class="section-intro">Onderzoek van 2025-2026 laat een duidelijk beeld zien: Gen Z is op zoek. Dit is het moment om te investeren.</p>
+
+    <div class="kansen-grid">
+      <div class="kans-kaart">
+        <div class="kans-getal">27%</div>
+        <div class="kans-label">Gen Z'ers noemt zich gelovig — meer dan millennials (22%)</div>
+        <div class="kans-bron">God in Nederland, 2025</div>
+      </div>
+      <div class="kans-kaart">
+        <div class="kans-getal">4×</div>
+        <div class="kans-label">Kerkbezoek 18-24 jaar verviervoudigd in 6 jaar in het VK</div>
+        <div class="kans-bron">UK Church Statistics, 2024</div>
+      </div>
+      <div class="kans-kaart">
+        <div class="kans-getal">66%</div>
+        <div class="kans-label">Amerikanen zegt persoonlijk commitment aan Jezus gemaakt — stijging van 12%</div>
+        <div class="kans-bron">Barna State of the Church, 2025</div>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      <p>"Jongeren zoeken geen leuke programma's. Ze zoeken iets dat groter is dan zijzelf, een verhaal om in te wortelen, een God die echt is."</p>
+      <cite>Jeugdtrends 2026, MissieNederland</cite>
+    </div>
+
+    <div class="kansen-grid" style="margin-top:0">
+      <div class="kans-kaart">
+        <div class="kans-getal" style="font-size:1.6rem">Trendbreuk</div>
+        <div class="kans-label">Nederland: voor het eerst stijgt het aantal gelovige jongeren in decennia</div>
+        <div class="kans-bron">God in Nederland, 2025</div>
+      </div>
+      <div class="kans-kaart">
+        <div class="kans-getal" style="font-size:1.6rem">50%</div>
+        <div class="kans-label">Van CGK Zwolle is jonger dan 30 jaar — een uitzonderlijke voedingsbodem</div>
+        <div class="kans-bron">CGK Zwolle ledenbestand</div>
+      </div>
+      <div class="kans-kaart">
+        <div class="kans-getal" style="font-size:1.6rem">Opwekking</div>
+        <div class="kans-label">60.000 bezoekers, bijna de helft onder 30 jaar — het verlangen is er</div>
+        <div class="kans-bron">Opwekking Nederland, 2025</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1.25rem">
+      <h3>📚 Wat theologen ons leren</h3>
+      <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:0.5rem">
+        <div style="display:flex;gap:0.75rem;align-items:flex-start;font-size:0.875rem">
+          <span style="font-size:1.2rem;flex-shrink:0">⚠️</span>
+          <div><strong>Kenda Creasy Dean</strong> — Moralistic Therapeutic Deism: het grootste gevaar is niet secularisatie maar een dun, zelfgericht geloof dat eruitziet als christendom maar het niet is. Het antwoord: échte discipelen vormen die echt geloven.</div>
+        </div>
+        <div style="display:flex;gap:0.75rem;align-items:flex-start;font-size:0.875rem">
+          <span style="font-size:1.2rem;flex-shrink:0">🔗</span>
+          <div><strong>Kara Powell (Sticky Faith)</strong> — Geloof dat blijft heeft drie kenmerken: volwassenen die authentiek geloven en dat laten zien, ouders als geloofsvormers, en bewuste transitiebegeleiding.</div>
+        </div>
+        <div style="display:flex;gap:0.75rem;align-items:flex-start;font-size:0.875rem">
+          <span style="font-size:1.2rem;flex-shrink:0">🎯</span>
+          <div><strong>David Kinnaman (You Lost Me)</strong> — Jongeren verlaten de kerk niet omdat ze God moe zijn maar omdat ze niet worden uitgedaagd. Roeping + talent + betekenisvolle inzet = blijvend geloof.</div>
+        </div>
+        <div style="display:flex;gap:0.75rem;align-items:flex-start;font-size:0.875rem">
+          <span style="font-size:1.2rem;flex-shrink:0">🌱</span>
+          <div><strong>Andrew Root</strong> — Het doel van jeugdwerk is niet jongeren in de kerk houden maar dat ze God ontmoeten. Aanwezigheid zonder die kern is bedrijvigheid zonder vrucht.</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="note-btn" data-section="kansen" style="margin-top:1rem">💬 Notitie toevoegen</button>
+    <div class="notes-panel" id="notes-panel-kansen">
+      <div class="notes-list"></div>
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-kansen" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-kansen" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="kansen">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRONNEN -->
+  <section class="section" id="bronnen">
+    <div class="section-label">📚 Onderbouwing</div>
+    <h2 class="section-title">Gebruikte bronnen</h2>
+    <p class="section-intro">Dit plan is opgebouwd op een breed fundament van theologie, onderzoek en praktijkkennis. De bronnen zijn bewust gevarieerd: theologie, Nederlands onderzoek, vrijwilligerstrends en inzichten over uitval.</p>
+
+    <h3 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-bottom:0.75rem">A — Theologie & visie</h3>
+
+    <div class="bron-item"><div class="bron-nr">1</div><div class="bron-content"><h4>Andrew Root — Revisiting Relational Youth Ministry</h4><p>Relaties in jeugdwerk zijn geen strategie maar incarnationele roeping. Relatie als doel, niet middel.</p><span class="bron-tag tag-theologie">Theologie</span></div></div>
+    <div class="bron-item"><div class="bron-nr">2</div><div class="bron-content"><h4>Andrew Root — The End of Youth Ministry?</h4><p>Doel van jeugdwerk: niet geluk maar vreugde in Christus. Verhalen van transformatie als kern.</p><span class="bron-tag tag-theologie">Theologie</span></div></div>
+    <div class="bron-item"><div class="bron-nr">3</div><div class="bron-content"><h4>Chap Clark — Hurt 2.0</h4><p>Jongeren zijn verlaten door volwassenen. Kerk als plek van echte adoptie: erbij horen, gevormd worden, mogen meedoen.</p><span class="bron-tag tag-theologie">Theologie</span></div></div>
+    <div class="bron-item"><div class="bron-nr">4</div><div class="bron-content"><h4>Chap Clark — The Adoptive Church</h4><p>Kerk als gezin waar jongeren als broers en zussen worden opgenomen — naast, niet apart van, de gemeente.</p><span class="bron-tag tag-theologie">Theologie</span></div></div>
+    <div class="bron-item"><div class="bron-nr">5</div><div class="bron-content"><h4>Mark DeVries — Family-Based Youth Ministry</h4><p>Geloofsoverdracht vindt primair thuis plaats. Ouders zijn ongeëvenaarde geloofsvormers. Kerk als uitgebreide familie.</p><span class="bron-tag tag-theologie">Theologie</span></div></div>
+    <div class="bron-item"><div class="bron-nr">6</div><div class="bron-content"><h4>Kara Powell — Growing Young + Samen Jong</h4><p>Zes kernwaarden voor kerken die jongeren vasthouden. Warm > hip. Belonging before believing.</p><span class="bron-tag tag-theologie">Theologie</span></div></div>
+
+    <h3 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin:1.5rem 0 0.75rem">B — Nederlands & gereformeerd onderzoek</h3>
+
+    <div class="bron-item"><div class="bron-nr">7</div><div class="bron-content"><h4>IZB — Jongerenrapport 2025</h4><p>Twintigers in gereformeerde context: diepe honger naar Gods aanwezigheid. Als wekelijks ritme wegvalt, valt men snel uit.</p><span class="bron-tag tag-onderzoek">Onderzoek</span></div></div>
+    <div class="bron-item"><div class="bron-nr">8</div><div class="bron-content"><h4>CGJO — Christelijke Gereformeerde Jeugdwerk Organisatie</h4><p>Landelijke CGK-organisatie voor jeugdwerk: materiaal, training en netwerk specifiek voor onze denominatie.</p><span class="bron-tag tag-onderzoek">Onderzoek</span></div></div>
+    <div class="bron-item"><div class="bron-nr">9</div><div class="bron-content"><h4>Jeugdtrends 2026 — MissieNederland</h4><p>Vijf trends onder christelijke jongeren 12-30 jaar, gebaseerd op enquête onder ~800 jongeren.</p><span class="bron-tag tag-onderzoek">Onderzoek</span></div></div>
+    <div class="bron-item"><div class="bron-nr">10</div><div class="bron-content"><h4>PThU — Intergenerationele geloofsvorming</h4><p>Geloofsvorming vraagt twee-richtingsverkeer tussen generaties. Jongere leert van oudere én andersom.</p><span class="bron-tag tag-onderzoek">Onderzoek</span></div></div>
+
+    <h3 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin:1.5rem 0 0.75rem">C — Vrijwilligers & trends</h3>
+
+    <div class="bron-item"><div class="bron-nr">11</div><div class="bron-content"><h4>CBS — Vrijwilligerswerk 2024</h4><p>Vraag naar vrijwilligers +11,5%, aanbod nieuwe vrijwilligers -19% in 2023. Structurele trend.</p><span class="bron-tag tag-vrijwilligers">Vrijwilligers</span></div></div>
+    <div class="bron-item"><div class="bron-nr">12</div><div class="bron-content"><h4>Trends Vrijwillige Inzet 2025 — Jong Nederland</h4><p>Jongere vrijwilligers willen flexibiliteit en kortdurende inzet (micro-vrijwilligerswerk).</p><span class="bron-tag tag-vrijwilligers">Vrijwilligers</span></div></div>
+    <div class="bron-item"><div class="bron-nr">13</div><div class="bron-content"><h4>Gen Z & geloof — Qompas / IFES / KRO-NCRV 2025</h4><p>27% Gen Z gelovig vs. 22% millennials — trendbreuk. Zoeken diepgang en zingeving, niet instituties.</p><span class="bron-tag tag-onderzoek">Onderzoek</span></div></div>
+
+    <h3 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin:1.5rem 0 0.75rem">D — Uitval & derde plek</h3>
+
+    <div class="bron-item"><div class="bron-nr">14</div><div class="bron-content"><h4>Jeffrey Arnett — Emerging Adulthood</h4><p>De fase 18-25 is structureel een periode van instabiliteit en identiteitsverkenning. Uitval is geen falen, maar ontwikkelingsfase.</p><span class="bron-tag tag-uitval">Uitval</span></div></div>
+    <div class="bron-item"><div class="bron-nr">15</div><div class="bron-content"><h4>IZB — "Voorkom dat twintigers in anonimiteit verdwijnen" (2025)</h4><p>Praktisch artikel over hoe je jongeren niet ongemerkt laat verdwijnen na de middelbare school.</p><span class="bron-tag tag-uitval">Uitval</span></div></div>
+    <div class="bron-item"><div class="bron-nr">16</div><div class="bron-content"><h4>Youth for Christ — Derde plek concept</h4><p>Jongeren hebben een eigen plek nodig buiten thuis en school: missionair en pastoraal ankerpunt.</p><span class="bron-tag tag-plek">Derde plek</span></div></div>
+
+    <button class="note-btn" data-section="bronnen" style="margin-top:1.5rem">💬 Notitie toevoegen</button>
+    <div class="notes-panel" id="notes-panel-bronnen">
+      <div class="notes-list"></div>
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-bronnen" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-bronnen" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="bronnen">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SITUATIE -->
+  <section class="section" id="situatie">
+    <div class="section-label">📍 Analyse</div>
+    <h2 class="section-title">Waar staan we?</h2>
+    <p class="section-intro">CGK Zwolle heeft een uitzonderlijke basis voor discipelvorming. Dit zijn de feiten.</p>
+
+    <!-- Grote stats -->
+    <div class="big-stat-grid">
+      <div class="big-stat-kaart">
+        <div class="big-stat-getal">4.900</div>
+        <div class="big-stat-label">leden · drie locaties</div>
+        <div class="big-stat-context">Noorderkerk, Zuiderhof, Verrijzeniskerk</div>
+      </div>
+      <div class="big-stat-kaart">
+        <div class="big-stat-getal" style="color:var(--green)">50%</div>
+        <div class="big-stat-label">jonger dan 30 jaar</div>
+        <div class="big-stat-context">Nergens groeit discipelschap makkelijker</div>
+      </div>
+      <div class="big-stat-kaart">
+        <div class="big-stat-getal">75%</div>
+        <div class="big-stat-label">opkomst bij #DurfteZijn</div>
+        <div class="big-stat-context">Sterk fundament bij 12–14 jaar</div>
+      </div>
+      <div class="big-stat-kaart">
+        <div class="big-stat-getal" style="color:var(--yellow)">↓</div>
+        <div class="big-stat-label">na 14 jaar daalt de opkomst</div>
+        <div class="big-stat-context">Bij elke stap omhoog vallen jongeren af</div>
+      </div>
+    </div>
+
+    <!-- Programma's compact -->
+    <div class="card" style="margin-top:1rem">
+      <h3>📋 Programma-overzicht 12–25 jaar</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.75rem">
+        <span style="background:#FADBD8;color:var(--primary);padding:0.3rem 0.8rem;border-radius:20px;font-size:0.8rem;font-weight:600">#DurfteZijn 12–14 ✅</span>
+        <span style="background:#FADBD8;color:var(--primary);padding:0.3rem 0.8rem;border-radius:20px;font-size:0.8rem;font-weight:600">#Durfte 14–22 ✅</span>
+        <span style="background:#DBEAFE;color:#2563EB;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.8rem;font-weight:600">Zomerkamp 13–15</span>
+        <span style="background:#DBEAFE;color:#2563EB;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.8rem;font-weight:600">Wintersport 16–21</span>
+        <span style="background:#DBEAFE;color:#2563EB;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.8rem;font-weight:600">Youth Alpha 16–22</span>
+        <span style="background:#DCFCE7;color:#16A34A;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.8rem;font-weight:600">Connect 18–30 ✅</span>
+        <span style="background:#FEF3C7;color:#D97706;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.8rem;font-weight:600">Jeugdhonk 🔨 in opbouw</span>
+        <span style="background:#FEE2E2;color:#DC2626;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.8rem;font-weight:700">⚠️ GAT bij 16–18 jaar</span>
+      </div>
+    </div>
+
+    <!-- Kernuitdaging -->
+    <div class="pull-quote" style="margin-top:1.25rem">
+      <p>"De vraag is niet of we genoeg activiteiten hebben. De vraag is: worden onze jongeren echt gevormd als volgelingen van Jezus?"</p>
+      <cite>Kernvraag voor dit plan</cite>
+    </div>
+
+    <button class="note-btn" data-section="situatie" style="margin-top:1rem">💬 Notitie toevoegen</button>
+    <div class="notes-panel" id="notes-panel-situatie">
+      <div class="notes-list"></div>
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-situatie" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-situatie" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="situatie">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SWOT -->
+  <section class="section" id="swot">
+    <div class="section-label">📊 Fase 3</div>
+    <h2 class="section-title">SWOT-analyse</h2>
+    <p class="section-intro">Op basis van de huidige situatie en de bronnen hebben we een SWOT-analyse gemaakt. Dit is een levend document — aanvullingen zijn welkom via de notities.</p>
+
+    <div class="card" style="margin-bottom:1rem">
+      <h3>📌 In één zin</h3>
+      <table><tbody>
+        <tr><td><strong>Sterk</strong></td><td style="font-size:0.85rem">CGK Zwolle heeft de uitzonderlijke voedingsbodem om echte discipelen te vormen — jong, gepassioneerd, met talenten voor het Koninkrijk.</td></tr>
+        <tr><td><strong>Zwak</strong></td><td style="font-size:0.85rem">Geloof dreigt vlak te blijven: te weinig uitgedaagd, te weinig meelopen, talent en Koninkrijk nog niet genoeg verbonden.</td></tr>
+        <tr><td><strong>Kansen</strong></td><td style="font-size:0.85rem">Gen Z zoekt meer dan ooit naar diepte, echtheid en groter verhaal — dit is hét moment om te investeren in discipelschap.</td></tr>
+        <tr><td><strong>Bedreigingen</strong></td><td style="font-size:0.85rem">Dun geloof (Moralistic Therapeutic Deism) en drukte zijn de stille killers — niet secularisatie.</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="accordion" id="swot-accordion">
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion('swot-detail')">
+          <span class="accordion-title">Volledige SWOT-analyse</span>
+          <span class="accordion-subtitle">4 kwadranten · klik om te openen</span>
+          <span class="accordion-chevron">▼</span>
+        </div>
+        <div class="accordion-body" id="swot-detail">
+
+    <div class="swot-grid">
+      <div class="swot-card strengths">
+        <div class="swot-label">💪 Sterktes</div>
+        <ul>
+          <li><strong>Uitzonderlijke voedingsbodem:</strong> 50% onder 30 — nergens groeit discipelschap makkelijker dan hier</li>
+          <li><strong>#Durfte:</strong> talent inzetten voor Gods Koninkrijk — exact wat vocation-onderzoek aanwijst als kern van blijvend geloof</li>
+          <li><strong>Kamptraditie:</strong> zomerkamp, wintersport, Texperience zijn plekken waar God echt wordt ontmoet</li>
+          <li><strong>Visie klopt:</strong> "Weg van Jezus", discipelschap als route — sluit naadloos aan op wat werkt</li>
+          <li><strong>#DurfteZijn:</strong> ~75% opkomst — sterk fundament bij 12-14 jaar</li>
+          <li><strong>Connect:</strong> goed gestructureerde gemeenschap voor 18-30 jaar</li>
+          <li>Gepassioneerde vrijwilligers die er echt voor gaan</li>
+        </ul>
+        <div id="swot-dynamic-strengths"></div>
+        <div class="swot-toevoegen-wrap">
+          <input class="swot-toevoegen-input" id="swot-input-strengths" placeholder="＋ Sterkte toevoegen..." maxlength="200" onkeydown="if(event.key==='Enter')voegSwotItemToe('strengths')">
+          <button class="swot-toevoegen-btn" onclick="voegSwotItemToe('strengths')">Toevoegen</button>
+        </div>
+      </div>
+      <div class="swot-card weaknesses">
+        <div class="swot-label">⚠️ Zwaktes</div>
+        <ul>
+          <li><strong>Geloof dreigt vlak te blijven:</strong> risico op Moralistic Therapeutic Deism — God als servicedesk in plaats van Heer (Kenda Creasy Dean)</li>
+          <li><strong>Te weinig meelopen:</strong> nauwelijks volwassenen die jongeren persoonlijk begeleiden — terwijl dat het sterkste middel is (Sticky Faith)</li>
+          <li><strong>Gat 16-22:</strong> juist in de fase dat geloof stand moet houden is er weinig structureel aanbod</li>
+          <li><strong>Talent → Koninkrijk-koppeling is niet altijd bewust</strong> in #Durfte: geloof en talent worden nog niet altijd expliciet verbonden</li>
+          <li><strong>Jongeren nog te weinig als kerk van vandaag ingezet</strong> — echte verantwoordelijkheid ontbreekt vaak</li>
+          <li>Vrijwilligerswerving loopt stroef; commitment fragiel</li>
+        </ul>
+        <div id="swot-dynamic-weaknesses"></div>
+        <div class="swot-toevoegen-wrap">
+          <input class="swot-toevoegen-input" id="swot-input-weaknesses" placeholder="＋ Zwakte toevoegen..." maxlength="200" onkeydown="if(event.key==='Enter')voegSwotItemToe('weaknesses')">
+          <button class="swot-toevoegen-btn" onclick="voegSwotItemToe('weaknesses')">Toevoegen</button>
+        </div>
+      </div>
+      <div class="swot-card opportunities">
+        <div class="swot-label">🚀 Kansen</div>
+        <ul>
+          <li><strong>Trendbreuk:</strong> Gen Z meer open voor geloof dan millennials (God in Nederland 2025) — dit is hét moment</li>
+          <li><strong>Spirituele honger:</strong> Gen Z zoekt diepte, echtheid, groter verhaal — meer dan ooit (Barna, Jeugdtrends 2026)</li>
+          <li><strong>UK-effect:</strong> kerkbezoek 18-24 jaar verviervoudigd in 6 jaar — het kan dus</li>
+          <li><strong>#Durfte-model is exact wat werkt:</strong> vocation + talent + Koninkrijk = langdurig geloof (Kinnaman, Sticky Faith)</li>
+          <li><strong>Online als voordeur:</strong> jongeren vinden geloof eerst online — wij kunnen die eerste stap zijn</li>
+          <li><strong>Jonge gemeente = jongeren vormen jongeren</strong> — peer discipleship is krachtig</li>
+          <li>Emerging adulthood bewust begeleiden = jongeren die blijven</li>
+        </ul>
+        <div id="swot-dynamic-opportunities"></div>
+        <div class="swot-toevoegen-wrap">
+          <input class="swot-toevoegen-input" id="swot-input-opportunities" placeholder="＋ Kans toevoegen..." maxlength="200" onkeydown="if(event.key==='Enter')voegSwotItemToe('opportunities')">
+          <button class="swot-toevoegen-btn" onclick="voegSwotItemToe('opportunities')">Toevoegen</button>
+        </div>
+      </div>
+      <div class="swot-card threats">
+        <div class="swot-label">🌩️ Bedreigingen</div>
+        <ul>
+          <li><strong>Moralistic Therapeutic Deism</strong> (Kenda Creasy Dean): geloof dat zegt "God wil dat je aardig bent en je goed voelt" — het klinkt christelijk maar is het niet</li>
+          <li><strong>Programmaverslaving:</strong> druk en bezet zijn zonder gevormd te worden — meer activiteiten = meer illusie van groei (Andrew Root)</li>
+          <li><strong>Stille uitval:</strong> bijna de helft van jongeren die opgroeien in de kerk verlaat na de middelbare school — als je het merkt is het te laat (Kara Powell)</li>
+          <li><strong>Prestatiedruk:</strong> jongeren zijn te moe en te druk om nog ergens voor te gaan — geloof wordt een extra verplichting</li>
+          <li><strong>Leiders zonder diep geloofsleven</strong> kunnen geen discipelen vormen — authenticiteit is niet te faken</li>
+          <li>Smartphone: strijd om aandacht is reëel (5-7 uur/dag)</li>
+        </ul>
+        <div id="swot-dynamic-threats"></div>
+        <div class="swot-toevoegen-wrap">
+          <input class="swot-toevoegen-input" id="swot-input-threats" placeholder="＋ Bedreiging toevoegen..." maxlength="200" onkeydown="if(event.key==='Enter')voegSwotItemToe('threats')">
+          <button class="swot-toevoegen-btn" onclick="voegSwotItemToe('threats')">Toevoegen</button>
+        </div>
+      </div>
+    </div>
+
+        </div><!-- /accordion-body -->
+      </div><!-- /accordion-item -->
+    </div><!-- /accordion -->
+
+    <button class="note-btn" data-section="swot" style="margin-top:0.5rem">💬 Notitie toevoegen</button>
+    <div class="notes-panel" id="notes-panel-swot">
+      <div class="notes-list"></div>
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-swot" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-swot" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="swot">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- START STOP DOORGAAN UPDATEN -->
+  <section class="section" id="ssdu">
+    <div class="section-label">🎯 Fase 4</div>
+    <h2 class="section-title">Start / Stop / Doorgaan / Updaten</h2>
+    <p class="section-intro">Op basis van de SWOT maken we bewuste strategische keuzes. Niet alles tegelijk — maar gericht kiezen wat we versterken, wat we loslaten en wat we nieuw starten.</p>
+
+    <div class="accordion">
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion('ssdu-detail')">
+          <span class="accordion-title">Volledige Start / Stop / Doorgaan / Updaten analyse</span>
+          <span class="accordion-subtitle">4 kwadranten · klik om te openen</span>
+          <span class="accordion-chevron">▼</span>
+        </div>
+        <div class="accordion-body" id="ssdu-detail">
+    <div class="ssdu-grid">
+      <div class="ssdu-card doorgaan">
+        <div class="ssdu-label">🔵 Doorgaan</div>
+        <div class="ssdu-item"><h4>#DurfteZijn (12–14)</h4><p>75% opkomst, sterke basis. Niet aanraken, wel borgen.</p></div>
+        <div class="ssdu-item"><h4>#Durfte talentgericht (14–22)</h4><p>Uniek, theologisch doordacht. GTI-model klopt.</p></div>
+        <div class="ssdu-item"><h4>Kamptraditie</h4><p>Zomerkamp, wintersport, Texperience. Diepte-ervaringen vormen en binden.</p></div>
+        <div class="ssdu-item"><h4>Connect (18–30)</h4><p>Goede structuur. Aanvulling nodig voor overgang 16→18.</p></div>
+        <div class="ssdu-item"><h4>Intergenerationele visie</h4><p>Consequenter toepassen in de praktijk.</p></div>
+      </div>
+
+      <div class="ssdu-card stop">
+        <div class="ssdu-label">🔴 Stoppen</div>
+        <div class="ssdu-item"><h4>Brede oproepen als primaire wervingsstrategie</h4><p>Werkt aantoonbaar niet meer. Vervangen door persoonlijke, gerichte benadering.</p></div>
+        <div class="ssdu-item"><h4>Meerjarig vast commitment als standaard</h4><p>Past niet bij de tijdgeest. Micro-inzet is de nieuwe realiteit.</p></div>
+        <div class="ssdu-item"><h4>Jeugdwerk als losstaande wereld</h4><p>Mist de krachtigste geloofsvormende factor: intergenerationele relaties en ouders.</p></div>
+        <div class="ssdu-item"><h4>Meer programma's als oplossing</h4><p>Meer activiteiten lossen het kernprobleem niet op. Stoppen met vullen, beginnen met verdiepen.</p></div>
+      </div>
+
+      <div class="ssdu-card updaten">
+        <div class="ssdu-label">🟡 Updaten</div>
+        <div class="ssdu-item"><h4>Vrijwilligersaanpak</h4><p>Naar persoonlijke werving, flexibele rollen en betere begeleiding + waardering.</p></div>
+        <div class="ssdu-item"><h4>#Durfte leidersbehoefte</h4><p>Bouw een pijplijn: jongeren uit #Durfte doorstromen naar co-leider.</p></div>
+        <div class="ssdu-item"><h4>Aanbod 16–22 jaar</h4><p>Meer relatie, minder structuur, echte verantwoordelijkheid voor deze groep.</p></div>
+        <div class="ssdu-item"><h4>Jeugdhonk</h4><p>Van onduidelijke plek naar bewust ingerichte 'derde plek'.</p></div>
+        <div class="ssdu-item"><h4>Ouders bewuster betrekken</h4><p>Geloofsoverdracht vindt primair thuis plaats. Ouders zijn partners, geen toeschouwers.</p></div>
+        <div class="ssdu-item"><h4>Digitale aanwezigheid</h4><p>Online vindbaar en herkenbaar als eerste stap naar de fysieke gemeenschap.</p></div>
+      </div>
+
+      <div class="ssdu-card start">
+        <div class="ssdu-label">🟢 Starten</div>
+        <div class="ssdu-item"><h4>Bewuste overgangsaanpak 14→16 en 16→18</h4><p>Persoonlijk gesprek + contactpersoon op elk overgangsmoment.</p></div>
+        <div class="ssdu-item"><h4>Leiderschapspijplijn vanuit de jeugd</h4><p>Systematisch jongeren opleiden tot toekomstige leiders via het leiderschapsvierkant.</p></div>
+        <div class="ssdu-item"><h4>Flexibel vrijwilligersmodel</h4><p>Concrete rollen van 2–4 uur per maand. Lagere drempel, grotere basis.</p></div>
+        <div class="ssdu-item"><h4>Mentorrelaties</h4><p>Jongeren koppelen aan een volwassene die met hen meeloopt — geen programma, maar een relatie.</p></div>
+        <div class="ssdu-item"><h4>Jaarlijkse evaluatiecyclus</h4><p>Structureel meten: wie bereiken we, wie niet, wat werkt, wat niet?</p></div>
+      </div>
+    </div>
+        </div><!-- /accordion-body -->
+      </div><!-- /accordion-item -->
+    </div><!-- /accordion -->
+
+    <button class="note-btn" data-section="ssdu" style="margin-top:0.5rem">💬 Notitie toevoegen</button>
+    <div class="notes-panel" id="notes-panel-ssdu">
+      <div class="notes-list"></div>
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-ssdu" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-ssdu" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="ssdu">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRENDS -->
+  <section class="section" id="trends">
+    <div class="section-label">📈 Context</div>
+    <h2 class="section-title">Trends die ons raken</h2>
+    <p class="section-intro">Wat speelt er in de samenleving en kerk dat direct relevant is voor ons plan — over jongeren, discipelschap én vrijwilligers.</p>
+
+    <div class="kansen-grid" style="margin-bottom:1.5rem">
+      <div class="kans-kaart">
+        <div class="kans-getal" style="font-size:1.4rem;color:var(--green)">Honger</div>
+        <div class="kans-label">Gen Z zoekt meer dan ooit naar diepte, echtheid en groter verhaal</div>
+        <div class="kans-bron">Jeugdtrends 2026</div>
+      </div>
+      <div class="kans-kaart">
+        <div class="kans-getal" style="font-size:1.4rem;color:var(--yellow)">–19%</div>
+        <div class="kans-label">Nieuwe vrijwilligers in 2023 — terwijl de vraag met +11,5% steeg</div>
+        <div class="kans-bron">CBS 2024</div>
+      </div>
+      <div class="kans-kaart">
+        <div class="kans-getal" style="font-size:1.4rem;color:var(--primary)">Online</div>
+        <div class="kans-label">Jongeren ontdekken geloof eerst online — daarna pas de kerk</div>
+        <div class="kans-bron">Jeugdtrends 2026</div>
+      </div>
+    </div>
+
+    <div class="trend-card">
+      <div class="trend-nr">Trend 1</div>
+      <h3>De vrijwilligersmarkt krimpt structureel</h3>
+      <p>Vraag naar vrijwilligers steeg met 11,5% in 2023, terwijl het aanbod van nieuwe vrijwilligers met 19% daalde. Dit is geen tijdelijk dipje maar een langetermijntrend.</p>
+      <div class="trend-implication"><strong>Wat dit vraagt:</strong> Professionelere aanpak van werving, binding en waardering. De tijd dat een oproep voldoende is, is voorbij.</div>
+    </div>
+
+    <div class="trend-card">
+      <div class="trend-nr">Trend 2</div>
+      <h3>Van commitment naar contributie</h3>
+      <p>De nieuwe vrijwilliger wil kortdurend, projectmatig, flexibel en zinvol bijdragen. Ze willen ook zelf iets leren — niet alleen geven. Micro-vrijwilligerswerk groeit.</p>
+      <div class="trend-implication"><strong>Wat dit vraagt:</strong> Rollen herdefiniëren: wat kan in 2–4 uur per maand? Jaarvrijwilliger is niet meer de enige norm.</div>
+    </div>
+
+    <div class="trend-card">
+      <div class="trend-nr">Trend 3</div>
+      <h3>Persoonlijke werving werkt, algemene oproepen niet</h3>
+      <p>Onderzoek is consistent: de meest effectieve wervingsmethode is een persoonlijke, gerichte vraag van iemand die de persoon kent. Posters en WhatsApp-oproepen werken als aanvulling, nooit als primaire strategie.</p>
+      <div class="trend-implication"><strong>Wat dit vraagt:</strong> Cultuur van actief mensen kennen en gericht benaderen. Dit kost tijd maar levert vrijwilligers op.</div>
+    </div>
+
+    <div class="trend-card">
+      <div class="trend-nr">Trend 4</div>
+      <h3>Jongeren als vrijwilliger: kans én uitdaging</h3>
+      <p>52% van nieuwe vrijwilligers in 2023 is jonger dan 40. Jongeren willen bijdragen, maar op hun eigen manier. Tegelijk ervaren ze hoge prestatiedruk — vrijwilligerswerk voelt snel als "nog meer moeten".</p>
+      <div class="trend-implication"><strong>Wat dit vraagt:</strong> Investeer in jongeren als vrijwilliger vanuit vorming, niet vanuit nood. Het leiderschapsvierkant van #Durfte is hiervoor al het juiste model.</div>
+    </div>
+
+    <div class="trend-card">
+      <div class="trend-nr">Trend 5</div>
+      <h3>Kerkelijke context: meer vraag, minder mensen</h3>
+      <p>Kerken vragen steeds meer van steeds minder mensen. Dezelfde vrijwilligers worden voor meerdere taken gevraagd — dit leidt tot overbelasting en uitval. Nieuwe VOG-verplichting per juli 2025 geldt ook voor jeugdwerk-leiders (al ingericht bij CGK Zwolle ✓).</p>
+      <div class="trend-implication"><strong>Wat dit vraagt:</strong> Breedte vergroten, niet de bestaande kern uitmelken. Bewust investeren in nieuwe vrijwilligers.</div>
+    </div>
+
+    <div class="card" style="margin-top:0.5rem">
+      <h3>📋 Wat dit vraagt van CGK Zwolle</h3>
+      <table>
+        <thead><tr><th>Trend</th><th>Concrete actie</th></tr></thead>
+        <tbody>
+          <tr><td>Markt krimpt</td><td>Professionelere werving, binding en waardering</td></tr>
+          <tr><td>Kortdurende inzet</td><td>Rollen herdefiniëren: wat kan in 2–4 uur/maand?</td></tr>
+          <tr><td>Persoonlijke werving</td><td>Cultuur van actief mensen kennen en gericht vragen</td></tr>
+          <tr><td>Jongeren als vrijwilliger</td><td>Leiderschapsontwikkeling systematisch maken</td></tr>
+          <tr><td>Overbelasting vaste kern</td><td>Breedte vergroten, niet diepte uitmelken</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button class="note-btn" data-section="trends" style="margin-top:1.5rem">💬 Notitie toevoegen</button>
+    <div class="notes-panel" id="notes-panel-trends">
+      <div class="notes-list"></div>
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-trends" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-trends" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="trends">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5-JARENPLAN -->
+  <section class="section" id="vijfjarenplan">
+    <div class="section-label">🗓️ Fase 6</div>
+    <h2 class="section-title">5-Jarenplan 2026–2031</h2>
+    <p class="section-intro">Een strategisch kader voor vijf jaar, gebaseerd op drie pijlers: <strong>Wortels</strong> (geloofsvorming), <strong>Relaties</strong> (mensen die meelopen) en <strong>Ruimte</strong> (echte verantwoordelijkheid).</p>
+
+    <div class="quote-block">
+      <p>"Elke jongere in CGK Zwolle wordt uitgenodigd en gevormd om volgeling van Jezus te zijn — en neemt anderen mee op die weg."</p>
+    </div>
+
+    <!-- HORIZONTALE TIJDLIJN -->
+    <div class="jaar-tl-wrap">
+      <div class="jaar-tl">
+        <div class="jaar-tl-item actief" onclick="toggleJaarDetail('j1')">
+          <div class="jaar-tl-dot">1</div>
+          <div class="jaar-tl-jaar">2026/27</div>
+          <div class="jaar-tl-thema">✨ Ontmoeten</div>
+        </div>
+        <div class="jaar-tl-item" onclick="toggleJaarDetail('j2')">
+          <div class="jaar-tl-dot">2</div>
+          <div class="jaar-tl-jaar">2027/28</div>
+          <div class="jaar-tl-thema">🌱 Gevormd</div>
+        </div>
+        <div class="jaar-tl-item" onclick="toggleJaarDetail('j3')">
+          <div class="jaar-tl-dot">3</div>
+          <div class="jaar-tl-jaar">2028/29</div>
+          <div class="jaar-tl-thema">🔥 Meenemen</div>
+        </div>
+        <div class="jaar-tl-item" onclick="toggleJaarDetail('j4')">
+          <div class="jaar-tl-dot">4</div>
+          <div class="jaar-tl-jaar">2029/30</div>
+          <div class="jaar-tl-thema">🏗️ Duurzaam</div>
+        </div>
+        <div class="jaar-tl-item" onclick="toggleJaarDetail('j5')">
+          <div class="jaar-tl-dot">5</div>
+          <div class="jaar-tl-jaar">2030/31</div>
+          <div class="jaar-tl-thema">🌳 Bloeien</div>
+        </div>
+      </div>
+    </div>
+    <div id="jaar-detail-wrap"></div>
+
+    <div class="jaar-card">
+      <div class="jaar-header">
+        <span class="jaar-nr">Jaar 1 · 2026/2027</span>
+        <span class="jaar-title">✨ Ontmoeten — de basis leggen</span>
+      </div>
+      <div class="jaar-theme">"Alles draait om echte ontmoeting met Jezus"</div>
+      <ul>
+        <li>Geloofskern verankeren: elk programma heeft een bewust formatiemoment</li>
+        <li>Mentorrelaties pilot: 15 jongeren gekoppeld aan een volwassene die meeloopt</li>
+        <li>#Durfte: talent → Koninkrijk-koppeling expliciet en bewust maken</li>
+        <li>Jeugdhonk: eerste open avonden als laagdrempelige ontmoetingsplek</li>
+        <li>Jongeren op zichtbare plekken: voorgaan, leiden, dienen</li>
+        <li>Overgangsaanpak: persoonlijk gesprek bij 14 en 18 jaar</li>
+      </ul>
+    </div>
+
+    <div class="jaar-card">
+      <div class="jaar-header">
+        <span class="jaar-nr">Jaar 2 · 2027/2028</span>
+        <span class="jaar-title">🌱 Gevormd worden — mensen die meelopen</span>
+      </div>
+      <div class="jaar-theme">"Discipelschap vraagt mensen, niet programma's"</div>
+      <ul>
+        <li>Mentorrelaties uitbreiden naar 40+ jongeren</li>
+        <li>Leiderschapspijplijn: jongeren uit #Durfte worden co-leiders</li>
+        <li>Ouders als geloofspartners: structurele samenwerking thuis + kerk</li>
+        <li>Discipelschapsgesprekken: kleine groepjes die samen lopen met Jezus</li>
+        <li>Gen Z-zoekers bereiken via jeugdhonk en online</li>
+      </ul>
+    </div>
+
+    <div class="jaar-card">
+      <div class="jaar-header">
+        <span class="jaar-nr">Jaar 3 · 2028/2029</span>
+        <span class="jaar-title">🔥 Meenemen — jongeren die anderen meenemen</span>
+      </div>
+      <div class="jaar-theme">"Discipelschap vermenigvuldigt zich"</div>
+      <ul>
+        <li>Jongeren die zelf andere jongeren meenemen in het geloof</li>
+        <li>CGK Zwolle missionair: jongeren leven hun geloof in Zwolle</li>
+        <li>Intergenerationele momenten: generaties leren van en met elkaar</li>
+        <li>Leiderschapspijplijn levert eerste eigen jeugdleiders op</li>
+        <li>Jeugdhonk als missionair ankerpunt in de wijk</li>
+      </ul>
+    </div>
+
+    <div class="jaar-card">
+      <div class="jaar-header">
+        <span class="jaar-nr">Jaar 4 · 2029/2030</span>
+        <span class="jaar-title">🏗️ Duurzaam — wat we bouwen staat</span>
+      </div>
+      <div class="jaar-theme">"Niet afhankelijk van één persoon of seizoen"</div>
+      <ul>
+        <li>Doorgaande discipelschapsroute 12–25 jaar: bewust, aaneengesloten, overdraagbaar</li>
+        <li>Programma's toetsen: draagt dit bij aan echte vorming? Stoppen wat niet werkt.</li>
+        <li>Tussentijdse evaluatie — met het team én met de jongeren zelf</li>
+        <li>Kennis documenteren: niet in hoofden maar overdraagbaar</li>
+      </ul>
+    </div>
+
+    <div class="jaar-card">
+      <div class="jaar-header">
+        <span class="jaar-nr">Jaar 5 · 2030/2031</span>
+        <span class="jaar-title">🌳 Bloeien — ter eer van God</span>
+      </div>
+      <div class="jaar-theme">"Niet om onszelf — maar tot Zijn eer"</div>
+      <ul>
+        <li>CGK Zwolle: een gemeente waar jongeren worden gevormd als echte volgelingen</li>
+        <li>Jongeren uit 2026 zijn nu leiders van 22–25 jaar — ze nemen anderen mee</li>
+        <li>Meten: niet hoeveel programma's maar hoeveel levens veranderd zijn</li>
+        <li>Vieren — en de eer geven aan God</li>
+        <li>Lessen delen via CGJO en andere kerken</li>
+        <li>Nieuw 5-jarenplan vanuit wat God heeft gedaan</li>
+      </ul>
+    </div>
+
+    <div class="card" style="margin-top:0.5rem">
+      <h3>🏁 Wat succes eruitziet in 2031</h3>
+      <ul>
+        <li>Jongeren van CGK Zwolle zijn herkenbare volgelingen van Jezus — in de kerk én in Zwolle</li>
+        <li>Jongeren zijn <strong>niet</strong> de kerk van morgen — ze zijn de kerk van vandaag, zichtbaar in Zwolle</li>
+        <li>Er is een doorgaande lijn van ontmoeten → gevormd worden → meenemen, van 12 tot 25 jaar</li>
+        <li>Elk programma heeft een geloofskern; discipelschap is cultuur, geen project</li>
+        <li>Jongeren uit 2026 leiden anderen — discipelschap heeft zich vermenigvuldigd</li>
+        <li>CGK Zwolle staat bekend als een gemeente waar jongeren worden uitgedaagd en gevormd — warm én veeleisend</li>
+      </ul>
+    </div>
+
+    <button class="note-btn" data-section="vijfjarenplan" style="margin-top:1.5rem">💬 Notitie toevoegen</button>
+    <div class="notes-panel" id="notes-panel-vijfjarenplan">
+      <div class="notes-list"></div>
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-vijfjarenplan" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-vijfjarenplan" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="vijfjarenplan">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- JAARPLAN -->
+  <section class="section" id="jaarplan">
+    <div class="section-label">✅ Fase 7</div>
+    <h2 class="section-title">Jaarplan 2026/2027</h2>
+    <p class="section-intro">Het eerste jaar concreet en uitvoerbaar gemaakt. Drie focuspunten: vrijwilligersaanpak vernieuwen, overgangen dichten, jeugdhonk als plek neerzetten.</p>
+
+    <div class="card">
+      <h3>🎯 Drie focuspunten dit jaar</h3>
+      <ul>
+        <li><strong>Vrijwilligersaanpak vernieuwen</strong> — de basis voor alles</li>
+        <li><strong>Overgangen dichten</strong> — stoppen met jongeren kwijtraken op de kruispunten</li>
+        <li><strong>Jeugdhonk als plek neerzetten</strong> — een thuis creëren</li>
+      </ul>
+    </div>
+
+    <div class="timeline" style="margin-top:1.75rem">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-month">September 2026 — Start seizoen</div>
+        <div class="timeline-card">
+          <h4>Vrijwilligers</h4>
+          <ul>
+            <li>Inventariseer alle rollen → herdefinieer in vast / project / micro</li>
+            <li>Voer individuele gesprekken met alle huidige vrijwilligers: wat geeft energie?</li>
+          </ul>
+          <h4 style="margin-top:0.75rem">Programma</h4>
+          <ul>
+            <li>#DurfteZijn en #Durfte starten zoals gewend</li>
+            <li>Connect start nieuwe jaargroepen op</li>
+            <li>Jeugdhonk: eerste open avond — geen programma, gewoon de deur open</li>
+          </ul>
+          <h4 style="margin-top:0.75rem">Overgang 14 jaar</h4>
+          <ul>
+            <li>Persoonlijk gesprek met elk kind dat de stap van #DurfteZijn naar #Durfte maakt</li>
+            <li>Koppel hen aan een leider vóórdat ze voor het eerst komen</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-month">Oktober–December 2026</div>
+        <div class="timeline-card">
+          <h4>Vrijwilligerswerving</h4>
+          <ul>
+            <li>Start persoonlijke wervingsgesprekken voor openstaande rollen</li>
+            <li>Doel: 5 nieuwe vrijwilligers via persoonlijke benadering</li>
+          </ul>
+          <h4 style="margin-top:0.75rem">Jeugdhonk</h4>
+          <ul>
+            <li>Tweede en derde open avond — evalueer wie er komt</li>
+            <li>Stel één vaste trekker aan</li>
+          </ul>
+          <h4 style="margin-top:0.75rem">Leiderschapspijplijn</h4>
+          <ul>
+            <li>Identificeer 3–5 jongeren (17–19 jaar) met leiderschapspotentieel</li>
+            <li>Informeel gesprek: "Wij zien dit in jou — zou je mee willen kijken?"</li>
+          </ul>
+          <h4 style="margin-top:0.75rem">Ouderavond</h4>
+          <ul>
+            <li>Avond voor ouders van 12–16 jarigen: gesprek over geloofsgroei thuis</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-month">Januari–Maart 2027</div>
+        <div class="timeline-card">
+          <h4>Evaluatiemoment</h4>
+          <ul>
+            <li>Eerste evaluatie van het seizoen met het vrijwilligersteam</li>
+          </ul>
+          <h4 style="margin-top:0.75rem">Overgang 18 jaar</h4>
+          <ul>
+            <li>Inventariseer wie dit jaar 18 wordt of naar Connect gaat</li>
+            <li>Contactpersoon aanwijzen die actief contact houdt</li>
+            <li>Persoonlijke uitnodiging voor Connect — geen algemene aankondiging</li>
+          </ul>
+          <h4 style="margin-top:0.75rem">Co-leiders starten</h4>
+          <ul>
+            <li>De 3–5 jongeren uit oktober starten als co-leider: eerst meekijken</li>
+            <li>Koppel elk aan een ervaren leider als begeleider</li>
+          </ul>
+          <h4 style="margin-top:0.75rem">Wintersportkamp</h4>
+          <ul>
+            <li>Bewust inzetten als verbindingsmoment voor 16–21 jaar</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-month">April–Juni 2027</div>
+        <div class="timeline-card">
+          <h4>Lente-activiteiten</h4>
+          <ul>
+            <li>EO-Jongerendag (6 juni) — inzetten als laagdrempelig instapmoment</li>
+          </ul>
+          <h4 style="margin-top:0.75rem">Vrijwilligerswaardering</h4>
+          <ul>
+            <li>Jaarlijkse dankjewel-avond voor alle vrijwilligers — verankeren als vast moment</li>
+            <li>Persoonlijk gesprek met elke vrijwilliger die overweegt te stoppen</li>
+          </ul>
+          <h4 style="margin-top:0.75rem">Eerste meting</h4>
+          <ul>
+            <li>Hoeveel jongeren actief in een programma?</li>
+            <li>Hoeveel overgangen zijn goed verlopen?</li>
+            <li>Hoeveel nieuwe vrijwilligers bijgekomen?</li>
+            <li>Hoe vaak is het jeugdhonk bezocht en door wie?</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-month">Juli–Augustus 2027</div>
+        <div class="timeline-card">
+          <h4>Zomerkamp</h4>
+          <ul>
+            <li>Doorgaan zoals gepland (13–15 jaar, Erve Aaftink Lemele)</li>
+            <li>Bewust discipelschapselement inbouwen</li>
+          </ul>
+          <h4 style="margin-top:0.75rem">Voorbereiding nieuw seizoen</h4>
+          <ul>
+            <li>Evalueer het volledige jaar met het team</li>
+            <li>Stel bij waar nodig</li>
+            <li>Plan start jaar 2: mentorrelaties en leiderschapspijplijn uitbouwen</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1.75rem">
+      <h3>🏁 Doelen eind 2026/2027</h3>
+      <table>
+        <thead><tr><th>Doel</th><th>Maatstaf</th></tr></thead>
+        <tbody>
+          <tr><td>Vrijwilligersaanpak</td><td>Minimaal 5 nieuwe vrijwilligers via persoonlijke werving; alle rollen ingedeeld in 3 categorieën</td></tr>
+          <tr><td>Overgang 14 jaar</td><td>100% van de overstappers heeft een persoonlijk gesprek gehad</td></tr>
+          <tr><td>Overgang 18 jaar</td><td>Geen jongere valt ongemerkt weg — elk heeft een contactpersoon</td></tr>
+          <tr><td>Jeugdhonk</td><td>Minimaal 6 open avonden; vaste trekker aangesteld</td></tr>
+          <tr><td>Leiderschapspijplijn</td><td>3–5 jonge co-leiders gestart</td></tr>
+          <tr><td>Discipelschap</td><td>Elke programma-avond heeft een bewust geloofsvormend moment</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button class="note-btn" data-section="jaarplan" style="margin-top:1.5rem">💬 Notitie toevoegen</button>
+    <div class="notes-panel" id="notes-panel-jaarplan">
+      <div class="notes-list"></div>
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-jaarplan" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-jaarplan" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="jaarplan">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEEFTIJDSOVERZICHT -->
+  <section class="section" id="leeftijden">
+    <div class="section-label">👥 Actie</div>
+    <h2 class="section-title">Leeftijdsoverzicht</h2>
+    <p class="section-intro">Wat bieden we aan per leeftijdsgroep, wat is het doel, en waar liggen de aandachtspunten?</p>
+
+    <!-- GANTT CHART -->
+    <div class="gantt-wrap">
+      <div class="gantt">
+        <div class="gantt-header">
+          <div class="gantt-age" style="text-align:left;font-size:0.65rem">Leeftijd →</div>
+          <div class="gantt-age">12</div><div class="gantt-age">13</div><div class="gantt-age">14</div>
+          <div class="gantt-age">15</div><div class="gantt-age highlight">16</div><div class="gantt-age highlight">17</div>
+          <div class="gantt-age highlight">18</div><div class="gantt-age">19</div><div class="gantt-age">20</div>
+          <div class="gantt-age">21</div><div class="gantt-age">22</div><div class="gantt-age">23</div><div class="gantt-age">24</div>
+        </div>
+        <!-- #DurfteZijn: 12-14 (col 2-4) -->
+        <div class="gantt-row">
+          <div class="gantt-name">#DurfteZijn</div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#C0392B"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#C0392B"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#C0392B"></div></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <!-- #Durfte: 14-22 -->
+        <div class="gantt-row">
+          <div class="gantt-name">#Durfte</div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#E74C3C"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#E74C3C"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#E74C3C"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#E74C3C"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#E74C3C"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#E74C3C"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#E74C3C"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#E74C3C"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#E74C3C"></div></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <!-- Zomerkamp: 13-15 -->
+        <div class="gantt-row">
+          <div class="gantt-name">Zomerkamp</div>
+          <div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#2980B9"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#2980B9"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#2980B9"></div></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <!-- GAT 16-18 -->
+        <div class="gantt-row">
+          <div class="gantt-name" style="color:var(--red);font-weight:900">⚠️ GAT</div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell" style="position:relative"><div class="gantt-gap"></div><span class="gantt-gap-label">!</span></div>
+          <div class="gantt-cell" style="position:relative"><div class="gantt-gap"></div></div>
+          <div class="gantt-cell" style="position:relative"><div class="gantt-gap"></div></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <!-- Wintersport: 16-21 -->
+        <div class="gantt-row">
+          <div class="gantt-name">Wintersport</div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#8E44AD"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#8E44AD"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#8E44AD"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#8E44AD"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#8E44AD"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#8E44AD"></div></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <!-- Connect: 18-30 -->
+        <div class="gantt-row">
+          <div class="gantt-name">Connect</div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#D35400"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#D35400"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#D35400"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#D35400"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#D35400"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#D35400"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#D35400"></div></div>
+        </div>
+        <!-- Jeugdhonk: doel 12-25 -->
+        <div class="gantt-row">
+          <div class="gantt-name" style="color:var(--text-muted);font-style:italic">Jeugdhonk (doel)</div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#BDC3C7;opacity:0.5"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#BDC3C7;opacity:0.5"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#BDC3C7;opacity:0.5"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#BDC3C7;opacity:0.5"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#BDC3C7;opacity:0.5"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#BDC3C7;opacity:0.5"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#BDC3C7;opacity:0.5"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#BDC3C7;opacity:0.5"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#BDC3C7;opacity:0.5"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#BDC3C7;opacity:0.5"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#BDC3C7;opacity:0.5"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#BDC3C7;opacity:0.5"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar" style="background:#BDC3C7;opacity:0.5"></div></div>
+        </div>
+      </div>
+      <div class="gantt-legend">
+        <div class="gantt-legend-item"><div class="gantt-legend-dot" style="background:#C0392B"></div>#DurfteZijn</div>
+        <div class="gantt-legend-item"><div class="gantt-legend-dot" style="background:#E74C3C"></div>#Durfte</div>
+        <div class="gantt-legend-item"><div class="gantt-legend-dot" style="background:#2980B9"></div>Zomerkamp</div>
+        <div class="gantt-legend-item"><div class="gantt-legend-dot" style="background:#8E44AD"></div>Wintersport</div>
+        
+        <div class="gantt-legend-item"><div class="gantt-legend-dot" style="background:#D35400"></div>Connect</div>
+        <div class="gantt-legend-item"><div class="gantt-legend-dot" style="background:#BDC3C7"></div>Jeugdhonk (doel)</div>
+      </div>
+    </div>
+
+    <div class="age-gap-banner">
+      <span style="font-size:1.5rem">⚠️</span>
+      <div><p><strong>Aandacht: gat bij 16–18 jaar.</strong> Tussen #DurfteZijn/Durfte en Connect zit een overgangszone waar jongeren weinig specifiek aanbod hebben en structureel wegvallen. Dit is prioriteit #1 om te adresseren.</p></div>
+    </div>
+
+    <div class="age-matrix-wrap">
+      <table class="age-matrix">
+        <thead>
+          <tr>
+            <th>Leeftijd</th>
+            <th>Programma</th>
+            <th>Doel</th>
+            <th>Status</th>
+            <th>Aandachtspunt</th>
+            <th style="width:36px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="age-badge">12–14</span></td>
+            <td><strong>#DurfteZijn</strong></td>
+            <td>Geloofsopbouw + binding aan gemeente</td>
+            <td data-leeftijd-status="durftezijn"><span class="status-ok">✅ Sterk</span><br><small>~75% opkomst</small></td>
+            <td data-leeftijd-aandacht="durftezijn">Overgang naar #Durfte bewust begeleiden</td>
+            <td><button class="leeftijd-edit-knop" onclick="toggleLeeftijdEdit('durftezijn')">✏️</button></td>
+          </tr>
+          <tr class="leeftijd-edit-rij" id="leeftijd-edit-durftezijn"><td colspan="6"><div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap"><label style="font-size:0.8rem;font-weight:600">Status:</label><select class="status-select" id="leeftijd-status-durftezijn"><option value="ok">✅ Goed</option><option value="warn">⚠️ Aandacht</option><option value="alert">🔴 Urgent</option></select><input class="leeftijd-aandacht-input" id="leeftijd-aandacht-durftezijn" placeholder="Aandachtspunt" style="flex:1"><button class="inline-opslaan" onclick="slaLeeftijdOp('durftezijn')">Opslaan</button><button class="inline-annuleer" onclick="toggleLeeftijdEdit('durftezijn')">Annuleer</button></div></td></tr>
+          <tr>
+            <td><span class="age-badge">14–22</span></td>
+            <td><strong>#Durfte</strong><br><small>talentgericht</small></td>
+            <td>GTI: Geloof · Talent · Inzet</td>
+            <td data-leeftijd-status="durfte"><span class="status-ok">✅ Uniek</span></td>
+            <td data-leeftijd-aandacht="durfte">Afhankelijk van passie-leiders → pijplijn nodig</td>
+            <td><button class="leeftijd-edit-knop" onclick="toggleLeeftijdEdit('durfte')">✏️</button></td>
+          </tr>
+          <tr class="leeftijd-edit-rij" id="leeftijd-edit-durfte"><td colspan="6"><div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap"><label style="font-size:0.8rem;font-weight:600">Status:</label><select class="status-select" id="leeftijd-status-durfte"><option value="ok">✅ Goed</option><option value="warn">⚠️ Aandacht</option><option value="alert">🔴 Urgent</option></select><input class="leeftijd-aandacht-input" id="leeftijd-aandacht-durfte" placeholder="Aandachtspunt" style="flex:1"><button class="inline-opslaan" onclick="slaLeeftijdOp('durfte')">Opslaan</button><button class="inline-annuleer" onclick="toggleLeeftijdEdit('durfte')">Annuleer</button></div></td></tr>
+          <tr>
+            <td><span class="age-badge">13–15</span></td>
+            <td>Zomerkamp</td>
+            <td>Vorming + beleving + verbinding</td>
+            <td data-leeftijd-status="zomerkamp"><span class="status-ok">✅ Goed</span></td>
+            <td data-leeftijd-aandacht="zomerkamp">Bewust discipelschapselement inbouwen</td>
+            <td><button class="leeftijd-edit-knop" onclick="toggleLeeftijdEdit('zomerkamp')">✏️</button></td>
+          </tr>
+          <tr class="leeftijd-edit-rij" id="leeftijd-edit-zomerkamp"><td colspan="6"><div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap"><label style="font-size:0.8rem;font-weight:600">Status:</label><select class="status-select" id="leeftijd-status-zomerkamp"><option value="ok">✅ Goed</option><option value="warn">⚠️ Aandacht</option><option value="alert">🔴 Urgent</option></select><input class="leeftijd-aandacht-input" id="leeftijd-aandacht-zomerkamp" placeholder="Aandachtspunt" style="flex:1"><button class="inline-opslaan" onclick="slaLeeftijdOp('zomerkamp')">Opslaan</button><button class="inline-annuleer" onclick="toggleLeeftijdEdit('zomerkamp')">Annuleer</button></div></td></tr>
+          <tr style="background:#FEF9C3">
+            <td><span class="age-badge" style="background:#FEF3C7;color:#D97706">16–18</span></td>
+            <td><em>Beperkt aanbod</em></td>
+            <td>—</td>
+            <td data-leeftijd-status="gap1618"><span class="status-alert">🔴 GAT</span></td>
+            <td data-leeftijd-aandacht="gap1618"><strong>Prioriteit: overgangsaanpak + extra aanbod</strong></td>
+            <td><button class="leeftijd-edit-knop" onclick="toggleLeeftijdEdit('gap1618')">✏️</button></td>
+          </tr>
+          <tr class="leeftijd-edit-rij" id="leeftijd-edit-gap1618"><td colspan="6"><div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap"><label style="font-size:0.8rem;font-weight:600">Status:</label><select class="status-select" id="leeftijd-status-gap1618"><option value="ok">✅ Goed</option><option value="warn">⚠️ Aandacht</option><option value="alert" selected>🔴 Urgent</option></select><input class="leeftijd-aandacht-input" id="leeftijd-aandacht-gap1618" placeholder="Aandachtspunt" style="flex:1"><button class="inline-opslaan" onclick="slaLeeftijdOp('gap1618')">Opslaan</button><button class="inline-annuleer" onclick="toggleLeeftijdEdit('gap1618')">Annuleer</button></div></td></tr>
+          <tr>
+            <td><span class="age-badge">16–22</span></td>
+            <td>Youth Alpha / Bèta</td>
+            <td>Geloofsverdieping</td>
+            <td data-leeftijd-status="youthalpha"><span class="status-warn">⚠️ Klein bereik</span></td>
+            <td data-leeftijd-aandacht="youthalpha">Bereik vergroten bij 16–18 jaar</td>
+            <td><button class="leeftijd-edit-knop" onclick="toggleLeeftijdEdit('youthalpha')">✏️</button></td>
+          </tr>
+          <tr class="leeftijd-edit-rij" id="leeftijd-edit-youthalpha"><td colspan="6"><div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap"><label style="font-size:0.8rem;font-weight:600">Status:</label><select class="status-select" id="leeftijd-status-youthalpha"><option value="ok">✅ Goed</option><option value="warn" selected>⚠️ Aandacht</option><option value="alert">🔴 Urgent</option></select><input class="leeftijd-aandacht-input" id="leeftijd-aandacht-youthalpha" placeholder="Aandachtspunt" style="flex:1"><button class="inline-opslaan" onclick="slaLeeftijdOp('youthalpha')">Opslaan</button><button class="inline-annuleer" onclick="toggleLeeftijdEdit('youthalpha')">Annuleer</button></div></td></tr>
+          <tr>
+            <td><span class="age-badge">16–21</span></td>
+            <td>Wintersportkamp</td>
+            <td>Verbinding + geloofsvorming</td>
+            <td data-leeftijd-status="wintersport"><span class="status-ok">✅ Goed</span></td>
+            <td data-leeftijd-aandacht="wintersport">Bewust verbindingsmoment voor kwetsbare fase</td>
+            <td><button class="leeftijd-edit-knop" onclick="toggleLeeftijdEdit('wintersport')">✏️</button></td>
+          </tr>
+          <tr class="leeftijd-edit-rij" id="leeftijd-edit-wintersport"><td colspan="6"><div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap"><label style="font-size:0.8rem;font-weight:600">Status:</label><select class="status-select" id="leeftijd-status-wintersport"><option value="ok">✅ Goed</option><option value="warn">⚠️ Aandacht</option><option value="alert">🔴 Urgent</option></select><input class="leeftijd-aandacht-input" id="leeftijd-aandacht-wintersport" placeholder="Aandachtspunt" style="flex:1"><button class="inline-opslaan" onclick="slaLeeftijdOp('wintersport')">Opslaan</button><button class="inline-annuleer" onclick="toggleLeeftijdEdit('wintersport')">Annuleer</button></div></td></tr>
+          <tr>
+            <td><span class="age-badge">18–30</span></td>
+            <td><strong>Connect</strong></td>
+            <td>Bijbelstudie + ontmoeting + leiderschap</td>
+            <td data-leeftijd-status="connect"><span class="status-ok">✅ Goed</span></td>
+            <td data-leeftijd-aandacht="connect">Overgang 16→18 verbeteren · meer 18-jarigen actief bereiken</td>
+            <td><button class="leeftijd-edit-knop" onclick="toggleLeeftijdEdit('connect')">✏️</button></td>
+          </tr>
+          <tr class="leeftijd-edit-rij" id="leeftijd-edit-connect"><td colspan="6"><div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap"><label style="font-size:0.8rem;font-weight:600">Status:</label><select class="status-select" id="leeftijd-status-connect"><option value="ok">✅ Goed</option><option value="warn">⚠️ Aandacht</option><option value="alert">🔴 Urgent</option></select><input class="leeftijd-aandacht-input" id="leeftijd-aandacht-connect" placeholder="Aandachtspunt" style="flex:1"><button class="inline-opslaan" onclick="slaLeeftijdOp('connect')">Opslaan</button><button class="inline-annuleer" onclick="toggleLeeftijdEdit('connect')">Annuleer</button></div></td></tr>
+          <tr>
+            <td><span class="age-badge">12–25</span></td>
+            <td><strong>Jeugdhonk</strong></td>
+            <td>Laagdrempelige 'derde plek'</td>
+            <td data-leeftijd-status="jeugdhonk"><span class="status-alert">🔴 In ontwikkeling</span></td>
+            <td data-leeftijd-aandacht="jeugdhonk">Prioriteit dit jaar: vaste trekker + ritme</td>
+            <td><button class="leeftijd-edit-knop" onclick="toggleLeeftijdEdit('jeugdhonk')">✏️</button></td>
+          </tr>
+          <tr class="leeftijd-edit-rij" id="leeftijd-edit-jeugdhonk"><td colspan="6"><div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap"><label style="font-size:0.8rem;font-weight:600">Status:</label><select class="status-select" id="leeftijd-status-jeugdhonk"><option value="ok">✅ Goed</option><option value="warn">⚠️ Aandacht</option><option value="alert" selected>🔴 Urgent</option></select><input class="leeftijd-aandacht-input" id="leeftijd-aandacht-jeugdhonk" placeholder="Aandachtspunt" style="flex:1"><button class="inline-opslaan" onclick="slaLeeftijdOp('jeugdhonk')">Opslaan</button><button class="inline-annuleer" onclick="toggleLeeftijdEdit('jeugdhonk')">Annuleer</button></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button class="note-btn" data-section="leeftijden" style="margin-top:0.5rem">💬 Notitie toevoegen</button>
+    <div class="notes-panel" id="notes-panel-leeftijden">
+      <div class="notes-list"></div>
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-leeftijden" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-leeftijden" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="leeftijden">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEEFTIJDSGROEP 11–14 -->
+  <section class="section" id="lg-1114">
+    <div class="section-label">🟢 Leeftijdsgroep</div>
+    <h2 class="section-title">11–14 jaar</h2>
+    <p class="section-intro">De jongste groep. Grote stap van kinderwerk naar jeugdwerk. Geloof wordt persoonlijk — identiteit in opbouw. Verantwoordelijke: <strong>Leonie</strong>.</p>
+
+    <div class="lg-header-strip" style="background:linear-gradient(135deg,#16A34A,#15803D);color:white;border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem">
+      <div style="font-size:2.5rem">🟢</div>
+      <div>
+        <div style="font-weight:700;font-size:1.1rem">#DurfteZijn · Zomerkamp (13–15)</div>
+        <div style="opacity:0.85;font-size:0.85rem">Drie bewegingen: ✨ Ontmoeten → 🌱 Gevormd worden</div>
+      </div>
+    </div>
+
+    <div class="vier-lijnen-grid">
+      <div class="lijn-kaart lijn-leer">
+        <div class="lijn-label">📖 Leerlijn</div>
+        <h4>Geloofsvorming & discipelschap</h4>
+        <ul>
+          <li>Wie is God, wie ben ik? — geloofsfundament leggen</li>
+          <li>Bijbel als verhaal begrijpen en jezelf daarin zien</li>
+          <li>Persoonlijk gebed en stille tijd ontdekken</li>
+          <li>Binding aan de gemeente als eigen thuis</li>
+          <li>Catechese als plek van vragen stellen</li>
+        </ul>
+      </div>
+      <div class="lijn-kaart lijn-activ">
+        <div class="lijn-label">🎯 Activiteiten</div>
+        <h4>Programma's & momenten</h4>
+        <ul>
+          <li><strong>#DurfteZijn</strong> — wekelijkse bijeenkomst (catechese + ontmoeting)</li>
+          <li><strong>Zomerkamp</strong> (13–15 jaar) — vorming, beleving, verbinding</li>
+          <li>Openstelling Jeugdhonk</li>
+          <li>Bijzondere diensten (belijdenis, doop) als ijkpunt</li>
+        </ul>
+      </div>
+      <div class="lijn-kaart lijn-rel">
+        <div class="lijn-label">🤝 Relaties</div>
+        <h4>Wie loopt mee?</h4>
+        <ul>
+          <li><strong>Leider:</strong> Leonie (coördinatie 11–15)</li>
+          <li><strong>Mentor:</strong> volwassen gemeentelid of ouder als vertrouwenspersoon</li>
+          <li><strong>Peer:</strong> vaste groep leeftijdsgenoten, wekelijks contact</li>
+          <li>Ouders betrekken bij geloofsthema's thuis</li>
+        </ul>
+      </div>
+      <div class="lijn-kaart lijn-overgang">
+        <div class="lijn-label">🔀 Overgangen</div>
+        <h4>In- en uitstroom</h4>
+        <ul>
+          <li><strong>Instroom (11 jr):</strong> bewuste overdracht vanuit kinderwerk — kennismakingsmoment</li>
+          <li><strong>Uitstroom (14 jr):</strong> begeleid doorstromen naar 14–16 groep</li>
+          <li>Overgangsgesprek met leider + ouder(s)</li>
+          <li>Drempel verlagen: nieuwe groep alvast meelopen</li>
+        </ul>
+      </div>
+    </div>
+
+    <button class="note-btn" data-section="lg-1114" style="margin-top:1.5rem">💬 Notitie toevoegen</button>
+    <div class="note-form-wrap" id="note-form-lg-1114" style="display:none;margin-top:1rem">
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-lg-1114" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-lg-1114" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="lg-1114">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEEFTIJDSGROEP 14–16 -->
+  <section class="section" id="lg-1416">
+    <div class="section-label">🟡 Leeftijdsgroep</div>
+    <h2 class="section-title">14–16 jaar</h2>
+    <p class="section-intro">Brugfase: puberteit op z'n hevigst. Geloofsvragen worden intenser. Aanbod via #Durfte en bewuste mentorrelaties. Verantwoordelijken: <strong>Leonie &amp; Timon</strong>.</p>
+
+    <div class="lg-header-strip" style="background:linear-gradient(135deg,#D97706,#B45309);color:white;border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem">
+      <div style="font-size:2.5rem">🟡</div>
+      <div>
+        <div style="font-weight:700;font-size:1.1rem">#Durfte (aanvang) · Zomerkamp (t/m 15)</div>
+        <div style="opacity:0.85;font-size:0.85rem">Drie bewegingen: ✨ Ontmoeten → 🌱 Gevormd worden</div>
+      </div>
+    </div>
+
+    <div class="vier-lijnen-grid">
+      <div class="lijn-kaart lijn-leer">
+        <div class="lijn-label">📖 Leerlijn</div>
+        <h4>Geloofsvorming & discipelschap</h4>
+        <ul>
+          <li>Geloof en identiteit: wie ben ik als christen op school/online?</li>
+          <li>Bijbelse ethiek en eigen keuzes leren maken</li>
+          <li>Van weten naar beleven — geloof als levenswijze</li>
+          <li>Discipelschap: anderen meenemen begint hier</li>
+          <li>Youth Alpha als verdiepingsspoor</li>
+        </ul>
+      </div>
+      <div class="lijn-kaart lijn-activ">
+        <div class="lijn-label">🎯 Activiteiten</div>
+        <h4>Programma's & momenten</h4>
+        <ul>
+          <li><strong>#Durfte</strong> — talentgericht (GTI: Geloof · Talent · Inzet)</li>
+          <li><strong>Zomerkamp</strong> (nog t/m 15 jaar)</li>
+          <li>Youth Alpha / Bèta (verdieping)</li>
+          <li>Jeugdhonk als laagdrempelige ontmoetingsplek</li>
+        </ul>
+      </div>
+      <div class="lijn-kaart lijn-rel">
+        <div class="lijn-label">🤝 Relaties</div>
+        <h4>Wie loopt mee?</h4>
+        <ul>
+          <li><strong>Leider:</strong> Leonie (t/m 15) + Timon (v.a. #Durfte)</li>
+          <li><strong>Mentor:</strong> 1-op-1 begeleiding door jongvolwassene (18–22)</li>
+          <li><strong>Peer:</strong> vaste #Durfte-groep, vriendschappen bouwen</li>
+          <li>Eerste stap als 'helper' bij jongere groepen</li>
+        </ul>
+      </div>
+      <div class="lijn-kaart lijn-overgang">
+        <div class="lijn-label">🔀 Overgangen</div>
+        <h4>In- en uitstroom</h4>
+        <ul>
+          <li><strong>Instroom (14 jr):</strong> warme overdracht vanuit 11–14 groep</li>
+          <li><strong>Uitstroom (16 jr):</strong> bewust begeleiden richting 16–18 aanpak</li>
+          <li>Risico: 16-jarigen vallen weg — actief monitoren</li>
+          <li>Buddy-systeem: 18+ begeleidt de overstap</li>
+        </ul>
+      </div>
+    </div>
+
+    <button class="note-btn" data-section="lg-1416" style="margin-top:1.5rem">💬 Notitie toevoegen</button>
+    <div class="note-form-wrap" id="note-form-lg-1416" style="display:none;margin-top:1rem">
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-lg-1416" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-lg-1416" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="lg-1416">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEEFTIJDSGROEP 16–18 (GAT) -->
+  <section class="section" id="lg-1618">
+    <div class="section-label">🔴 Leeftijdsgroep — Prioriteit</div>
+    <h2 class="section-title">16–18 jaar <span style="color:var(--red)">(GAT)</span></h2>
+    <p class="section-intro">De meest kwetsbare fase. Jongeren staan structureel zonder eigen aanbod. Dit is <strong>prioriteit #1</strong> in het plan. Verantwoordelijke: <strong>Timon &amp; Thijs</strong>.</p>
+
+    <div class="lg-header-strip" style="background:linear-gradient(135deg,#DC2626,#991B1B);color:white;border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem">
+      <div style="font-size:2.5rem">⚠️</div>
+      <div>
+        <div style="font-weight:700;font-size:1.1rem">Geen structureel aanbod — overgangszone</div>
+        <div style="opacity:0.85;font-size:0.85rem">Actie: overgangsaanpak + extra aanbod bouwen in 2026–2027</div>
+      </div>
+    </div>
+
+    <div class="vier-lijnen-grid">
+      <div class="lijn-kaart lijn-leer">
+        <div class="lijn-label">📖 Leerlijn</div>
+        <h4>Geloofsvorming & discipelschap</h4>
+        <ul>
+          <li>Geloofsvolwassenheid: persoonlijk eigenaarschap van geloof</li>
+          <li>Kritisch nadenken over geloof, twijfel en identiteit</li>
+          <li>Youth Alpha / Bèta als structuuraanbod</li>
+          <li>Bijbelstudie in kleine groepjes (begeleid)</li>
+          <li><em>Doel 2027: nieuw programma-aanbod ontwikkelen</em></li>
+        </ul>
+      </div>
+      <div class="lijn-kaart lijn-activ">
+        <div class="lijn-label">🎯 Activiteiten</div>
+        <h4>Programma's & momenten</h4>
+        <ul>
+          <li>Youth Alpha / Bèta (beperkt bereik — uitbreiden)</li>
+          <li><strong>Wintersportkamp</strong> (16–21) — verbindingsmoment</li>
+          <li>Incidenteel via #Durfte of Connect</li>
+          <li><em>Actie: eigen bijeenkomstformaat ontwikkelen voor 16–18</em></li>
+        </ul>
+      </div>
+      <div class="lijn-kaart lijn-rel">
+        <div class="lijn-label">🤝 Relaties</div>
+        <h4>Wie loopt mee?</h4>
+        <ul>
+          <li><strong>Leider:</strong> Thijs (16–24), Timon (coördinatie)</li>
+          <li><strong>Mentor:</strong> <em>cruciaal in deze fase</em> — 1-op-1 contact met jongvolwassene</li>
+          <li><strong>Peer:</strong> weinig structuur — opbouwen via nieuwe activiteit</li>
+          <li>Koppeling aan Connect-groep als kennismaking</li>
+        </ul>
+      </div>
+      <div class="lijn-kaart lijn-overgang">
+        <div class="lijn-label">🔀 Overgangen</div>
+        <h4>In- en uitstroom</h4>
+        <ul>
+          <li><strong>Instroom (16 jr):</strong> actief navragen wie 16 wordt — proactief contact</li>
+          <li><strong>Uitstroom (18 jr):</strong> warme introductie bij Connect</li>
+          <li>Risico: jongeren verdwijnen stil — monitor-systeem nodig</li>
+          <li>Actie: overzichtslijst 16–18-jarigen bijhouden</li>
+        </ul>
+      </div>
+    </div>
+
+    <button class="note-btn" data-section="lg-1618" style="margin-top:1.5rem">💬 Notitie toevoegen</button>
+    <div class="note-form-wrap" id="note-form-lg-1618" style="display:none;margin-top:1rem">
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-lg-1618" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-lg-1618" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="lg-1618">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEEFTIJDSGROEP 18–22 -->
+  <section class="section" id="lg-1822">
+    <div class="section-label">🔵 Leeftijdsgroep</div>
+    <h2 class="section-title">18–22 jaar</h2>
+    <p class="section-intro">Zelfstandig worden — studie, werk, eigen leven. Geloof wordt bewust gekozen of afgelegd. Connect is de kern. Verantwoordelijke: <strong>Thijs &amp; Timon</strong>.</p>
+
+    <div class="lg-header-strip" style="background:linear-gradient(135deg,#2563EB,#1D4ED8);color:white;border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem">
+      <div style="font-size:2.5rem">🔵</div>
+      <div>
+        <div style="font-weight:700;font-size:1.1rem">Connect · Wintersport · Youth Alpha/Bèta</div>
+        <div style="opacity:0.85;font-size:0.85rem">Drie bewegingen: 🌱 Gevormd worden → 🔥 Meenemen</div>
+      </div>
+    </div>
+
+    <div class="vier-lijnen-grid">
+      <div class="lijn-kaart lijn-leer">
+        <div class="lijn-label">📖 Leerlijn</div>
+        <h4>Geloofsvorming & discipelschap</h4>
+        <ul>
+          <li>Bijbelstudie in Connect: diepgang en toepassing</li>
+          <li>Persoonlijk leiderschap: geloof in werk/studie/relaties</li>
+          <li>Anderen meenemen: discipelschap als levensstijl</li>
+          <li>Youth Alpha Bèta als verdiepingsspoor</li>
+          <li>Meelooppen als leider bij #Durfte of #DurfteZijn</li>
+        </ul>
+      </div>
+      <div class="lijn-kaart lijn-activ">
+        <div class="lijn-label">🎯 Activiteiten</div>
+        <h4>Programma's & momenten</h4>
+        <ul>
+          <li><strong>Connect</strong> — wekelijkse bijbelstudie + ontmoeting</li>
+          <li><strong>Wintersportkamp</strong> (t/m 21) — verbinding</li>
+          <li>Youth Alpha / Bèta</li>
+          <li>Leiderschap bij #Durfte of #DurfteZijn (vrijwillig)</li>
+          <li>Jeugdhonk als informele ontmoetingsplek</li>
+        </ul>
+      </div>
+      <div class="lijn-kaart lijn-rel">
+        <div class="lijn-label">🤝 Relaties</div>
+        <h4>Wie loopt mee?</h4>
+        <ul>
+          <li><strong>Leider:</strong> Thijs (coördinatie Connect), Timon (overkoepelend)</li>
+          <li><strong>Mentor:</strong> ouderling of gemeente-lid als gids op levensgebied</li>
+          <li><strong>Peer:</strong> vaste Connect-groep, vriendschappen voeden</li>
+          <li>Rol als mentor voor 16–18 jaar (meenemen-beweging)</li>
+        </ul>
+      </div>
+      <div class="lijn-kaart lijn-overgang">
+        <div class="lijn-label">🔀 Overgangen</div>
+        <h4>In- en uitstroom</h4>
+        <ul>
+          <li><strong>Instroom (18 jr):</strong> warme introductie vanuit 16–18 aanpak</li>
+          <li><strong>Uitstroom (22 jr):</strong> bewust doorleiden naar 22–25 spoor</li>
+          <li>Risico: vertrek naar andere stad/studie — contact houden</li>
+          <li>Sleutel: 18-jarigen actief uitnodigen, niet afwachten</li>
+        </ul>
+      </div>
+    </div>
+
+    <button class="note-btn" data-section="lg-1822" style="margin-top:1.5rem">💬 Notitie toevoegen</button>
+    <div class="note-form-wrap" id="note-form-lg-1822" style="display:none;margin-top:1rem">
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-lg-1822" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-lg-1822" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="lg-1822">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEEFTIJDSGROEP 22–25 -->
+  <section class="section" id="lg-2225">
+    <div class="section-label">🟣 Leeftijdsgroep</div>
+    <h2 class="section-title">22–25 jaar</h2>
+    <p class="section-intro">Volwassen geloof in de praktijk. Investeren in de volgende generatie. Van ontvanger naar gever. Verantwoordelijke: <strong>Timon &amp; Thijs</strong>.</p>
+
+    <div class="lg-header-strip" style="background:linear-gradient(135deg,#7C3AED,#5B21B6);color:white;border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem">
+      <div style="font-size:2.5rem">🟣</div>
+      <div>
+        <div style="font-weight:700;font-size:1.1rem">Connect · #Durfte (leider) · Persoonlijk traject</div>
+        <div style="opacity:0.85;font-size:0.85rem">Drie bewegingen: 🔥 Meenemen — anderen vormen</div>
+      </div>
+    </div>
+
+    <div class="vier-lijnen-grid">
+      <div class="lijn-kaart lijn-leer">
+        <div class="lijn-label">📖 Leerlijn</div>
+        <h4>Geloofsvorming & discipelschap</h4>
+        <ul>
+          <li>Theologie voor het dagelijks leven: werk, relaties, roeping</li>
+          <li>Leiderschap en geestelijke verantwoordelijkheid</li>
+          <li>Bijbelstudie in Connect (verdieping)</li>
+          <li>Persoonlijk discipelschapstraject (1-op-1 of kleine groep)</li>
+          <li>Geloof doorgeven als kernopdracht</li>
+        </ul>
+      </div>
+      <div class="lijn-kaart lijn-activ">
+        <div class="lijn-label">🎯 Activiteiten</div>
+        <h4>Programma's & momenten</h4>
+        <ul>
+          <li><strong>Connect</strong> — bijbelstudie + onderlinge zorg</li>
+          <li><strong>#Durfte als leider</strong> — talent inzetten voor jongeren</li>
+          <li>Leiderstraining / toerusting (gemeente-breed)</li>
+          <li>Persoonlijk gesprek met Timon/Thijs over groei</li>
+        </ul>
+      </div>
+      <div class="lijn-kaart lijn-rel">
+        <div class="lijn-label">🤝 Relaties</div>
+        <h4>Wie loopt mee?</h4>
+        <ul>
+          <li><strong>Leider:</strong> Timon en Thijs als aanspreekpunt</li>
+          <li><strong>Mentor:</strong> ouderling of predikant voor levensfase-begeleiding</li>
+          <li><strong>Peer:</strong> Connect-groep als geloofsgemeenschap</li>
+          <li>Zelf mentor zijn voor 16–18 of 18–22 jarigen</li>
+        </ul>
+      </div>
+      <div class="lijn-kaart lijn-overgang">
+        <div class="lijn-label">🔀 Overgangen</div>
+        <h4>In- en uitstroom</h4>
+        <ul>
+          <li><strong>Instroom (22 jr):</strong> doorstroom vanuit 18–22 spoor</li>
+          <li><strong>Uitstroom (25+):</strong> ingroeien in bredere gemeente — kringen, vrijwilligerswerk</li>
+          <li>Koppeling aan gemeente-structuren (kerkenraad, diaconaat)</li>
+          <li>Doel: geloof is geen jeugdwerk meer — het is hun leven</li>
+        </ul>
+      </div>
+    </div>
+
+    <button class="note-btn" data-section="lg-2225" style="margin-top:1.5rem">💬 Notitie toevoegen</button>
+    <div class="note-form-wrap" id="note-form-lg-2225" style="display:none;margin-top:1rem">
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-lg-2225" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-lg-2225" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="lg-2225">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIORITEITEN -->
+  <section class="section" id="prioriteiten">
+    <div class="section-label">✅ Actie</div>
+    <h2 class="section-title">Prioriteiten 2026/2027</h2>
+    <p class="section-intro">Wat pakken we dit jaar aan — geordend op prioriteit. Alles staat in dienst van het hoofddoel: jongeren die volgeling van Jezus worden.</p>
+
+    <div class="priority-board" id="priority-board">
+      <div class="priority-col hoog">
+        <div class="priority-col-header">🔴 Hoog — dit jaar</div>
+        <div id="prio-col-hoog"><!-- dynamisch gevuld door JS --></div>
+        <div class="nieuw-kaartje-wrap">
+          <button class="nieuw-kaartje-toggle" onclick="toggleNieuwKaartje('hoog')">＋ Nieuw kaartje</button>
+          <div class="nieuw-kaartje-form" id="nieuw-form-hoog">
+            <input class="inline-input" id="nieuw-titel-hoog" placeholder="Titel" maxlength="80">
+            <textarea class="inline-textarea" id="nieuw-beschr-hoog" placeholder="Beschrijving (optioneel)" rows="2"></textarea>
+            <div class="inline-form-knoppen">
+              <button class="inline-opslaan" onclick="voegNieuwKaartjeToe('hoog')">Toevoegen</button>
+              <button class="inline-annuleer" onclick="toggleNieuwKaartje('hoog')">Annuleer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="priority-col middel">
+        <div class="priority-col-header">🟡 Middel — dit seizoen</div>
+        <div id="prio-col-middel"><!-- dynamisch gevuld door JS --></div>
+        <div class="nieuw-kaartje-wrap">
+          <button class="nieuw-kaartje-toggle" onclick="toggleNieuwKaartje('middel')">＋ Nieuw kaartje</button>
+          <div class="nieuw-kaartje-form" id="nieuw-form-middel">
+            <input class="inline-input" id="nieuw-titel-middel" placeholder="Titel" maxlength="80">
+            <textarea class="inline-textarea" id="nieuw-beschr-middel" placeholder="Beschrijving (optioneel)" rows="2"></textarea>
+            <div class="inline-form-knoppen">
+              <button class="inline-opslaan" onclick="voegNieuwKaartjeToe('middel')">Toevoegen</button>
+              <button class="inline-annuleer" onclick="toggleNieuwKaartje('middel')">Annuleer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="priority-col later">
+        <div class="priority-col-header">⬜ Later — volgend jaar</div>
+        <div id="prio-col-later"><!-- dynamisch gevuld door JS --></div>
+        <div class="nieuw-kaartje-wrap">
+          <button class="nieuw-kaartje-toggle" onclick="toggleNieuwKaartje('later')">＋ Nieuw kaartje</button>
+          <div class="nieuw-kaartje-form" id="nieuw-form-later">
+            <input class="inline-input" id="nieuw-titel-later" placeholder="Titel" maxlength="80">
+            <textarea class="inline-textarea" id="nieuw-beschr-later" placeholder="Beschrijving (optioneel)" rows="2"></textarea>
+            <div class="inline-form-knoppen">
+              <button class="inline-opslaan" onclick="voegNieuwKaartjeToe('later')">Toevoegen</button>
+              <button class="inline-annuleer" onclick="toggleNieuwKaartje('later')">Annuleer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="note-btn" data-section="prioriteiten" style="margin-top:0.5rem">💬 Notitie toevoegen</button>
+    <div class="notes-panel" id="notes-panel-prioriteiten">
+      <div class="notes-list"></div>
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-prioriteiten" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-prioriteiten" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="prioriteiten">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- VRAGENLIJST -->
+  <section class="section" id="vragenlijst">
+    <div class="section-label">📝 Team</div>
+    <h2 class="section-title">Vragenlijst</h2>
+    <p class="section-intro">Persoonlijke vragen voor elk teamlid — gericht op jullie eigen leeftijdsgroep én het grote geheel. Jullie antwoorden vormen samen de input voor een verfijnde analyse.</p>
+
+    <div id="vl-klaar-melding"></div>
+
+    <div id="vl-formulier">
+      <!-- Stap 0: Wie ben jij? -->
+      <div id="vl-stap-0">
+        <div style="margin-bottom:1.25rem">
+          <div style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:0.5rem">Stap 1 van 4</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:0.25rem">Wie ben jij?</div>
+          <div style="color:var(--text-muted);font-size:0.875rem">Kies jouw naam — de vragen worden daarna op jou afgestemd.</div>
+        </div>
+        <div class="vl-rol-grid">
+          <div class="vl-rol-card" onclick="kiesRol('leonie')" id="rol-leonie">
+            <div class="vl-rol-avatar">👧</div>
+            <div class="vl-rol-naam">Leonie</div>
+            <div class="vl-rol-focus">Focus: 11–15 jaar</div>
+          </div>
+          <div class="vl-rol-card" onclick="kiesRol('timon')" id="rol-timon">
+            <div class="vl-rol-avatar">👨</div>
+            <div class="vl-rol-naam">Timon</div>
+            <div class="vl-rol-focus">Focus: 14–24 jaar</div>
+          </div>
+          <div class="vl-rol-card" onclick="kiesRol('thijs')" id="rol-thijs">
+            <div class="vl-rol-avatar">👱</div>
+            <div class="vl-rol-naam">Thijs</div>
+            <div class="vl-rol-focus">Focus: 16–24 jaar</div>
+          </div>
+        </div>
+        <div class="vl-nav-bar" style="justify-content:flex-end">
+          <button class="vl-knop-verder" onclick="vlStap0Verder()">Volgende →</button>
+        </div>
+      </div>
+
+      <!-- Stap 1-3: Vragen (worden door JS ingevuld) -->
+      <div id="vl-vragen-wrap" style="display:none">
+        <div id="vl-begroeting" class="vl-greeting"></div>
+        <div class="vl-steps-bar" id="vl-stappen-balk"></div>
+        <div id="vl-vragen-inhoud"></div>
+      </div>
+    </div><!-- /vl-formulier -->
+
+    <!-- Resultaten -->
+    <div id="vl-resultaten-wrap" style="margin-top:2rem">
+      <div style="display:flex;gap:0.75rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap">
+        <button class="note-btn" onclick="laadVragenlijstResultaten()" style="border-radius:8px">📊 Bekijk alle antwoorden</button>
+        <button class="note-btn" onclick="genereerPrompt()" style="border-radius:8px">🤖 Genereer AI-prompt</button>
+      </div>
+      <div id="vl-resultaten-container"></div>
+      <div id="vl-prompt-container"></div>
+    </div>
+
+    <button class="note-btn" data-section="vragenlijst" style="margin-top:1.5rem">💬 Notitie toevoegen</button>
+    <div class="notes-panel" id="notes-panel-vragenlijst">
+      <div class="notes-list"></div>
+      <div class="notes-form">
+        <input class="note-name-input" id="note-name-vragenlijst" type="text" placeholder="Jouw naam" maxlength="40">
+        <textarea id="note-text-vragenlijst" rows="3" placeholder="Schrijf hier je reactie of opmerking..."></textarea>
+        <button class="note-submit" data-section="vragenlijst">Opslaan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALLE NOTITIES -->
+  <section class="section" id="allenotities">
+    <div class="section-label">💬 Team</div>
+    <h2 class="section-title">Alle notities</h2>
+    <p class="section-intro">Overzicht van alle notities van het team, gegroepeerd per onderdeel. Je kunt hier ook nieuwe notities toevoegen of bestaande aanpassen.</p>
+
+    <div style="display:flex;gap:0.75rem;margin-bottom:1.5rem;align-items:center;flex-wrap:wrap">
+      <button class="note-btn" id="refresh-notes-btn" style="border-radius:8px">🔄 Vernieuwen</button>
+      <span id="notes-last-updated" style="font-size:0.8rem;color:var(--text-muted)"></span>
+    </div>
+
+    <div id="alle-notities-container">
+      <p style="color:var(--text-muted);font-size:0.9rem">Laden...</p>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<script src="app.js?v=21"></script>
+</body>
+</html>
